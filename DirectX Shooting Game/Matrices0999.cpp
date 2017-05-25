@@ -46,57 +46,6 @@ enum { MOVE_UP, MOVE_DOWN, MOVE_LEFT, MOVE_RIGHT };
 
 
 //기본 클래스 
-class entity {
-
-public:
-	float x_pos;
-	float y_pos;
-	int status;
-	int HP;
-
-};
-
-
-//주인공 클래스 
-class Hero :public entity {
-
-public:
-	void fire();
-	void super_fire();
-	void move(int i);
-
-};
-
-
-
-
-// 적 클래스 
-class Enemy :public entity {
-
-public:
-	void fire();
-
-
-};
-
-
-// 총알 클래스 
-class Bullet :public entity {
-
-public:
-	void move();
-
-};
-
-
-
-
-
-//객체 생성 
-Hero hero;
-Enemy enemy[100];
-
-
 
 
 // the entry point for any Windows program
