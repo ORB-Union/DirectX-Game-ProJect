@@ -21,13 +21,13 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Matrices0999.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="Hero.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Enemy.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

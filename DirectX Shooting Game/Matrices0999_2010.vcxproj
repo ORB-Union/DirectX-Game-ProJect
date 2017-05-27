@@ -377,7 +377,7 @@
   <ItemGroup>
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Hero.cpp" />
-    <ClCompile Include="Matrices0999.cpp" />
+    <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
   </ItemGroup>
