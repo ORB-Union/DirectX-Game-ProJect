@@ -1,0 +1,9 @@
+﻿  Main.cpp
+c:\users\6kmar\documents\github\directx-game-project\directx shooting game\main.cpp(74): warning C4100: 'lpCmdLine': 참조되지 않은 정식 매개 변수입니다.
+c:\users\6kmar\documents\github\directx-game-project\directx shooting game\main.cpp(73): warning C4100: 'hPrevInstance': 참조되지 않은 정식 매개 변수입니다.
+c:\users\6kmar\documents\github\directx-game-project\directx shooting game\main.cpp(143): warning C4459: 'message' 선언은 전역 선언을 숨깁니다.
+  c:\users\6kmar\documents\github\directx-game-project\directx shooting game\main.cpp(30): note: 'message' 선언을 참조하십시오.
+c:\users\6kmar\documents\github\directx-game-project\directx shooting game\main.cpp(302): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\6kmar\documents\github\directx-game-project\directx shooting game\main.cpp(335): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  Matrices0999_2010.vcxproj -> C:\Users\6kmar\Documents\GitHub\DirectX-Game-ProJect\DirectX Shooting Game\Debug\Matrices0999.exe
+  Matrices0999_2010.vcxproj -> C:\Users\6kmar\Documents\GitHub\DirectX-Game-ProJect\DirectX Shooting Game\Debug\Matrices0999.pdb (Full PDB)
