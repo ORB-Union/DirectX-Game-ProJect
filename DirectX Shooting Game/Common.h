@@ -2,9 +2,9 @@
 class entity {
 
 public:
-	float x_pos;
-	float y_pos;
+	float x_pos; // 이동좌표
+	float y_pos; // 이동좌표
 	int status;
-	int HP;
+	int HP; // 체력
 
 };

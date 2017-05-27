@@ -375,13 +375,15 @@
     <None Include="DXUT\Optional\directx.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="Hero.cpp" />
     <ClCompile Include="Matrices0999.cpp" />
   </ItemGroup>
   <ItemGroup>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Character.h" />
     <ClInclude Include="Common.h" />
+    <ClInclude Include="Hero.h" />
     <ClInclude Include="Enemy.h" />
     <CLInclude Include="resource.h" />
     <ResourceCompile Include="Matrices0999.rc" />

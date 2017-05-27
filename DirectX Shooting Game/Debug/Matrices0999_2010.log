@@ -1,5 +1,2 @@
-﻿  Matrices0999.cpp
-c:\users\6kmar\documents\github\directx-game-project\directx shooting game\matrices0999.cpp(54): warning C4100: 'lpCmdLine': 참조되지 않은 정식 매개 변수입니다.
-c:\users\6kmar\documents\github\directx-game-project\directx shooting game\matrices0999.cpp(53): warning C4100: 'hPrevInstance': 참조되지 않은 정식 매개 변수입니다.
-  Matrices0999_2010.vcxproj -> C:\Users\6kmar\Documents\GitHub\DirectX-Game-ProJect\DirectX Shooting Game\Debug\Matrices0999.exe
+﻿  Matrices0999_2010.vcxproj -> C:\Users\6kmar\Documents\GitHub\DirectX-Game-ProJect\DirectX Shooting Game\Debug\Matrices0999.exe
   Matrices0999_2010.vcxproj -> C:\Users\6kmar\Documents\GitHub\DirectX-Game-ProJect\DirectX Shooting Game\Debug\Matrices0999.pdb (Full PDB)
