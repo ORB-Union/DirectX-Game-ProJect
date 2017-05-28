@@ -1,15 +1,18 @@
 #pragma once
 #include"Common.h"
+#include <windows.h>
+#include <windowsx.h>
+#include <d3d9.h>
+#include <d3dx9.h>
+#include <iostream>
 class Bullet : public entity
 {
-public :
-
-	
-	bool bShow;
-	void init(float x, float y);
-	void move();
-	bool show();
-	void hide();
-	void active();
-	bool check_collision(float x, float y);
+public:
+	bool bShow; // 보이는지 체크
+	void init(float x, float y); // 초기화
+	void move(); // 이동
+	bool show(); // 보여주기
+	void hide(); // 충돌시 파괴
+	void active(); // 버튼 누를시 총알 발사
+	bool check_collision(float x, float y); // 충돌 체크
 };

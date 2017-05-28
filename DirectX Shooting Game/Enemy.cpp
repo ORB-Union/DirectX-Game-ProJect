@@ -6,6 +6,7 @@
 #include"Enemy.h"
 
 
+
 void Enemy::init(float x, float y)
 {
 	x_pos = x;

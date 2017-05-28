@@ -24,6 +24,7 @@ bool Bullet::check_collision(float x, float y)
 
 void Bullet::init(float x, float y)
 {
+	
 	x_pos = x;
 	y_pos = y;
 

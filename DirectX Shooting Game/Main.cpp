@@ -31,6 +31,7 @@ RECT fRectangle;
 std::string message;
 
 
+bool KeyCheck;
 
 // sprite declarations
 LPDIRECT3DTEXTURE9 sprite;    // the pointer to the sprite
@@ -68,7 +69,8 @@ enum { MOVE_UP, MOVE_DOWN, MOVE_LEFT, MOVE_RIGHT };
 //객체 생성
 
 Hero hero;
-Bullet bullet;
+//Bullet bullet;
+Bullet bull[100];
 Enemy enemy[ENEMY_NUM];
 
 //Bullet bullet;
@@ -223,21 +225,21 @@ void initD3D(HWND hWnd)
 		&sprite_hero);    // load to sprite
 
     //플레이어 총알
-	D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
-		L"CoinBulletsprite.png",    // the file name
-		D3DX_DEFAULT,    // default width
-		D3DX_DEFAULT,    // default height
-		D3DX_DEFAULT,    // no mip mapping
-		NULL,    // regular usage
-		D3DFMT_A8R8G8B8,    // 32-bit pixels with alpha
-		D3DPOOL_MANAGED,    // typical memory handling
-		D3DX_DEFAULT,    // no filtering
-		D3DX_DEFAULT,    // no mip filtering
-		D3DCOLOR_XRGB(255, 0, 255),    // the hot-pink color key
-		NULL,    // no image info struct
-		NULL,    // not using 256 colors
-		&sprite_bullet);    // load to sprite
-	
+		D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
+			L"CoinBulletsprite.png",    // the file name
+			D3DX_DEFAULT,    // default width
+			D3DX_DEFAULT,    // default height
+			D3DX_DEFAULT,    // no mip mapping
+			NULL,    // regular usage
+			D3DFMT_A8R8G8B8,    // 32-bit pixels with alpha
+			D3DPOOL_MANAGED,    // typical memory handling
+			D3DX_DEFAULT,    // no filtering
+			D3DX_DEFAULT,    // no mip filtering
+			D3DCOLOR_XRGB(255, 0, 255),    // the hot-pink color key
+			NULL,    // no image info struct
+			NULL,    // not using 256 colors
+			&sprite_bullet);    // load to sprite
+
 	//필살기
 	D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
 		L"Boss.png",    // the file name
@@ -321,15 +323,18 @@ void init_game(void)
 		//enemybullet.init(enemy[i].x_pos, enemy[i].y_pos);
 	}
 
-	//총알 초기화 
-	//bullet.init(hero.x_pos, hero.y_pos);
+	//총알 초기화
+	for(int i = 0 ; i < 100; i++)
+	{
+	bull[i].init(hero.x_pos, hero.y_pos);
+	}
 	//Superbullet.init(hero.x_pos, hero.y_pos);
 
 }
 
 void do_game_logic(void)
 {
-
+	KeyCheck = true;
 
 	//주인공 처리 
 	if (KEY_DOWN(VK_UP))
@@ -364,9 +369,60 @@ void do_game_logic(void)
 			enemy[i].move();
 		}
 	}
+	
 
+	if (GetKeyState(VK_SPACE) && 0x800000)
+	{
+		for (int i = 0; i < 100; i++)
+		{
+			if (bull[i].show() == false)
+			{
+				bull[i].active();
+				bull[i].init(hero.x_pos, hero.y_pos);
+				//bull[i].move();
+				break;
+			}
+		}
+	}
 
-	//총알 처리 
+	
+	for (int k = 0; k < 100; k++)
+	{
+		if (bull[k].show() == true)
+		{
+			bull[k].move();
+		}
+		if (bull[k].x_pos > 1300)
+		{
+			bull[k].hide();
+		}	
+	}
+	/*
+	for (int k = 0; k < 100; k++)
+	{
+		if(bull[k].show() == false)
+		{
+		if (GetKeyState(VK_SPACE))
+		{
+			bull[k].init(hero.x_pos, hero.y_pos);
+			bull[k].active();
+		}
+		}
+		if (bull[k].show() == true)
+		{
+			if (bull[k].x_pos > 1300)
+			{
+				bull[k].hide();
+			}
+			else
+				bull[k].move();
+		}
+	}
+
+	*/
+	
+	/*
+	
 	if (bullet.show() == false)
 	{
 		if (KEY_DOWN(VK_SPACE))
@@ -375,14 +431,17 @@ void do_game_logic(void)
 			bullet.init(hero.x_pos, hero.y_pos);
 		}
 	}
+	
 
+	
 	if (bullet.show() == true)
 	{
 		if (bullet.x_pos > 1300)
 			bullet.hide();
 		else
 			bullet.move();
-
+	*/
+			
 
 		/*
 		//충돌 처리
@@ -394,10 +453,9 @@ void do_game_logic(void)
 
 			}
 		}
-	}
-	*/
-	}
-
+		}
+		*/
+	
 }
 
 // this is the function used to render a single frame
@@ -442,14 +500,17 @@ void render_frame(void)
 	D3DXVECTOR3 position(hero.x_pos, hero.y_pos, 0.0f);    // position at 50, 50 with no depth
 	d3dspt->Draw(sprite_hero, &part, &center, &position, D3DCOLOR_ARGB(255, 255, 255, 255));
 	
-	////총알 
-	if (bullet.bShow == true)
+	////총알
+	for(int i = 0; i < 100; i++)
+	{
+	if (bull[i].bShow == true)
 	{
 		RECT part1;
 		SetRect(&part1, 0, 0, 64, 64);
 		D3DXVECTOR3 center1(0.0f, 0.0f, 0.0f);    // center at the upper-left corner
-		D3DXVECTOR3 position1(bullet.x_pos, bullet.y_pos, 0.0f);    // position at 50, 50 with no depth
+		D3DXVECTOR3 position1(bull[i].x_pos, bull[i].y_pos, 0.0f);    // position at 50, 50 with no depth
 		d3dspt->Draw(sprite_bullet, &part1, &center1, &position1, D3DCOLOR_ARGB(255, 255, 255, 255));
+	}
 	}
 
 

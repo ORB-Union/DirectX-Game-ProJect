@@ -44,28 +44,31 @@ void Hero::move(int i)
 
 }
 
-
-
+/*
 void Hero::fire()
 {
 	Hero hero;
 	Bullet bullet;
+	Bullet bulletc[100];
 
-	if(GetKeyState(VK_SPACE))
+	if (GetKeyState(VK_SPACE && 0x8000))
 	{
-		bullet.active();
-		bullet.init(hero.x_pos, hero.y_pos);
+		for (int i = 0; i < 100; i++)
+		{
+			bulletc[i].active();   
+			bulletc[i].init(hero.x_pos, hero.y_pos);
+			if (bulletc[i].show() == true)
+			{
+				if (bulletc[i].x_pos > 650)
+					bulletc[i].hide();
+				else
+					bulletc[i].move();
+			}
+		}
 	}
-
-	if (bullet.show() == true)
-	{
-		if (bullet.x_pos > 650)
-			bullet.hide();
-		else
-			bullet.move();
-	}
-
+	
 }
+*/
 
 /*
 void Hero::super_fire()
