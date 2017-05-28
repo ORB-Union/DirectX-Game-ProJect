@@ -1,5 +1,7 @@
 #include"Common.h"
 
+#define ENEMY_NUM 5
+
 class Enemy :public entity {
 
 public :

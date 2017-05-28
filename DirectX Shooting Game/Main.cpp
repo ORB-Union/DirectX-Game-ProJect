@@ -7,6 +7,7 @@
 #include"Common.h"
 #include"Enemy.h"
 #include"Hero.h"
+#include"Bullet.h"
 
 // define the screen resolution and keyboard macros
 #define SCREEN_WIDTH 1240
@@ -33,12 +34,16 @@ std::string message;
 
 // sprite declarations
 LPDIRECT3DTEXTURE9 sprite;    // the pointer to the sprite
-LPDIRECT3DTEXTURE9 sprite_hero;    // the pointer to the sprite
-LPDIRECT3DTEXTURE9 sprite_enemy;    // the pointer to the sprite
-LPDIRECT3DTEXTURE9 sprite_bullet;    // the pointer to the sprite
-LPDIRECT3DTEXTURE9 sprite_superbullet;
-LPDIRECT3DTEXTURE9 sprite_enemybullet;
 
+//플레이어
+LPDIRECT3DTEXTURE9 sprite_hero;    // the pointer to the sprite
+LPDIRECT3DTEXTURE9 sprite_bullet;    // the pointer to the sprite // 코인 불렛
+LPDIRECT3DTEXTURE9 sprite_superbullet; // 필살기
+
+
+//적
+LPDIRECT3DTEXTURE9 sprite_enemy;    // the pointer to the sprite
+LPDIRECT3DTEXTURE9 sprite_enemybullet;
 
 
 // function prototypes
@@ -48,7 +53,7 @@ void cleanD3D(void);		// closes Direct3D and releases memory
 
 void init_game(void);
 void do_game_logic(void);
-bool sphere_collision_check(float x0, float y0, float size0, float x1, float y1, float size1);
+//bool sphere_collision_check(float x0, float y0, float size0, float x1, float y1, float size1);
 
 
 // the WindowProc function prototype
@@ -60,9 +65,12 @@ using namespace std;
 enum { MOVE_UP, MOVE_DOWN, MOVE_LEFT, MOVE_RIGHT };
 
 
-//객체 생성 
+//객체 생성
+
 Hero hero;
+Bullet bullet;
 Enemy enemy[ENEMY_NUM];
+
 //Bullet bullet;
 //SuperBullet Superbullet;
 //EnemyBullet enemybullet;
@@ -72,7 +80,7 @@ Enemy enemy[ENEMY_NUM];
 int WINAPI WinMain(HINSTANCE hInstance,
 	HINSTANCE hPrevInstance,
 	LPSTR lpCmdLine,
-	int nCmdShow)
+	int nCmdShow)	
 {
 	HWND hWnd;
 	WNDCLASSEX wc;
@@ -198,6 +206,7 @@ void initD3D(HWND hWnd)
 		&sprite);    // load to sprite
 
 
+	//플레이어
 	D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
 		L"SonicSprite1.png",    // the file name
 		D3DX_DEFAULT,    // default width
@@ -213,6 +222,42 @@ void initD3D(HWND hWnd)
 		NULL,    // not using 256 colors
 		&sprite_hero);    // load to sprite
 
+    //플레이어 총알
+	D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
+		L"CoinBulletsprite.png",    // the file name
+		D3DX_DEFAULT,    // default width
+		D3DX_DEFAULT,    // default height
+		D3DX_DEFAULT,    // no mip mapping
+		NULL,    // regular usage
+		D3DFMT_A8R8G8B8,    // 32-bit pixels with alpha
+		D3DPOOL_MANAGED,    // typical memory handling
+		D3DX_DEFAULT,    // no filtering
+		D3DX_DEFAULT,    // no mip filtering
+		D3DCOLOR_XRGB(255, 0, 255),    // the hot-pink color key
+		NULL,    // no image info struct
+		NULL,    // not using 256 colors
+		&sprite_bullet);    // load to sprite
+	
+	//필살기
+	D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
+		L"Boss.png",    // the file name
+		D3DX_DEFAULT,    // default width
+		D3DX_DEFAULT,    // default height
+		D3DX_DEFAULT,    // no mip mapping
+		NULL,    // regular usage
+		D3DFMT_A8R8G8B8,    // 32-bit pixels with alpha
+		D3DPOOL_MANAGED,    // typical memory handling
+		D3DX_DEFAULT,    // no filtering
+		D3DX_DEFAULT,    // no mip filtering
+		D3DCOLOR_XRGB(255, 0, 255),    // the hot-pink color key
+		NULL,    // no image info struct
+		NULL,    // not using 256 colors
+		&sprite_superbullet);    // load to sprite
+
+
+
+
+	//적
 	D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
 		L"Enemy2.png",    // the file name
 		D3DX_DEFAULT,    // default width
@@ -228,6 +273,9 @@ void initD3D(HWND hWnd)
 		NULL,    // not using 256 colors
 		&sprite_enemy);    // load to sprite
 
+
+
+	//적총알
 	D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
 		L"bomb.png",    // the file name
 		D3DX_DEFAULT,    // default width
@@ -243,36 +291,6 @@ void initD3D(HWND hWnd)
 		NULL,    // not using 256 colors
 		&sprite_enemybullet);    // load to sprite
 
-
-	D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
-		L"HaroBullet.png",    // the file name
-		D3DX_DEFAULT,    // default width
-		D3DX_DEFAULT,    // default height
-		D3DX_DEFAULT,    // no mip mapping
-		NULL,    // regular usage
-		D3DFMT_A8R8G8B8,    // 32-bit pixels with alpha
-		D3DPOOL_MANAGED,    // typical memory handling
-		D3DX_DEFAULT,    // no filtering
-		D3DX_DEFAULT,    // no mip filtering
-		D3DCOLOR_XRGB(255, 0, 255),    // the hot-pink color key
-		NULL,    // no image info struct
-		NULL,    // not using 256 colors
-		&sprite_bullet);    // load to sprite
-
-	D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
-		L"Boss.png",    // the file name
-		D3DX_DEFAULT,    // default width
-		D3DX_DEFAULT,    // default height
-		D3DX_DEFAULT,    // no mip mapping
-		NULL,    // regular usage
-		D3DFMT_A8R8G8B8,    // 32-bit pixels with alpha
-		D3DPOOL_MANAGED,    // typical memory handling
-		D3DX_DEFAULT,    // no filtering
-		D3DX_DEFAULT,    // no mip filtering
-		D3DCOLOR_XRGB(255, 0, 255),    // the hot-pink color key
-		NULL,    // no image info struct
-		NULL,    // not using 256 colors
-		&sprite_superbullet);    // load to sprite
 
 	/*
 	font = NULL;
@@ -309,24 +327,30 @@ void init_game(void)
 
 }
 
-
 void do_game_logic(void)
 {
 
 
 	//주인공 처리 
 	if (KEY_DOWN(VK_UP))
+	{
 		hero.move(MOVE_UP);
+	}
 
 	if (KEY_DOWN(VK_DOWN))
+	{
 		hero.move(MOVE_DOWN);
+	}
 
 	if (KEY_DOWN(VK_LEFT))
+	{
 		hero.move(MOVE_LEFT);
+	}
 
 	if (KEY_DOWN(VK_RIGHT))
+	{
 		hero.move(MOVE_RIGHT);
-
+	}
 
 	//적들 처리 
 	for (int i = 0; i < ENEMY_NUM; i++)
@@ -340,6 +364,40 @@ void do_game_logic(void)
 			enemy[i].move();
 		}
 	}
+
+
+	//총알 처리 
+	if (bullet.show() == false)
+	{
+		if (KEY_DOWN(VK_SPACE))
+		{
+			bullet.active();
+			bullet.init(hero.x_pos, hero.y_pos);
+		}
+	}
+
+	if (bullet.show() == true)
+	{
+		if (bullet.x_pos > 1300)
+			bullet.hide();
+		else
+			bullet.move();
+
+
+		/*
+		//충돌 처리
+		for (int i = 0; i<ENEMY_NUM; i++)
+		{
+			if (bullet.check_collision(enemy[i].x_pos, enemy[i].y_pos) == true)
+			{
+				enemy[i].init((float)(rand() % 300), rand() % 200 - 300);
+
+			}
+		}
+	}
+	*/
+	}
+
 }
 
 // this is the function used to render a single frame
@@ -383,7 +441,7 @@ void render_frame(void)
 	D3DXVECTOR3 center(0.0f, 0.0f, 0.0f);    // center at the upper-left corner
 	D3DXVECTOR3 position(hero.x_pos, hero.y_pos, 0.0f);    // position at 50, 50 with no depth
 	d3dspt->Draw(sprite_hero, &part, &center, &position, D3DCOLOR_ARGB(255, 255, 255, 255));
-	/*
+	
 	////총알 
 	if (bullet.bShow == true)
 	{
@@ -393,6 +451,9 @@ void render_frame(void)
 		D3DXVECTOR3 position1(bullet.x_pos, bullet.y_pos, 0.0f);    // position at 50, 50 with no depth
 		d3dspt->Draw(sprite_bullet, &part1, &center1, &position1, D3DCOLOR_ARGB(255, 255, 255, 255));
 	}
+
+
+	/*
 
 	////슈퍼총알 
 	if (Superbullet.bShow == true)

@@ -7,4 +7,5 @@ public:
 	void fire();
 	void super_fire();
 	void move(int i);
+	void Move();
 };
