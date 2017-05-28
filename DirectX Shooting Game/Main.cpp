@@ -334,7 +334,7 @@ void init_game(void)
 
 void do_game_logic(void)
 {
-	KeyCheck = true;
+	static int counter = 0;
 
 	//주인공 처리 
 	if (KEY_DOWN(VK_UP))
@@ -369,10 +369,12 @@ void do_game_logic(void)
 			enemy[i].move();
 		}
 	}
-	
-
-	if (GetKeyState(VK_SPACE) && 0x800000)
+	//총알 연사처리
+	if (GetKeyState(VK_SPACE) && 0x80000)
 	{
+		counter++;
+		if(counter % 15 == 0)
+		{
 		for (int i = 0; i < 100; i++)
 		{
 			if (bull[i].show() == false)
@@ -382,10 +384,12 @@ void do_game_logic(void)
 				//bull[i].move();
 				break;
 			}
+
+		}
 		}
 	}
 
-	
+
 	for (int k = 0; k < 100; k++)
 	{
 		if (bull[k].show() == true)
