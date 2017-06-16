@@ -4,18 +4,20 @@
 #include <d3d9.h>
 #include <d3dx9.h>
 #include <iostream>
+
 #include"Common.h"
 #include"Enemy.h"
 #include"Hero.h"
 #include"Bullet.h"
+
+using namespace std;
 
 // define the screen resolution and keyboard macros
 #define SCREEN_WIDTH 1240
 #define SCREEN_HEIGHT 800
 #define KEY_DOWN(vk_code) ((GetAsyncKeyState(vk_code) & 0x8000) ? 1 : 0)
 #define KEY_UP(vk_code) ((GetAsyncKeyState(vk_code) & 0x8000) ? 0 : 1)
-
-#define ENEMY_NUM 5
+#define ENEMY_NUM 7
 
 
 // include the Direct3D Library file
@@ -54,6 +56,7 @@ void cleanD3D(void);		// closes Direct3D and releases memory
 
 void init_game(void);
 void do_game_logic(void);
+bool sphere_collision_check(float x0, float y0, float size0, float x1, float y1, float size1);
 //bool sphere_collision_check(float x0, float y0, float size0, float x1, float y1, float size1);
 
 
@@ -72,6 +75,7 @@ Hero hero;
 //Bullet bullet;
 Bullet bull[100];
 Enemy enemy[ENEMY_NUM];
+EnemyBullet Ebullet[ENEMY_NUM];
 
 //Bullet bullet;
 //SuperBullet Superbullet;
@@ -227,8 +231,8 @@ void initD3D(HWND hWnd)
     //플레이어 총알
 		D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
 			L"CoinBulletsprite.png",    // the file name
-			D3DX_DEFAULT,    // default width
-			D3DX_DEFAULT,    // default height
+			40,    // default width
+			40,    // default height
 			D3DX_DEFAULT,    // no mip mapping
 			NULL,    // regular usage
 			D3DFMT_A8R8G8B8,    // 32-bit pixels with alpha
@@ -261,7 +265,7 @@ void initD3D(HWND hWnd)
 
 	//적
 	D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
-		L"Enemy2.png",    // the file name
+		L"EnemySonic.png",    // the file name
 		D3DX_DEFAULT,    // default width
 		D3DX_DEFAULT,    // default height
 		D3DX_DEFAULT,    // no mip mapping
@@ -279,7 +283,7 @@ void initD3D(HWND hWnd)
 
 	//적총알
 	D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
-		L"bomb.png",    // the file name
+		L"EnemyBullet.png",    // the file name
 		D3DX_DEFAULT,    // default width
 		D3DX_DEFAULT,    // default height
 		D3DX_DEFAULT,    // no mip mapping
@@ -309,6 +313,48 @@ void initD3D(HWND hWnd)
 	return;
 }
 
+bool sphere_collision_check(float x0, float y0, float size0, float x1, float y1, float size1)
+{
+
+	if ((x0 - x1)*(x0 - x1) + (y0 - y1)*(y0 - y1) < (size0 + size1) * (size0 + size1))
+		return true;
+	else
+		return false;
+
+}
+
+
+
+//총알 발사시 적과의 충돌
+bool Bullet::check_collision(float x, float y)
+{
+
+	//충돌 처리 시 
+	if (sphere_collision_check(x_pos, y_pos, 40, x, y, 40) == true)
+	{
+		bShow = false;
+		return true;
+
+	}
+	else {
+
+		return false;
+	}
+}
+
+
+//적의 총알	발사시 캐릭터와의 충돌
+bool EnemyBullet::check_collision(float x, float y)
+{
+	if (sphere_collision_check(x_pos, y_pos, 40, x, y, 40) == true)
+	{
+		bShow = false;
+		return true;
+	}
+	else
+		return false;
+}
+
 
 void init_game(void)
 {
@@ -316,18 +362,25 @@ void init_game(void)
 	hero.init(50, 300);
 
 
-	//적 및 총알들 초기화 
-	for (int i = 0; i<ENEMY_NUM; i++)
+	//적 초기화 
+	for (int i = 0; i < ENEMY_NUM; i++)
 	{
-		enemy[i].init((float)(rand() % 300), rand() % 200 - 300);
-		//enemybullet.init(enemy[i].x_pos, enemy[i].y_pos);
+		enemy[i].init((float)(SCREEN_WIDTH + (rand() % 300)), rand() % SCREEN_HEIGHT);
+		
 	}
 
 	//총알 초기화
-	for(int i = 0 ; i < 100; i++)
+	for (int i = 0; i < 100; i++)
 	{
-	bull[i].init(hero.x_pos, hero.y_pos);
+		bull[i].init(hero.x_pos, hero.y_pos);
 	}
+
+	//적 총알 초기화
+	for (int i = 0; i < ENEMY_NUM; i++)
+	{
+		Ebullet[i].init(enemy[i].x_pos, enemy[i	].y_pos);
+	}
+
 	//Superbullet.init(hero.x_pos, hero.y_pos);
 
 }
@@ -360,20 +413,46 @@ void do_game_logic(void)
 	//적들 처리 
 	for (int i = 0; i < ENEMY_NUM; i++)
 	{
-		if (enemy[i].y_pos > 500)
-		{
-			enemy[i].init((float)(rand() % 300), rand() % 200 - 300);
-		}
+		if (enemy[i].x_pos < 0)
+			enemy[i].init((float)(SCREEN_WIDTH + (rand() % 200)), rand() % SCREEN_HEIGHT);
 		else
-		{
 			enemy[i].move();
+	}
+
+	//적 총알 처리
+	for (int j = 0; j < ENEMY_NUM; j++)
+	{
+		if (Ebullet[j].show() == false)
+		{
+			Ebullet[j].active();
+			Ebullet[j].init(enemy[j].x_pos, enemy[j].y_pos);
 		}
 	}
+	//적 총알 처리
+	for (int t = 0; t < ENEMY_NUM; t++)
+	{
+
+		if (Ebullet[t].show() == true)
+		{
+			if (Ebullet[t].x_pos < SCREEN_WIDTH)
+				Ebullet[t].hide();
+			else
+				Ebullet[t].move();
+		}
+
+
+		if (Ebullet[t].check_collision(hero.x_pos, hero.y_pos) == true)
+		{
+			Ebullet[t].hide();
+		}
+	}
+
+
 	//총알 연사처리
-	if (GetKeyState(VK_SPACE) && 0x80000)
+	if (KEY_DOWN(VK_SPACE) && 0x80000)
 	{
 		counter++;
-		if(counter % 15 == 0)
+		if(counter % 5 == 0)
 		{
 		for (int i = 0; i < 100; i++)
 		{
@@ -388,18 +467,25 @@ void do_game_logic(void)
 		}
 		}
 	}
-
-
-	for (int k = 0; k < 100; k++)
+	//총알처리
+	for (int i = 0; i < 100; i++)
 	{
-		if (bull[k].show() == true)
+		if (bull[i].show() == true)
 		{
-			bull[k].move();
+			if (bull[i].x_pos > SCREEN_WIDTH)
+				bull[i].hide();
+			else
+				bull[i].move();
+
+			//충돌 처리 
+			for (int j = 0; j < ENEMY_NUM; j++)
+			{
+				if (bull[i].check_collision(enemy[j].x_pos, enemy[j].y_pos) == true)
+				{
+					enemy[j].init((float)(SCREEN_WIDTH + (rand() % 300)), rand() % SCREEN_HEIGHT);
+				}
+			}
 		}
-		if (bull[k].x_pos > 1300)
-		{
-			bull[k].hide();
-		}	
 	}
 	/*
 	for (int k = 0; k < 100; k++)
@@ -503,24 +589,24 @@ void render_frame(void)
 	D3DXVECTOR3 center(0.0f, 0.0f, 0.0f);    // center at the upper-left corner
 	D3DXVECTOR3 position(hero.x_pos, hero.y_pos, 0.0f);    // position at 50, 50 with no depth
 	d3dspt->Draw(sprite_hero, &part, &center, &position, D3DCOLOR_ARGB(255, 255, 255, 255));
-	
+
 	////총알
-	for(int i = 0; i < 100; i++)
+	for (int i = 0; i < 100; i++)
 	{
-	if (bull[i].bShow == true)
-	{
-		RECT part1;
-		SetRect(&part1, 0, 0, 64, 64);
-		D3DXVECTOR3 center1(0.0f, 0.0f, 0.0f);    // center at the upper-left corner
-		D3DXVECTOR3 position1(bull[i].x_pos, bull[i].y_pos, 0.0f);    // position at 50, 50 with no depth
-		d3dspt->Draw(sprite_bullet, &part1, &center1, &position1, D3DCOLOR_ARGB(255, 255, 255, 255));
-	}
+		if (bull[i].bShow == true)
+		{
+			RECT part1;
+			SetRect(&part1, 0, 0, 40, 40);
+			D3DXVECTOR3 center1(0.0f, 0.0f, 0.0f);    // center at the upper-left corner
+			D3DXVECTOR3 position1(bull[i].x_pos, bull[i].y_pos + 5.0f, 0.0f);    // position at 50, 50 with no depth
+			d3dspt->Draw(sprite_bullet, &part1, &center1, &position1, D3DCOLOR_ARGB(255, 255, 255, 255));
+		}
 	}
 
 
 	/*
 
-	////슈퍼총알 
+	////슈퍼총알
 	if (Superbullet.bShow == true)
 	{
 		RECT part3;
@@ -531,30 +617,30 @@ void render_frame(void)
 	}
 	*/
 
+
 	////에네미 
 	RECT part2;
-	SetRect(&part2, 0, 0, 64, 64);
+	SetRect(&part2, 0, 0, 60, 60);
 	D3DXVECTOR3 center2(0.0f, 0.0f, 0.0f);    // center at the upper-left corner
-	for (int i = 0; i<ENEMY_NUM; i++)
+
+	for (int i = 0; i < ENEMY_NUM; i++)
 	{
 		D3DXVECTOR3 position2(enemy[i].x_pos, enemy[i].y_pos, 0.0f);    // position at 50, 50 with no depth
 		d3dspt->Draw(sprite_enemy, &part2, &center2, &position2, D3DCOLOR_ARGB(255, 255, 255, 255));
 	}
 
-	/*
 	//적총알
-	if (enemybullet.bShow == true)
+
+		
+	RECT part4;
+	SetRect(&part4, 0, 0, 64, 64);
+	D3DXVECTOR3 center4(0.0f, 0.0f, 0.0f);    // center at the upper-left corner
+
+	for (int i = 0; i < ENEMY_NUM; i++)
 	{
-		for (int i = 0; i < ENEMY_NUM; i++)
-		{
-			RECT part4;
-			SetRect(&part4, 0, 0, 64, 64);
-			D3DXVECTOR3 center4(0.0f, 0.0f, 0.0f);    // center at the upper-left corner
-			D3DXVECTOR3 position4(enemybullet.x_pos, enemybullet.y_pos, 0.0f);    // position at 50, 50 with no depth
-			d3dspt->Draw(sprite_enemybullet, &part4, &center4, &position4, D3DCOLOR_ARGB(255, 255, 255, 255));
-		}
+			D3DXVECTOR3 position4(Ebullet[i].x_pos, Ebullet[i].y_pos, 0.0f);    // position at 50, 50 with no depth	
+			d3dspt->Draw(sprite_enemybullet, &part4, &center4, &position4, D3DCOLOR_ARGB(255, 255, 255, 255));	
 	}
-	*/
 
 	if (font)
 	{

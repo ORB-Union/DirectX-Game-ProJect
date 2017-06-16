@@ -15,7 +15,7 @@ void Enemy::init(float x, float y)
 
 void Enemy::move()
 {
-
+	x_pos -= 10;
 }
 
 void Enemy::fire()

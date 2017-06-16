@@ -16,3 +16,18 @@ public:
 	void active(); // 버튼 누를시 총알 발사
 	bool check_collision(float x, float y); // 충돌 체크
 };
+
+
+
+class EnemyBullet : public Bullet
+{
+	bool bShow;
+
+public:
+	void move();
+	bool check_collision(float x, float y);
+	void init(float x, float y);
+	bool show();
+	void active();
+	void hide();
+};

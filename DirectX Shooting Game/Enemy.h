@@ -8,4 +8,5 @@ public :
 	void init(float x, float y);
 	void fire();
 	void move();
+	bool Visible;
 };

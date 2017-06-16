@@ -44,6 +44,8 @@ void Hero::move(int i)
 
 }
 
+
+
 /*
 void Hero::fire()
 {
