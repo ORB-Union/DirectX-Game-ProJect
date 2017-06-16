@@ -175,8 +175,6 @@ void initD3D(HWND hWnd)
 	d3d = Direct3DCreate9(D3D_SDK_VERSION);
 
 	D3DPRESENT_PARAMETERS d3dpp;
-
-
 	ZeroMemory(&d3dpp, sizeof(d3dpp));
 	d3dpp.Windowed = TRUE;
 	d3dpp.SwapEffect = D3DSWAPEFFECT_DISCARD;
@@ -349,6 +347,7 @@ bool EnemyBullet::check_collision(float x, float y)
 	if (sphere_collision_check(x_pos, y_pos, 40, x, y, 40) == true)
 	{
 		bShow = false;
+		x_pos = -64;
 		return true;
 	}
 	else
@@ -410,61 +409,23 @@ void do_game_logic(void)
 		hero.move(MOVE_RIGHT);
 	}
 
-	//利甸 贸府 
-	for (int i = 0; i < ENEMY_NUM; i++)
-	{
-		if (enemy[i].x_pos < 0)
-			enemy[i].init((float)(SCREEN_WIDTH + (rand() % 200)), rand() % SCREEN_HEIGHT);
-		else
-			enemy[i].move();
-	}
-
-	//利 醚舅 贸府
-	for (int j = 0; j < ENEMY_NUM; j++)
-	{
-		if (Ebullet[j].show() == false)
-		{
-			Ebullet[j].active();
-			Ebullet[j].init(enemy[j].x_pos, enemy[j].y_pos);
-		}
-	}
-	//利 醚舅 贸府
-	for (int t = 0; t < ENEMY_NUM; t++)
-	{
-
-		if (Ebullet[t].show() == true)
-		{
-			if (Ebullet[t].x_pos < SCREEN_WIDTH)
-				Ebullet[t].hide();
-			else
-				Ebullet[t].move();
-		}
-
-
-		if (Ebullet[t].check_collision(hero.x_pos, hero.y_pos) == true)
-		{
-			Ebullet[t].hide();
-		}
-	}
-
-
 	//醚舅 楷荤贸府
 	if (KEY_DOWN(VK_SPACE) && 0x80000)
 	{
 		counter++;
-		if(counter % 5 == 0)
+		if (counter % 5 == 0)
 		{
-		for (int i = 0; i < 100; i++)
-		{
-			if (bull[i].show() == false)
+			for (int i = 0; i < 100; i++)
 			{
-				bull[i].active();
-				bull[i].init(hero.x_pos, hero.y_pos);
-				//bull[i].move();
-				break;
-			}
+				if (bull[i].show() == false)
+				{
+					bull[i].active();
+					bull[i].init(hero.x_pos, hero.y_pos);
+					//bull[i].move();
+					break;
+				}
 
-		}
+			}
 		}
 	}
 	//醚舅贸府
@@ -487,6 +448,49 @@ void do_game_logic(void)
 			}
 		}
 	}
+
+	/////////////////////
+	//利贸府
+
+	//利甸 贸府 
+	for (int i = 0; i < ENEMY_NUM; i++)
+	{
+		if (enemy[i].x_pos < 0)
+			enemy[i].init((float)(SCREEN_WIDTH + (rand() % 200)), rand() % SCREEN_HEIGHT);
+		else
+			enemy[i].move();
+	}
+
+	//利 醚舅 贸府
+	for (int j = 0; j < ENEMY_NUM; j++)
+	{
+		if (enemy[j].x_pos < (SCREEN_WIDTH - 300) + rand() % 150 && Ebullet[j].show() == false)
+		{
+			Ebullet[j].active();
+			Ebullet[j].init(enemy[j].x_pos, enemy[j].y_pos);
+		}
+	}
+	//利 醚舅 贸府
+	for (int t = 0; t < ENEMY_NUM; t++)
+	{
+
+		if (Ebullet[t].show() == true)
+		{
+			if (Ebullet[t].x_pos < -64)
+				Ebullet[t].hide();
+			else
+				Ebullet[t].move();
+		}
+
+
+		if (Ebullet[t].check_collision(hero.x_pos, hero.y_pos) == true)
+		{
+			Ebullet[t].hide();
+		}
+	}
+
+
+
 	/*
 	for (int k = 0; k < 100; k++)
 	{
@@ -619,28 +623,27 @@ void render_frame(void)
 
 
 	////俊匙固 
-	RECT part2;
-	SetRect(&part2, 0, 0, 60, 60);
-	D3DXVECTOR3 center2(0.0f, 0.0f, 0.0f);    // center at the upper-left corner
 
-	for (int i = 0; i < ENEMY_NUM; i++)
-	{
-		D3DXVECTOR3 position2(enemy[i].x_pos, enemy[i].y_pos, 0.0f);    // position at 50, 50 with no depth
-		d3dspt->Draw(sprite_enemy, &part2, &center2, &position2, D3DCOLOR_ARGB(255, 255, 255, 255));
-	}
-
+		RECT part2;
+		SetRect(&part2, 0, 0, 60, 60);
+		D3DXVECTOR3 center2(0.0f, 0.0f, 0.0f);    // center at the upper-left corner
+		for (int i = 0; i < ENEMY_NUM; i++)
+		{
+			D3DXVECTOR3 position2(enemy[i].x_pos, enemy[i].y_pos, 0.0f);    // position at 50, 50 with no depth
+			d3dspt->Draw(sprite_enemy, &part2, &center2, &position2, D3DCOLOR_ARGB(255, 255, 255, 255));
+		}
 	//利醚舅
+				
+			RECT part4;
+			SetRect(&part4, 0, 0, 64, 64);
+			D3DXVECTOR3 center4(0.0f, 0.0f, 0.0f);    // center at the upper-left corner	
+	
+			for (int i = 0; i < ENEMY_NUM; i++)
 
-		
-	RECT part4;
-	SetRect(&part4, 0, 0, 64, 64);
-	D3DXVECTOR3 center4(0.0f, 0.0f, 0.0f);    // center at the upper-left corner
-
-	for (int i = 0; i < ENEMY_NUM; i++)
-	{
-			D3DXVECTOR3 position4(Ebullet[i].x_pos, Ebullet[i].y_pos, 0.0f);    // position at 50, 50 with no depth	
-			d3dspt->Draw(sprite_enemybullet, &part4, &center4, &position4, D3DCOLOR_ARGB(255, 255, 255, 255));	
-	}
+			{
+				D3DXVECTOR3 position4(Ebullet[i].x_pos, Ebullet[i].y_pos, 0.0f);    // position at 50, 50 with no depth		
+				d3dspt->Draw(sprite_enemybullet, &part4, &center4, &position4, D3DCOLOR_ARGB(255, 255, 255, 255));
+			}
 
 	if (font)
 	{

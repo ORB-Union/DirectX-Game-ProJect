@@ -56,7 +56,7 @@ void Bullet::hide()
 
 void EnemyBullet::move()
 {
-	x_pos -= 25;
+	x_pos -= 15;
 }
 
 

@@ -21,9 +21,8 @@ public:
 
 class EnemyBullet : public Bullet
 {
-	bool bShow;
-
 public:
+	bool bShow;
 	void move();
 	bool check_collision(float x, float y);
 	void init(float x, float y);
