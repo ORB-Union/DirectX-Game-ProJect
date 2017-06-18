@@ -5,6 +5,9 @@
 #include <d3dx9.h>
 #include <iostream>
 
+//배경음
+#include<mmsystem.h>
+
 #include"Common.h"
 #include"Enemy.h"
 #include"Hero.h"
@@ -18,11 +21,19 @@ using namespace std;
 #define KEY_DOWN(vk_code) ((GetAsyncKeyState(vk_code) & 0x8000) ? 1 : 0)
 #define KEY_UP(vk_code) ((GetAsyncKeyState(vk_code) & 0x8000) ? 0 : 1)
 #define ENEMY_NUM 7
+#define NewENEMY_NUM 3
+
 
 
 // include the Direct3D Library file
 #pragma comment (lib, "d3d9.lib")
 #pragma comment (lib, "d3dx9.lib")
+
+//음악 재생
+#pragma comment (lib, "winmm.lib")
+MCI_OPEN_PARMS mciOpen;
+MCI_PLAY_PARMS mciPlay;
+MCI_STATUS_PARMS mciStatus;
 
 // global declarations
 LPDIRECT3D9 d3d;    // the pointer to our Direct3D interface
@@ -35,11 +46,26 @@ std::string message;
 
 bool KeyCheck;
 
+int Time;
+int counter;
+
 // sprite declarations
 LPDIRECT3DTEXTURE9 sprite;    // the pointer to the sprite
 
 //플레이어
 LPDIRECT3DTEXTURE9 sprite_hero;    // the pointer to the sprite
+//플레이어 애니메이션
+LPDIRECT3DTEXTURE9      sprite_hero_ani1 = NULL; // Our texture
+LPDIRECT3DTEXTURE9      sprite_hero_ani2 = NULL; // Our texture
+LPDIRECT3DTEXTURE9      sprite_hero_ani3 = NULL; // Our texture
+LPDIRECT3DTEXTURE9      sprite_hero_ani4 = NULL; // Our texture
+LPDIRECT3DTEXTURE9      sprite_hero_ani5 = NULL; // Our texture
+LPDIRECT3DTEXTURE9      sprite_hero_ani6 = NULL; // Our texture
+LPDIRECT3DTEXTURE9      sprite_hero_ani7 = NULL; // Our texture
+LPDIRECT3DTEXTURE9      sprite_hero_ani8 = NULL; // Our texture
+
+
+//총알
 LPDIRECT3DTEXTURE9 sprite_bullet;    // the pointer to the sprite // 코인 불렛
 LPDIRECT3DTEXTURE9 sprite_superbullet; // 필살기
 
@@ -47,6 +73,8 @@ LPDIRECT3DTEXTURE9 sprite_superbullet; // 필살기
 //적
 LPDIRECT3DTEXTURE9 sprite_enemy;    // the pointer to the sprite
 LPDIRECT3DTEXTURE9 sprite_enemybullet;
+
+LPDIRECT3DTEXTURE9 sprite_Newenemy;    // the pointer to the sprite
 
 
 // function prototypes
@@ -76,10 +104,37 @@ Hero hero;
 Bullet bull[100];
 Enemy enemy[ENEMY_NUM];
 EnemyBullet Ebullet[ENEMY_NUM];
+NewEnemy newenemy[ENEMY_NUM];
 
 //Bullet bullet;
 //SuperBullet Superbullet;
 //EnemyBullet enemybullet;
+
+//음악재생 관련
+UINT wDeviceID = 0;
+DWORD LoadWAV(HWND hWnd, LPCTSTR lpszWave)
+{
+	DWORD Result;
+	mciOpen.lpstrDeviceType = L"MPEGVideo";
+	//재생타입
+
+	mciOpen.lpstrElementName = lpszWave;
+
+	Result = mciSendCommand(wDeviceID, MCI_OPEN, MCI_OPEN_TYPE | MCI_OPEN_ELEMENT, (DWORD)(LPVOID)&mciOpen);
+
+	if (Result)
+	{
+		return Result;
+	}
+
+	wDeviceID = mciOpen.wDeviceID;
+	mciPlay.dwCallback = (DWORD)hWnd;
+
+	if (Result)
+		return Result;
+
+	return 0;
+}
 
 
 // the entry point for any Windows program
@@ -102,7 +157,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
 	RegisterClassEx(&wc);
 
-	hWnd = CreateWindow(L"WindowClass", L"Our Direct3D Program",
+	hWnd = CreateWindow(L"WindowClass", L"DirectX Shooting Game",
 		WS_OVERLAPPEDWINDOW, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT,
 		NULL, NULL, hInstance, NULL);
 
@@ -118,6 +173,11 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	// enter the main loop:
 
 	MSG msg;
+	DWORD Sound1;
+
+	Sound1 = LoadWAV(hWnd, L"Yowamushi Pedal OST - Sakamichi.mp3");
+	Sound1 = mciSendCommand(1, MCI_PLAY, MCI_NOTIFY, (DWORD)(LPVOID)&mciPlay);
+
 
 	while (TRUE)
 	{
@@ -226,6 +286,136 @@ void initD3D(HWND hWnd)
 		NULL,    // not using 256 colors
 		&sprite_hero);    // load to sprite
 
+	/*
+	//플레이어 애니메이션
+	D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
+		L"SonicSprite1.png",    // the file name
+		D3DX_DEFAULT,    // default width
+		D3DX_DEFAULT,    // default height
+		D3DX_DEFAULT,    // no mip mapping
+		NULL,    // regular usage
+		D3DFMT_A8R8G8B8,    // 32-bit pixels with alpha
+		D3DPOOL_MANAGED,    // typical memory handling
+		D3DX_DEFAULT,    // no filtering
+		D3DX_DEFAULT,    // no mip filtering
+		D3DCOLOR_XRGB(255, 0, 255),    // the hot-pink color key
+		NULL,    // no image info struct
+		NULL,    // not using 256 colors
+		&sprite_hero_ani1);    // load to sprite
+
+	
+	D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
+		L"SonicSprite2.png",    // the file name
+		D3DX_DEFAULT,    // default width
+		D3DX_DEFAULT,    // default height
+		D3DX_DEFAULT,    // no mip mapping
+		NULL,    // regular usage
+		D3DFMT_A8R8G8B8,    // 32-bit pixels with alpha
+		D3DPOOL_MANAGED,    // typical memory handling
+		D3DX_DEFAULT,    // no filtering
+		D3DX_DEFAULT,    // no mip filtering
+		D3DCOLOR_XRGB(255, 0, 255),    // the hot-pink color key
+		NULL,    // no image info struct
+		NULL,    // not using 256 colors
+		&sprite_hero_ani2);    // load to sprite
+
+
+	D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
+		L"SonicSprite3.png",    // the file name
+		D3DX_DEFAULT,    // default width
+		D3DX_DEFAULT,    // default height
+		D3DX_DEFAULT,    // no mip mapping
+		NULL,    // regular usage
+		D3DFMT_A8R8G8B8,    // 32-bit pixels with alpha
+		D3DPOOL_MANAGED,    // typical memory handling
+		D3DX_DEFAULT,    // no filtering
+		D3DX_DEFAULT,    // no mip filtering
+		D3DCOLOR_XRGB(255, 0, 255),    // the hot-pink color key
+		NULL,    // no image info struct
+		NULL,    // not using 256 colors
+		&sprite_hero_ani3);    // load to sprite
+
+
+	D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
+		L"SonicSprite4.png",    // the file name
+		D3DX_DEFAULT,    // default width
+		D3DX_DEFAULT,    // default height
+		D3DX_DEFAULT,    // no mip mapping
+		NULL,    // regular usage
+		D3DFMT_A8R8G8B8,    // 32-bit pixels with alpha
+		D3DPOOL_MANAGED,    // typical memory handling
+		D3DX_DEFAULT,    // no filtering
+		D3DX_DEFAULT,    // no mip filtering
+		D3DCOLOR_XRGB(255, 0, 255),    // the hot-pink color key
+		NULL,    // no image info struct
+		NULL,    // not using 256 colors
+		&sprite_hero_ani4);    // load to sprite
+
+
+	D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
+		L"SonicSprite5.png",    // the file name
+		D3DX_DEFAULT,    // default width
+		D3DX_DEFAULT,    // default height
+		D3DX_DEFAULT,    // no mip mapping
+		NULL,    // regular usage
+		D3DFMT_A8R8G8B8,    // 32-bit pixels with alpha
+		D3DPOOL_MANAGED,    // typical memory handling
+		D3DX_DEFAULT,    // no filtering
+		D3DX_DEFAULT,    // no mip filtering
+		D3DCOLOR_XRGB(255, 0, 255),    // the hot-pink color key
+		NULL,    // no image info struct
+		NULL,    // not using 256 colors
+		&sprite_hero_ani5);    // load to sprite
+
+
+	D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
+		L"SonicSprite6.png",    // the file name
+		D3DX_DEFAULT,    // default width
+		D3DX_DEFAULT,    // default height
+		D3DX_DEFAULT,    // no mip mapping
+		NULL,    // regular usage
+		D3DFMT_A8R8G8B8,    // 32-bit pixels with alpha
+		D3DPOOL_MANAGED,    // typical memory handling
+		D3DX_DEFAULT,    // no filtering
+		D3DX_DEFAULT,    // no mip filtering
+		D3DCOLOR_XRGB(255, 0, 255),    // the hot-pink color key
+		NULL,    // no image info struct
+		NULL,    // not using 256 colors
+		&sprite_hero_ani6);    // load to sprite
+
+	D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
+		L"SonicSprite7.png",    // the file name
+		D3DX_DEFAULT,    // default width
+		D3DX_DEFAULT,    // default height
+		D3DX_DEFAULT,    // no mip mapping
+		NULL,    // regular usage
+		D3DFMT_A8R8G8B8,    // 32-bit pixels with alpha
+		D3DPOOL_MANAGED,    // typical memory handling
+		D3DX_DEFAULT,    // no filtering
+		D3DX_DEFAULT,    // no mip filtering
+		D3DCOLOR_XRGB(255, 0, 255),    // the hot-pink color key
+		NULL,    // no image info struct
+		NULL,    // not using 256 colors
+		&sprite_hero_ani7);    // load to sprite
+
+
+	D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
+		L"SonicSprite8.png",    // the file name
+		D3DX_DEFAULT,    // default width
+		D3DX_DEFAULT,    // default height
+		D3DX_DEFAULT,    // no mip mapping
+		NULL,    // regular usage
+		D3DFMT_A8R8G8B8,    // 32-bit pixels with alpha
+		D3DPOOL_MANAGED,    // typical memory handling
+		D3DX_DEFAULT,    // no filtering
+		D3DX_DEFAULT,    // no mip filtering
+		D3DCOLOR_XRGB(255, 0, 255),    // the hot-pink color key
+		NULL,    // no image info struct
+		NULL,    // not using 256 colors
+		&sprite_hero_ani8);    // load to sprite
+		*/
+
+
     //플레이어 총알
 		D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
 			L"CoinBulletsprite.png",    // the file name
@@ -257,8 +447,6 @@ void initD3D(HWND hWnd)
 		NULL,    // no image info struct
 		NULL,    // not using 256 colors
 		&sprite_superbullet);    // load to sprite
-
-
 
 
 	//적
@@ -294,6 +482,23 @@ void initD3D(HWND hWnd)
 		NULL,    // no image info struct
 		NULL,    // not using 256 colors
 		&sprite_enemybullet);    // load to sprite
+
+
+	//거대 소닉
+	D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
+		L"NewEnemy.png",    // the file name
+		D3DX_DEFAULT,    // default width
+		D3DX_DEFAULT,    // default height
+		D3DX_DEFAULT,    // no mip mapping
+		NULL,    // regular usage
+		D3DFMT_A8R8G8B8,    // 32-bit pixels with alpha
+		D3DPOOL_MANAGED,    // typical memory handling
+		D3DX_DEFAULT,    // no filtering
+		D3DX_DEFAULT,    // no mip filtering
+		D3DCOLOR_XRGB(255, 0, 255),    // the hot-pink color key
+		NULL,    // no image info struct
+		NULL,    // not using 256 colors
+		&sprite_Newenemy);    // load to sprite
 
 
 	/*
@@ -342,6 +547,7 @@ bool Hero::check_collision(float x, float y)
 }
 
 
+//적 충돌
 bool Enemy::check_collision(float x, float y)
 {
 
@@ -359,6 +565,20 @@ bool Enemy::check_collision(float x, float y)
 }
 
 
+bool NewEnemy::check_collision(float x, float y)
+{
+
+	//충돌 처리 시 
+	if (sphere_collision_check(x_pos, y_pos, 100, x, y, 100) == true)
+	{
+		bShow = false;
+		return true;
+
+	}
+	else {
+		return false;
+	}
+}
 
 
 //총알 발사시 적과의 충돌
@@ -382,10 +602,9 @@ bool Bullet::check_collision(float x, float y)
 //적의 총알	발사시 캐릭터와의 충돌
 bool EnemyBullet::check_collision(float x, float y)
 {
-	if (sphere_collision_check(x_pos, y_pos, 40, x, y, 40) == true)
+	if (sphere_collision_check(x_pos, y_pos, 30, x, y, 30) == true)
 	{
 		bShow = false;
-		x_pos = -64;
 		return true;
 	}
 	else
@@ -402,8 +621,15 @@ void init_game(void)
 	//적 초기화 
 	for (int i = 0; i < ENEMY_NUM; i++)
 	{
-		enemy[i].init((float)(SCREEN_WIDTH + (rand() % 300)), rand() % SCREEN_HEIGHT);
+		enemy[i].init((float)(SCREEN_WIDTH + (rand() % 300)), rand() % SCREEN_HEIGHT-50);
 		
+	}
+
+	//새로운적 초기화
+	for (int i = 0; i < NewENEMY_NUM; i++)
+	{
+		newenemy[i].init((float)(SCREEN_WIDTH + (rand() % 300)), rand() % SCREEN_HEIGHT-50);
+
 	}
 
 	//총알 초기화
@@ -476,13 +702,28 @@ void do_game_logic(void)
 			else
 				bull[i].move();
 
-			//충돌 처리 
+			//일반 적 충돌 처리 
 			for (int j = 0; j < ENEMY_NUM; j++)
 			{
 				if (bull[i].check_collision(enemy[j].x_pos, enemy[j].y_pos) == true)
 				{
-					enemy[j].init((float)(SCREEN_WIDTH + (rand() % 300)), rand() % SCREEN_HEIGHT);
+					enemy[j].init((float)(SCREEN_WIDTH + (rand() % 300)), rand() % SCREEN_HEIGHT-50);
 				}
+			}
+			
+			//새로운 적 충돌 처리
+			for (int t = 0; t < NewENEMY_NUM; t++)
+			{
+				if (bull[i].check_collision(newenemy[t].x_pos, newenemy[t].y_pos) == true)
+				{
+					newenemy[t].HP -= 1;
+					if (newenemy[t].HP <= 0)
+					{
+						newenemy[t].init((float)(SCREEN_WIDTH + (rand() % 300)), rand() % SCREEN_HEIGHT - 50);
+					}
+
+				}
+
 			}
 		}
 	}
@@ -494,9 +735,8 @@ void do_game_logic(void)
 		if (enemy[i].show() == false)
 		{
 			enemy[i].active();
-			enemy[i].init((float)(SCREEN_WIDTH + (rand() % 200)), rand() % SCREEN_HEIGHT);
+			enemy[i].init((float)(SCREEN_WIDTH + (rand() % 200)), rand() % SCREEN_HEIGHT-50);
 		}
-
 		if (enemy[i].show() == true)
 		{
 			if (enemy[i].x_pos < -100)
@@ -540,6 +780,44 @@ void do_game_logic(void)
 		}
 	}
 
+
+
+	/////////////////////////////////////////////
+		for (int i = 0; i < NewENEMY_NUM; i++)
+		{
+			if (newenemy[i].show() == false && Time % 8 == 0)
+			{
+				newenemy[i].active();
+				newenemy[i].init((float)(SCREEN_WIDTH + (rand() % 400)), rand() % SCREEN_HEIGHT);
+			}
+
+			if (newenemy[i].show() == true)
+			{
+				if (newenemy[i].x_pos < -100)
+				{
+					newenemy[i].hide();
+				}
+				//if(newenemy[i].x_pos > -100)
+				else
+				{
+					newenemy[i].move();
+					//newenemy[i].Stopping();					
+				}
+				/*
+				else
+				{
+					newenemy[i].Uping();
+					newenemy[i].downing();
+				}
+				*/
+
+			}
+
+			if (newenemy[i].check_collision(hero.x_pos, hero.y_pos) == true || newenemy[i].HP <= 0)
+			{
+				newenemy[i].hide();
+			}
+		}
 }
 
 // this is the function used to render a single frame
@@ -578,12 +856,65 @@ void render_frame(void)
 	d3dspt->Draw(sprite, &part6, &center6, &position6, D3DCOLOR_ARGB(255, 255, 255, 255));
 
 
-	//주인공 
-	RECT part;
-	SetRect(&part, 0, 0, 60, 60);
-	D3DXVECTOR3 center(0.0f, 0.0f, 0.0f);    // center at the upper-left corner
-	D3DXVECTOR3 position(hero.x_pos, hero.y_pos, 0.0f);    // position at 50, 50 with no depth
-	d3dspt->Draw(sprite_hero, &part, &center, &position, D3DCOLOR_ARGB(255, 255, 255, 255));
+	//주인공 애니메이션
+	RECT part_1;
+	SetRect(&part_1, 0, 0, 60, 60);
+	D3DXVECTOR3 center_1(0.0f, 0.0f, 0.0f);    // center at the upper-left corner
+	D3DXVECTOR3 position_1(hero.x_pos, hero.y_pos, 0.0f);    // position at 50, 50 with no depth
+	d3dspt->Draw(sprite_hero, &part_1, &center_1, &position_1, D3DCOLOR_ARGB(255, 255, 255, 255));
+
+
+	/* 애니메이션 작동 고민중
+	RECT part_2;
+	SetRect(&part_2, 0, 0, 60, 60);
+	D3DXVECTOR3 center_2(0.0f, 0.0f, 0.0f);    // center at the upper-left corner
+	D3DXVECTOR3 position_2(hero.x_pos, hero.y_pos, 0.0f);    // position at 50, 50 with no depth
+	d3dspt->Draw(sprite_hero_ani1, &part_2, &center_2, &position_2, D3DCOLOR_ARGB(255, 255, 255, 255));
+
+	RECT part_3;
+	SetRect(&part_3, 0, 0, 60, 60);
+	D3DXVECTOR3 center_3(0.0f, 0.0f, 0.0f);    // center at the upper-left corner
+	D3DXVECTOR3 position_3(hero.x_pos, hero.y_pos, 0.0f);    // position at 50, 50 with no depth
+	d3dspt->Draw(sprite_hero_ani2, &part_3, &center_3, &position_3, D3DCOLOR_ARGB(255, 255, 255, 255));
+
+	RECT part_4;
+	SetRect(&part_4, 0, 0, 60, 60);
+	D3DXVECTOR3 center_4(0.0f, 0.0f, 0.0f);    // center at the upper-left corner
+	D3DXVECTOR3 position_4(hero.x_pos, hero.y_pos, 0.0f);    // position at 50, 50 with no depth
+	d3dspt->Draw(sprite_hero_ani3, &part_4, &center_4, &position_4, D3DCOLOR_ARGB(255, 255, 255, 255));
+
+	RECT part_5;
+	SetRect(&part_5, 0, 0, 60, 60);
+	D3DXVECTOR3 center_5(0.0f, 0.0f, 0.0f);    // center at the upper-left corner
+	D3DXVECTOR3 position_5(hero.x_pos, hero.y_pos, 0.0f);    // position at 50, 50 with no depth
+	d3dspt->Draw(sprite_hero_ani4, &part_5, &center_5, &position_5, D3DCOLOR_ARGB(255, 255, 255, 255));
+
+	RECT part_6;
+	SetRect(&part_6, 0, 0, 60, 60);
+	D3DXVECTOR3 center_6(0.0f, 0.0f, 0.0f);    // center at the upper-left corner
+	D3DXVECTOR3 position_6(hero.x_pos, hero.y_pos, 0.0f);    // position at 50, 50 with no depth
+	d3dspt->Draw(sprite_hero_ani5, &part_6, &center_6, &position_6, D3DCOLOR_ARGB(255, 255, 255, 255));
+
+	RECT part_7;
+	SetRect(&part_7, 0, 0, 60, 60);
+	D3DXVECTOR3 center_7(0.0f, 0.0f, 0.0f);    // center at the upper-left corner
+	D3DXVECTOR3 position_7(hero.x_pos, hero.y_pos, 0.0f);    // position at 50, 50 with no depth
+	d3dspt->Draw(sprite_hero_ani6, &part_7, &center_7, &position_7, D3DCOLOR_ARGB(255, 255, 255, 255));
+
+	RECT part_8;
+	SetRect(&part_8, 0, 0, 60, 60);
+	D3DXVECTOR3 center_8(0.0f, 0.0f, 0.0f);    // center at the upper-left corner
+	D3DXVECTOR3 position_8(hero.x_pos, hero.y_pos, 0.0f);    // position at 50, 50 with no depth
+	d3dspt->Draw(sprite_hero_ani7, &part_8, &center_8, &position_8, D3DCOLOR_ARGB(255, 255, 255, 255));
+
+	RECT part_9;
+	SetRect(&part_9, 0, 0, 60, 60);
+	D3DXVECTOR3 center_9(0.0f, 0.0f, 0.0f);    // center at the upper-left corner
+	D3DXVECTOR3 position_9(hero.x_pos, hero.y_pos, 0.0f);    // position at 50, 50 with no depth
+	d3dspt->Draw(sprite_hero_ani8, &part_9, &center_9, &position_9, D3DCOLOR_ARGB(255, 255, 255, 255));
+	*/
+
+
 
 	////총알
 	for (int i = 0; i < 100; i++)
@@ -614,27 +945,39 @@ void render_frame(void)
 
 
 	////에네미 
+	RECT part2;
+	SetRect(&part2, 0, 0, 60, 60);
+	D3DXVECTOR3 center2(0.0f, 0.0f, 0.0f);    // center at the upper-left corner
 
-		RECT part2;
-		SetRect(&part2, 0, 0, 60, 60);
-		D3DXVECTOR3 center2(0.0f, 0.0f, 0.0f);    // center at the upper-left corner
-		for (int i = 0; i < ENEMY_NUM; i++)
-		{
-			D3DXVECTOR3 position2(enemy[i].x_pos, enemy[i].y_pos, 0.0f);    // position at 50, 50 with no depth
-			d3dspt->Draw(sprite_enemy, &part2, &center2, &position2, D3DCOLOR_ARGB(255, 255, 255, 255));
-		}
+	for (int i = 0; i < ENEMY_NUM; i++)
+	{
+		D3DXVECTOR3 position2(enemy[i].x_pos, enemy[i].y_pos, 0.0f);    // position at 50, 50 with no depth
+		d3dspt->Draw(sprite_enemy, &part2, &center2, &position2, D3DCOLOR_ARGB(255, 255, 255, 255));
+	}
 	//적총알
-				
-			RECT part4;
-			SetRect(&part4, 0, 0, 64, 64);
-			D3DXVECTOR3 center4(0.0f, 0.0f, 0.0f);    // center at the upper-left corner	
-	
-			for (int i = 0; i < ENEMY_NUM; i++)
 
-			{
-				D3DXVECTOR3 position4(Ebullet[i].x_pos, Ebullet[i].y_pos, 0.0f);    // position at 50, 50 with no depth		
-				d3dspt->Draw(sprite_enemybullet, &part4, &center4, &position4, D3DCOLOR_ARGB(255, 255, 255, 255));
-			}
+
+	RECT part4;
+	SetRect(&part4, 0, 0, 30, 30);
+	D3DXVECTOR3 center4(0.0f, 0.0f, 0.0f);    // center at the upper-left corner	
+
+
+	for (int i = 0; i < ENEMY_NUM; i++)
+	{
+		D3DXVECTOR3 position4(Ebullet[i].x_pos, Ebullet[i].y_pos, 0.0f);    // position at 50, 50 with no depth		
+		d3dspt->Draw(sprite_enemybullet, &part4, &center4, &position4, D3DCOLOR_ARGB(255, 255, 255, 255));
+	}
+
+
+	//새로운 적
+	RECT part5;
+	SetRect(&part5, 0, 0, 100, 100);
+	D3DXVECTOR3 center5(0.0f, 0.0f, 0.0f);    // center at the upper-left corner
+	for (int i = 0; i < NewENEMY_NUM; i++)
+	{
+		D3DXVECTOR3 position5(newenemy[i].x_pos, newenemy[i].y_pos, 0.0f);    // position at 50, 50 with no depth	
+		d3dspt->Draw(sprite_Newenemy, &part5, &center5, &position5, D3DCOLOR_ARGB(255, 255, 255, 255));
+	}
 
 	if (font)
 	{
@@ -670,5 +1013,8 @@ void cleanD3D(void)
 	sprite_superbullet->Release();
 	sprite_enemybullet->Release();
 
+
+
+	mciSendCommand(1, MCI_CLOSE, 0, (DWORD)(LPVOID)NULL);
 	return;
 }

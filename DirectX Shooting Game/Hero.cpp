@@ -11,6 +11,15 @@
 //방향키 정의
 enum { MOVE_UP, MOVE_DOWN, MOVE_LEFT, MOVE_RIGHT };
 
+Hero::Hero()
+{
+}
+
+Hero::~Hero()
+{
+
+}
+
 //클래스 함수 정의
 void Hero::init(float x, float y)
 {

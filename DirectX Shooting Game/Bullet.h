@@ -8,6 +8,8 @@
 class Bullet : public entity
 {
 public:
+	Bullet();
+	~Bullet();
 	bool bShow; // 보이는지 체크
 	void init(float x, float y); // 초기화
 	void move(); // 이동
@@ -22,6 +24,21 @@ public:
 class EnemyBullet : public Bullet
 {
 public:
+	bool bShow;
+	void move();
+	bool check_collision(float x, float y);
+	void init(float x, float y);
+	bool show();
+	void active();
+	void hide();
+};
+
+
+
+class NewEnemyBullet : public Bullet
+{
+public:
+	int Hp;
 	bool bShow;
 	void move();
 	bool check_collision(float x, float y);
