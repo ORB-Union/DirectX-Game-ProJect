@@ -13,12 +13,14 @@ enum { MOVE_UP, MOVE_DOWN, MOVE_LEFT, MOVE_RIGHT };
 
 Hero::Hero()
 {
+	HP = 5;
 }
 
 Hero::~Hero()
 {
 
 }
+
 
 //클래스 함수 정의
 void Hero::init(float x, float y)
@@ -70,6 +72,8 @@ void Hero::hide()
 {
 	bShow = false;
 }
+
+
 
 
 

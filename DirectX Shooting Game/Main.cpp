@@ -12,7 +12,7 @@
 #include"Enemy.h"
 #include"Hero.h"
 #include"Bullet.h"
-
+#include"BackGround.h"
 using namespace std;
 
 // define the screen resolution and keyboard macros
@@ -22,6 +22,7 @@ using namespace std;
 #define KEY_UP(vk_code) ((GetAsyncKeyState(vk_code) & 0x8000) ? 0 : 1)
 #define ENEMY_NUM 7
 #define NewENEMY_NUM 3
+#define BackNum 2
 
 
 
@@ -55,16 +56,6 @@ LPDIRECT3DTEXTURE9 sprite;    // the pointer to the sprite
 //플레이어
 LPDIRECT3DTEXTURE9 sprite_hero;    // the pointer to the sprite
 //플레이어 애니메이션
-LPDIRECT3DTEXTURE9      sprite_hero_ani1 = NULL; // Our texture
-LPDIRECT3DTEXTURE9      sprite_hero_ani2 = NULL; // Our texture
-LPDIRECT3DTEXTURE9      sprite_hero_ani3 = NULL; // Our texture
-LPDIRECT3DTEXTURE9      sprite_hero_ani4 = NULL; // Our texture
-LPDIRECT3DTEXTURE9      sprite_hero_ani5 = NULL; // Our texture
-LPDIRECT3DTEXTURE9      sprite_hero_ani6 = NULL; // Our texture
-LPDIRECT3DTEXTURE9      sprite_hero_ani7 = NULL; // Our texture
-LPDIRECT3DTEXTURE9      sprite_hero_ani8 = NULL; // Our texture
-
-
 //총알
 LPDIRECT3DTEXTURE9 sprite_bullet;    // the pointer to the sprite // 코인 불렛
 LPDIRECT3DTEXTURE9 sprite_superbullet; // 필살기
@@ -75,6 +66,12 @@ LPDIRECT3DTEXTURE9 sprite_enemy;    // the pointer to the sprite
 LPDIRECT3DTEXTURE9 sprite_enemybullet;
 
 LPDIRECT3DTEXTURE9 sprite_Newenemy;    // the pointer to the sprite
+
+
+
+LPDIRECT3DTEXTURE9 sprite_BackGround1;    // 배경화면
+LPDIRECT3DTEXTURE9 sprite_BackGround2;    // 배경화면
+
 
 
 // function prototypes
@@ -105,6 +102,7 @@ Bullet bull[100];
 Enemy enemy[ENEMY_NUM];
 EnemyBullet Ebullet[ENEMY_NUM];
 NewEnemy newenemy[ENEMY_NUM];
+BackGround back[2];
 
 //Bullet bullet;
 //SuperBullet Superbullet;
@@ -153,6 +151,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	wc.lpfnWndProc = (WNDPROC)WindowProc;
 	wc.hInstance = hInstance;
 	wc.hCursor = LoadCursor(NULL, IDC_ARROW);
+
 	wc.lpszClassName = L"WindowClass";
 
 	RegisterClassEx(&wc);
@@ -255,9 +254,9 @@ void initD3D(HWND hWnd)
 	D3DXCreateSprite(d3ddev, &d3dspt);    // create the Direct3D Sprite object
 
 	D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
-		L"Panel4.png",    // the file name
-		D3DX_DEFAULT,    // default width
-		D3DX_DEFAULT,    // default height
+		L"sonic_sprite_background_1.png",    // the file name
+		1240,    // default width
+		800,    // default height
 		D3DX_DEFAULT,    // no mip mapping
 		NULL,    // regular usage
 		D3DFMT_A8R8G8B8,    // 32-bit pixels with alpha
@@ -267,7 +266,22 @@ void initD3D(HWND hWnd)
 		D3DCOLOR_XRGB(255, 0, 255),    // the hot-pink color key
 		NULL,    // no image info struct
 		NULL,    // not using 256 colors
-		&sprite);    // load to sprite
+		&sprite_BackGround1);    // load to sprite
+
+	D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
+		L"sonic_sprite_background_2.png",    // the file name
+		1240,    // default width
+		800,    // default height
+		D3DX_DEFAULT,    // no mip mapping
+		NULL,    // regular usage
+		D3DFMT_A8R8G8B8,    // 32-bit pixels with alpha
+		D3DPOOL_MANAGED,    // typical memory handling
+		D3DX_DEFAULT,    // no filtering
+		D3DX_DEFAULT,    // no mip filtering
+		D3DCOLOR_XRGB(255, 0, 255),    // the hot-pink color key
+		NULL,    // no image info struct
+		NULL,    // not using 256 colors
+		&sprite_BackGround2);    // load to sprite
 
 
 	//플레이어
@@ -285,136 +299,6 @@ void initD3D(HWND hWnd)
 		NULL,    // no image info struct
 		NULL,    // not using 256 colors
 		&sprite_hero);    // load to sprite
-
-	/*
-	//플레이어 애니메이션
-	D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
-		L"SonicSprite1.png",    // the file name
-		D3DX_DEFAULT,    // default width
-		D3DX_DEFAULT,    // default height
-		D3DX_DEFAULT,    // no mip mapping
-		NULL,    // regular usage
-		D3DFMT_A8R8G8B8,    // 32-bit pixels with alpha
-		D3DPOOL_MANAGED,    // typical memory handling
-		D3DX_DEFAULT,    // no filtering
-		D3DX_DEFAULT,    // no mip filtering
-		D3DCOLOR_XRGB(255, 0, 255),    // the hot-pink color key
-		NULL,    // no image info struct
-		NULL,    // not using 256 colors
-		&sprite_hero_ani1);    // load to sprite
-
-	
-	D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
-		L"SonicSprite2.png",    // the file name
-		D3DX_DEFAULT,    // default width
-		D3DX_DEFAULT,    // default height
-		D3DX_DEFAULT,    // no mip mapping
-		NULL,    // regular usage
-		D3DFMT_A8R8G8B8,    // 32-bit pixels with alpha
-		D3DPOOL_MANAGED,    // typical memory handling
-		D3DX_DEFAULT,    // no filtering
-		D3DX_DEFAULT,    // no mip filtering
-		D3DCOLOR_XRGB(255, 0, 255),    // the hot-pink color key
-		NULL,    // no image info struct
-		NULL,    // not using 256 colors
-		&sprite_hero_ani2);    // load to sprite
-
-
-	D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
-		L"SonicSprite3.png",    // the file name
-		D3DX_DEFAULT,    // default width
-		D3DX_DEFAULT,    // default height
-		D3DX_DEFAULT,    // no mip mapping
-		NULL,    // regular usage
-		D3DFMT_A8R8G8B8,    // 32-bit pixels with alpha
-		D3DPOOL_MANAGED,    // typical memory handling
-		D3DX_DEFAULT,    // no filtering
-		D3DX_DEFAULT,    // no mip filtering
-		D3DCOLOR_XRGB(255, 0, 255),    // the hot-pink color key
-		NULL,    // no image info struct
-		NULL,    // not using 256 colors
-		&sprite_hero_ani3);    // load to sprite
-
-
-	D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
-		L"SonicSprite4.png",    // the file name
-		D3DX_DEFAULT,    // default width
-		D3DX_DEFAULT,    // default height
-		D3DX_DEFAULT,    // no mip mapping
-		NULL,    // regular usage
-		D3DFMT_A8R8G8B8,    // 32-bit pixels with alpha
-		D3DPOOL_MANAGED,    // typical memory handling
-		D3DX_DEFAULT,    // no filtering
-		D3DX_DEFAULT,    // no mip filtering
-		D3DCOLOR_XRGB(255, 0, 255),    // the hot-pink color key
-		NULL,    // no image info struct
-		NULL,    // not using 256 colors
-		&sprite_hero_ani4);    // load to sprite
-
-
-	D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
-		L"SonicSprite5.png",    // the file name
-		D3DX_DEFAULT,    // default width
-		D3DX_DEFAULT,    // default height
-		D3DX_DEFAULT,    // no mip mapping
-		NULL,    // regular usage
-		D3DFMT_A8R8G8B8,    // 32-bit pixels with alpha
-		D3DPOOL_MANAGED,    // typical memory handling
-		D3DX_DEFAULT,    // no filtering
-		D3DX_DEFAULT,    // no mip filtering
-		D3DCOLOR_XRGB(255, 0, 255),    // the hot-pink color key
-		NULL,    // no image info struct
-		NULL,    // not using 256 colors
-		&sprite_hero_ani5);    // load to sprite
-
-
-	D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
-		L"SonicSprite6.png",    // the file name
-		D3DX_DEFAULT,    // default width
-		D3DX_DEFAULT,    // default height
-		D3DX_DEFAULT,    // no mip mapping
-		NULL,    // regular usage
-		D3DFMT_A8R8G8B8,    // 32-bit pixels with alpha
-		D3DPOOL_MANAGED,    // typical memory handling
-		D3DX_DEFAULT,    // no filtering
-		D3DX_DEFAULT,    // no mip filtering
-		D3DCOLOR_XRGB(255, 0, 255),    // the hot-pink color key
-		NULL,    // no image info struct
-		NULL,    // not using 256 colors
-		&sprite_hero_ani6);    // load to sprite
-
-	D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
-		L"SonicSprite7.png",    // the file name
-		D3DX_DEFAULT,    // default width
-		D3DX_DEFAULT,    // default height
-		D3DX_DEFAULT,    // no mip mapping
-		NULL,    // regular usage
-		D3DFMT_A8R8G8B8,    // 32-bit pixels with alpha
-		D3DPOOL_MANAGED,    // typical memory handling
-		D3DX_DEFAULT,    // no filtering
-		D3DX_DEFAULT,    // no mip filtering
-		D3DCOLOR_XRGB(255, 0, 255),    // the hot-pink color key
-		NULL,    // no image info struct
-		NULL,    // not using 256 colors
-		&sprite_hero_ani7);    // load to sprite
-
-
-	D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
-		L"SonicSprite8.png",    // the file name
-		D3DX_DEFAULT,    // default width
-		D3DX_DEFAULT,    // default height
-		D3DX_DEFAULT,    // no mip mapping
-		NULL,    // regular usage
-		D3DFMT_A8R8G8B8,    // 32-bit pixels with alpha
-		D3DPOOL_MANAGED,    // typical memory handling
-		D3DX_DEFAULT,    // no filtering
-		D3DX_DEFAULT,    // no mip filtering
-		D3DCOLOR_XRGB(255, 0, 255),    // the hot-pink color key
-		NULL,    // no image info struct
-		NULL,    // not using 256 colors
-		&sprite_hero_ani8);    // load to sprite
-		*/
-
 
     //플레이어 총알
 		D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
@@ -487,8 +371,8 @@ void initD3D(HWND hWnd)
 	//거대 소닉
 	D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
 		L"NewEnemy.png",    // the file name
-		D3DX_DEFAULT,    // default width
-		D3DX_DEFAULT,    // default height
+		100,    // default width
+		100,    // default height
 		D3DX_DEFAULT,    // no mip mapping
 		NULL,    // regular usage
 		D3DFMT_A8R8G8B8,    // 32-bit pixels with alpha
@@ -614,9 +498,13 @@ bool EnemyBullet::check_collision(float x, float y)
 
 void init_game(void)
 {
-	//객체 초기화 
-	hero.init(50, 300);
+	//배경화면 초기화
+	back[0].init(0, 0);
+	back[1].init(SCREEN_WIDTH, 0);
 
+
+	//플레이어 초기화 
+	hero.init(50, 300);
 
 	//적 초기화 
 	for (int i = 0; i < ENEMY_NUM; i++)
@@ -650,7 +538,12 @@ void init_game(void)
 
 void do_game_logic(void)
 {
-	static int counter = 0;
+	//배경화면 처리
+	for (int i = 0; i < BackNum; i++)
+	{
+		back[i].Move();
+	}
+
 
 	//주인공 처리 
 	if (KEY_DOWN(VK_UP))
@@ -849,11 +742,19 @@ void render_frame(void)
 											 d3dspt->Draw(sprite, &part, &center, &position, D3DCOLOR_ARGB(127, 255, 255, 255));
 											 */
 
+	//배경화면
 	RECT part6;
-	SetRect(&part6, 0, 0, 640, 480);
+	SetRect(&part6, 0, 0, 1240, 800);
 	D3DXVECTOR3 center6(0.0f, 0.0f, 0.0f);    // center at the upper-left corner
-	D3DXVECTOR3 position6(0.0f, 0.0f, 0.0f);    // position at 50, 50 with no depth
-	d3dspt->Draw(sprite, &part6, &center6, &position6, D3DCOLOR_ARGB(255, 255, 255, 255));
+	D3DXVECTOR3 position6(back[0].x_pos, 0.0f, 0.0f);    // position at 50, 50 with no depth
+	d3dspt->Draw(sprite_BackGround1, &part6, &center6, &position6, D3DCOLOR_ARGB(255, 255, 255, 255));
+
+	//배경화면2
+	RECT part7;
+	SetRect(&part7, 0, 0, 1240, 800);
+	D3DXVECTOR3 center7(0.0f, 0.0f, 0.0f);    // center at the upper-left corner
+	D3DXVECTOR3 position7(back[1].x_pos, 0.0f, 0.0f);    // position at 50, 50 with no depth
+	d3dspt->Draw(sprite_BackGround2, &part7, &center7, &position7, D3DCOLOR_ARGB(255, 255, 255, 255));
 
 
 	//주인공 애니메이션
@@ -862,58 +763,6 @@ void render_frame(void)
 	D3DXVECTOR3 center_1(0.0f, 0.0f, 0.0f);    // center at the upper-left corner
 	D3DXVECTOR3 position_1(hero.x_pos, hero.y_pos, 0.0f);    // position at 50, 50 with no depth
 	d3dspt->Draw(sprite_hero, &part_1, &center_1, &position_1, D3DCOLOR_ARGB(255, 255, 255, 255));
-
-
-	/* 애니메이션 작동 고민중
-	RECT part_2;
-	SetRect(&part_2, 0, 0, 60, 60);
-	D3DXVECTOR3 center_2(0.0f, 0.0f, 0.0f);    // center at the upper-left corner
-	D3DXVECTOR3 position_2(hero.x_pos, hero.y_pos, 0.0f);    // position at 50, 50 with no depth
-	d3dspt->Draw(sprite_hero_ani1, &part_2, &center_2, &position_2, D3DCOLOR_ARGB(255, 255, 255, 255));
-
-	RECT part_3;
-	SetRect(&part_3, 0, 0, 60, 60);
-	D3DXVECTOR3 center_3(0.0f, 0.0f, 0.0f);    // center at the upper-left corner
-	D3DXVECTOR3 position_3(hero.x_pos, hero.y_pos, 0.0f);    // position at 50, 50 with no depth
-	d3dspt->Draw(sprite_hero_ani2, &part_3, &center_3, &position_3, D3DCOLOR_ARGB(255, 255, 255, 255));
-
-	RECT part_4;
-	SetRect(&part_4, 0, 0, 60, 60);
-	D3DXVECTOR3 center_4(0.0f, 0.0f, 0.0f);    // center at the upper-left corner
-	D3DXVECTOR3 position_4(hero.x_pos, hero.y_pos, 0.0f);    // position at 50, 50 with no depth
-	d3dspt->Draw(sprite_hero_ani3, &part_4, &center_4, &position_4, D3DCOLOR_ARGB(255, 255, 255, 255));
-
-	RECT part_5;
-	SetRect(&part_5, 0, 0, 60, 60);
-	D3DXVECTOR3 center_5(0.0f, 0.0f, 0.0f);    // center at the upper-left corner
-	D3DXVECTOR3 position_5(hero.x_pos, hero.y_pos, 0.0f);    // position at 50, 50 with no depth
-	d3dspt->Draw(sprite_hero_ani4, &part_5, &center_5, &position_5, D3DCOLOR_ARGB(255, 255, 255, 255));
-
-	RECT part_6;
-	SetRect(&part_6, 0, 0, 60, 60);
-	D3DXVECTOR3 center_6(0.0f, 0.0f, 0.0f);    // center at the upper-left corner
-	D3DXVECTOR3 position_6(hero.x_pos, hero.y_pos, 0.0f);    // position at 50, 50 with no depth
-	d3dspt->Draw(sprite_hero_ani5, &part_6, &center_6, &position_6, D3DCOLOR_ARGB(255, 255, 255, 255));
-
-	RECT part_7;
-	SetRect(&part_7, 0, 0, 60, 60);
-	D3DXVECTOR3 center_7(0.0f, 0.0f, 0.0f);    // center at the upper-left corner
-	D3DXVECTOR3 position_7(hero.x_pos, hero.y_pos, 0.0f);    // position at 50, 50 with no depth
-	d3dspt->Draw(sprite_hero_ani6, &part_7, &center_7, &position_7, D3DCOLOR_ARGB(255, 255, 255, 255));
-
-	RECT part_8;
-	SetRect(&part_8, 0, 0, 60, 60);
-	D3DXVECTOR3 center_8(0.0f, 0.0f, 0.0f);    // center at the upper-left corner
-	D3DXVECTOR3 position_8(hero.x_pos, hero.y_pos, 0.0f);    // position at 50, 50 with no depth
-	d3dspt->Draw(sprite_hero_ani7, &part_8, &center_8, &position_8, D3DCOLOR_ARGB(255, 255, 255, 255));
-
-	RECT part_9;
-	SetRect(&part_9, 0, 0, 60, 60);
-	D3DXVECTOR3 center_9(0.0f, 0.0f, 0.0f);    // center at the upper-left corner
-	D3DXVECTOR3 position_9(hero.x_pos, hero.y_pos, 0.0f);    // position at 50, 50 with no depth
-	d3dspt->Draw(sprite_hero_ani8, &part_9, &center_9, &position_9, D3DCOLOR_ARGB(255, 255, 255, 255));
-	*/
-
 
 
 	////총알
@@ -1002,18 +851,21 @@ void render_frame(void)
 // this is the function that cleans up Direct3D and COM
 void cleanD3D(void)
 {
-	sprite->Release();
 	d3ddev->Release();
 	d3d->Release();
 	font->Release();
-	//객체 해제 
+	//배경화면 해제 
+	sprite_BackGround1->Release();
+	sprite_BackGround2->Release();
+
+	//플레이어 해제
 	sprite_hero->Release();
-	sprite_enemy->Release();
 	sprite_bullet->Release();
 	sprite_superbullet->Release();
+
+	//적 해제
+	sprite_enemy->Release();
 	sprite_enemybullet->Release();
-
-
 
 	mciSendCommand(1, MCI_CLOSE, 0, (DWORD)(LPVOID)NULL);
 	return;

@@ -3,6 +3,28 @@
 
 class Hero :public entity
 {
+
+	LPDIRECT3DTEXTURE9	m_pTexture;
+	LPD3DXSPRITE		m_pSprite;
+
+	D3DXVECTOR3			m_vPos;
+	RECT				m_rect;
+	D3DCOLOR			m_color;
+	unsigned int		m_alpha;
+
+	bool				m_bDraw;
+	float				m_deltaTime;
+
+	float				m_width;
+	float				m_height;
+
+	float				m_radius;
+
+	float				m_AniTimer;
+	int					m_AniNum;
+
+
+
 public:
 	Hero();
 	~Hero();
@@ -19,6 +41,10 @@ public:
 	void super_fire();
 	void move(int i);
 	void Move();
+
+
+
+	
 	
 
 
