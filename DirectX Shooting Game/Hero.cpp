@@ -45,6 +45,25 @@ void Hero::move(int i)
 }
 
 
+bool Hero::show()
+{
+	return bShow;
+
+}
+
+void Hero::active()
+{
+	bShow = true;
+
+}
+
+void Hero::hide()
+{
+	bShow = false;
+}
+
+
+
 
 /*
 void Hero::fire()

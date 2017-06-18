@@ -311,6 +311,7 @@ void initD3D(HWND hWnd)
 	return;
 }
 
+//面倒
 bool sphere_collision_check(float x0, float y0, float size0, float x1, float y1, float size1)
 {
 
@@ -320,6 +321,43 @@ bool sphere_collision_check(float x0, float y0, float size0, float x1, float y1,
 		return false;
 
 }
+
+
+
+//利苞狼 面倒
+bool Hero::check_collision(float x, float y)
+{
+
+	//面倒 贸府 矫 
+	if (sphere_collision_check(x_pos, y_pos, 60, x, y, 60) == true)
+	{
+		bShow = false;
+		return true;
+
+	}
+	else {
+
+		return false;
+	}
+}
+
+
+bool Enemy::check_collision(float x, float y)
+{
+
+	//面倒 贸府 矫 
+	if (sphere_collision_check(x_pos, y_pos, 60, x, y, 60) == true)
+	{
+		bShow = false;
+		return true;
+
+	}
+	else {
+
+		return false;
+	}
+}
+
 
 
 
@@ -450,15 +488,29 @@ void do_game_logic(void)
 	}
 
 	/////////////////////
-	//利贸府
-
-	//利甸 贸府 
+	//利甸 面倒 贸府  棺 积己
 	for (int i = 0; i < ENEMY_NUM; i++)
 	{
-		if (enemy[i].x_pos < 0)
+		if (enemy[i].show() == false)
+		{
+			enemy[i].active();
 			enemy[i].init((float)(SCREEN_WIDTH + (rand() % 200)), rand() % SCREEN_HEIGHT);
-		else
-			enemy[i].move();
+		}
+
+		if (enemy[i].show() == true)
+		{
+			if (enemy[i].x_pos < -100)
+			{
+				enemy[i].hide();
+			}
+			else
+				enemy[i].move();
+		}
+
+		if (enemy[i].check_collision(hero.x_pos, hero.y_pos) == true)
+		{
+			enemy[i].hide();
+		}
 	}
 
 	//利 醚舅 贸府
@@ -476,12 +528,11 @@ void do_game_logic(void)
 
 		if (Ebullet[t].show() == true)
 		{
-			if (Ebullet[t].x_pos < -64)
+			if (Ebullet[t].x_pos < -100)
 				Ebullet[t].hide();
 			else
 				Ebullet[t].move();
 		}
-
 
 		if (Ebullet[t].check_collision(hero.x_pos, hero.y_pos) == true)
 		{
@@ -489,67 +540,6 @@ void do_game_logic(void)
 		}
 	}
 
-
-
-	/*
-	for (int k = 0; k < 100; k++)
-	{
-		if(bull[k].show() == false)
-		{
-		if (GetKeyState(VK_SPACE))
-		{
-			bull[k].init(hero.x_pos, hero.y_pos);
-			bull[k].active();
-		}
-		}
-		if (bull[k].show() == true)
-		{
-			if (bull[k].x_pos > 1300)
-			{
-				bull[k].hide();
-			}
-			else
-				bull[k].move();
-		}
-	}
-
-	*/
-	
-	/*
-	
-	if (bullet.show() == false)
-	{
-		if (KEY_DOWN(VK_SPACE))
-		{
-			bullet.active();
-			bullet.init(hero.x_pos, hero.y_pos);
-		}
-	}
-	
-
-	
-	if (bullet.show() == true)
-	{
-		if (bullet.x_pos > 1300)
-			bullet.hide();
-		else
-			bullet.move();
-	*/
-			
-
-		/*
-		//面倒 贸府
-		for (int i = 0; i<ENEMY_NUM; i++)
-		{
-			if (bullet.check_collision(enemy[i].x_pos, enemy[i].y_pos) == true)
-			{
-				enemy[i].init((float)(rand() % 300), rand() % 200 - 300);
-
-			}
-		}
-		}
-		*/
-	
 }
 
 // this is the function used to render a single frame
@@ -572,6 +562,7 @@ void render_frame(void)
 
 											 // calculate the x-position
 											 int xpos = frame * 182 + 1;
+
 
 											 RECT part;
 											 SetRect(&part, xpos, 0, xpos + 181, 128);

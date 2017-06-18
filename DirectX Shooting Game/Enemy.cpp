@@ -18,7 +18,20 @@ void Enemy::move()
 	x_pos -= 10;
 }
 
-void Enemy::fire()
+bool Enemy::show()
 {
+	return bShow;
 
 }
+
+void Enemy::active()
+{
+	bShow = true;
+
+}
+
+void Enemy::hide()
+{
+	bShow = false;
+}
+
