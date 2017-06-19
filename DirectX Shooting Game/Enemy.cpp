@@ -48,7 +48,7 @@ void Enemy::hide()
 
 NewEnemy::NewEnemy()
 {
-	HP = 10;
+	HP = 20;
 }
 
 NewEnemy::~NewEnemy()

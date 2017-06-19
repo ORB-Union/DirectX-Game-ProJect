@@ -188,9 +188,10 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
 	MSG msg;
 
-	DWORD Sound1, Sound2;
+	DWORD Sound1, Sound2, Sound3;
 	Sound1 = LoadWAV(hWnd, L"Yowamushi Pedal OST - Sakamichi.mp3");
 	Sound2 = LoadWAV(hWnd, L"Family.mp3");
+	Sound3 = LoadWAV(hWnd, L"MarioCoin.mp3");
 	//Sound1 = mciSendCommand(1, MCI_PLAY, MCI_NOTIFY, (DWORD)(LPVOID)&mciPlay);
 
 
@@ -591,22 +592,8 @@ void init_game(void)
 
 	//플레이어 초기화 
 	hero.init(50, 300);
-	hero.HP = 10;
 
-	//적 초기화 
-	for (int i = 0; i < ENEMY_NUM; i++)
-	{
-		enemy[i].init((float)(SCREEN_WIDTH + (rand() % 300)), rand() % SCREEN_HEIGHT-50);
-		
-	}
-
-	//새로운적 초기화
-	for (int i = 0; i < NewENEMY_NUM; i++)
-	{
-		newenemy[i].init((float)(SCREEN_WIDTH + (rand() % 300)), rand() % SCREEN_HEIGHT-50);
-
-	}
-
+	//////////////////////////////////////////////////////////////////////////
 	//총알 초기화 발사체 갯수 100개 -> BullLimit 만큼으로 변경
 	for (int i = 0; i < BullLimit; i++)
 	{
@@ -624,11 +611,29 @@ void init_game(void)
 		bull3[i].init(hero.x_pos, hero.y_pos);
 	}
 
+
+	///////////////////////////////////////////////////////////////////////////
+	//적 초기화 
+	for (int i = 0; i < ENEMY_NUM; i++)
+	{
+		enemy[i].init((float)(SCREEN_WIDTH + (rand() % 300)), rand() % SCREEN_HEIGHT-50);
+		
+	}
+
 	////////////////////////////////////////////
 	//적 총알 초기화
 	for (int i = 0; i < ENEMY_NUM; i++)
 	{
 		Ebullet[i].init(enemy[i].x_pos, enemy[i	].y_pos);
+	}
+
+
+
+	//새로운적 초기화
+	for (int i = 0; i < NewENEMY_NUM; i++)
+	{
+		newenemy[i].init((float)(SCREEN_WIDTH + (rand() % 300)), rand() % SCREEN_HEIGHT - 50);
+
 	}
 
 	//Superbullet.init(hero.x_pos, hero.y_pos);
@@ -669,6 +674,7 @@ void do_game_logic(void)
 		//총알 연사처리(첫번째)
 		if (KEY_DOWN(VK_SPACE) && 0x80000)
 		{
+			mciSendCommand(3, MCI_PLAY, MCI_DGV_PLAY_REPEAT, (DWORD)(LPVOID)&mciPlay);
 			counter++;
 			if (counter % 5 == 0)
 			{
@@ -686,6 +692,12 @@ void do_game_logic(void)
 				}
 			}
 		}
+
+		else if (KEY_UP(VK_SPACE))
+		{
+			mciSendCommand(3, MCI_SEEK, MCI_SEEK_TO_START, (DWORD)(LPVOID)NULL);
+		}
+	
 		//총알처리
 		for (int i = 0; i < BullLimit; i++)
 		{
@@ -715,7 +727,7 @@ void do_game_logic(void)
 						{
 							//이후 생성 안되는 버그 해결
 							newenemy[t].init((float)(SCREEN_WIDTH + (rand() % 300)), rand() % SCREEN_HEIGHT - 50);
-							newenemy[t].HP = 10;
+							newenemy[t].HP = 20;
 						}
 					}
 
@@ -726,6 +738,7 @@ void do_game_logic(void)
 		//총알 처리 두번째
 		if (KEY_DOWN(VK_SPACE) && 0x80000)
 		{
+			mciSendCommand(3, MCI_PLAY, MCI_DGV_PLAY_REPEAT, (DWORD)(LPVOID)&mciPlay);
 			counter++;
 			if (counter % 5 == 0)
 			{
@@ -742,6 +755,7 @@ void do_game_logic(void)
 
 				}
 			}
+
 		}
 		//총알처리
 		for (int i = 0; i < BullLimit; i++)
@@ -772,7 +786,7 @@ void do_game_logic(void)
 						{
 							//이후 생성 안되는 버그 해결
 							newenemy[t].init((float)(SCREEN_WIDTH + (rand() % 300)), rand() % SCREEN_HEIGHT - 50);
-							newenemy[t].HP = 10;
+							newenemy[t].HP = 20;
 						}
 					}
 
@@ -784,6 +798,7 @@ void do_game_logic(void)
 		//총알 처리 세번째
 		if (KEY_DOWN(VK_SPACE) && 0x80000)
 		{
+			mciSendCommand(3, MCI_PLAY, MCI_DGV_PLAY_REPEAT, (DWORD)(LPVOID)&mciPlay);
 			counter++;
 			if (counter % 5 == 0)
 			{
@@ -830,7 +845,7 @@ void do_game_logic(void)
 						{
 							//이후 생성 안되는 버그 해결
 							newenemy[t].init((float)(SCREEN_WIDTH + (rand() % 300)), rand() % SCREEN_HEIGHT - 50);
-							newenemy[t].HP = 10;
+							newenemy[t].HP = 20;
 						}
 					}
 
@@ -928,7 +943,7 @@ void do_game_logic(void)
 				if (newenemy[i].x_pos < -100)
 				{
 					newenemy[i].hide();
-					newenemy[i].HP = 10;
+					newenemy[i].HP = 20;
 				}
 				//if(newenemy[i].x_pos > -100)
 				else
@@ -1273,6 +1288,7 @@ void cleanD3D(void)
 	//음악 닫기
 	mciSendCommand(1, MCI_CLOSE, 0, (DWORD)(LPVOID)NULL);
 	mciSendCommand(2, MCI_CLOSE, 0, (DWORD)(LPVOID)NULL);
+	mciSendCommand(3, MCI_CLOSE, 0, (DWORD)(LPVOID)NULL);
 	return;
 }
 
