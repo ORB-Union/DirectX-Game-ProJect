@@ -7,7 +7,6 @@
 
 Enemy::Enemy()
 {
-	HP = 2;
 }
 
 
