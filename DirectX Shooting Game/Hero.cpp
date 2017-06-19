@@ -21,7 +21,6 @@ Hero::~Hero()
 
 }
 
-
 //클래스 함수 정의
 void Hero::init(float x, float y)
 {
