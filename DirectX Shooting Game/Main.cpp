@@ -24,7 +24,7 @@ using namespace std;
 #define ENEMY_NUM 10
 #define NewENEMY_NUM 3
 #define BackNum 2
-#define BullLimit 10
+#define BullLimit 100
 
 
 
@@ -50,21 +50,47 @@ std::string message;
 bool KeyCheck;
 
 int Time;
-int counter;
+int counter1_1;
+int counter1_2;
+int counter1_3;
+
+int Hero_anicounter;// 히어로 애니메이션
+int CoinBullet_anicounter_1; // 코인총알 애니메이션
+int CoinBullet_anicounter_2; // 코인총알 애니메이션
+int CoinBullet_anicounter_3; // 코인총알 애니메이션
+
+
+int EnemyGundam_anicounter; // 코인총알 애니메이션
 
 // sprite declarations
 LPDIRECT3DTEXTURE9 sprite;    // the pointer to the sprite
 
 //플레이어
-LPDIRECT3DTEXTURE9 sprite_hero;    // the pointer to the sprite
+LPDIRECT3DTEXTURE9 sprite_hero_1;    // the pointer to the sprite
+LPDIRECT3DTEXTURE9 sprite_hero_2;    // the pointer to the sprite
+LPDIRECT3DTEXTURE9 sprite_hero_3;    // the pointer to the sprite
+LPDIRECT3DTEXTURE9 sprite_hero_4;    // the pointer to the sprite
+
+
 //플레이어 애니메이션
 //총알
-LPDIRECT3DTEXTURE9 sprite_bullet;    // the pointer to the sprite // 코인 불렛
+LPDIRECT3DTEXTURE9 sprite_bullet_1; // the pointer to the sprite // 코인 불렛
+LPDIRECT3DTEXTURE9 sprite_bullet_2;    // the pointer to the sprite // 코인 불렛
+LPDIRECT3DTEXTURE9 sprite_bullet_3;    // the pointer to the sprite // 코인 불렛
+LPDIRECT3DTEXTURE9 sprite_bullet_4;    // the pointer to the sprite // 코인 불렛
+LPDIRECT3DTEXTURE9 sprite_bullet_5;    // the pointer to the sprite // 코인 불렛
+LPDIRECT3DTEXTURE9 sprite_bullet_6;    // the pointer to the sprite // 코인 불렛
+LPDIRECT3DTEXTURE9 sprite_bullet_7;    // the pointer to the sprite // 코인 불렛
+LPDIRECT3DTEXTURE9 sprite_bullet_8;    // the pointer to the sprite // 코인 불렛
+LPDIRECT3DTEXTURE9 sprite_bullet_9;    // the pointer to the sprite // 코인 불렛
+LPDIRECT3DTEXTURE9 sprite_bullet_10;    // the pointer to the sprite // 코인 불렛
 LPDIRECT3DTEXTURE9 sprite_superbullet; // 필살기
 
 
 //적
-LPDIRECT3DTEXTURE9 sprite_enemy;    // the pointer to the sprite
+LPDIRECT3DTEXTURE9 sprite_enemy_1;    // the pointer to the sprite
+LPDIRECT3DTEXTURE9 sprite_enemy_2;    // the pointer to the sprite
+
 LPDIRECT3DTEXTURE9 sprite_enemybullet;
 
 LPDIRECT3DTEXTURE9 sprite_Newenemy;    // the pointer to the sprite
@@ -341,7 +367,7 @@ void initD3D(HWND hWnd)
 
 	//플레이어
 	D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
-		L"SonicSprite1.png",    // the file name
+		L"Hero/SonicSprite5.png",    // the file name
 		60,    // default width
 		60,    // default height
 		D3DX_DEFAULT,    // no mip mapping
@@ -353,11 +379,60 @@ void initD3D(HWND hWnd)
 		D3DCOLOR_XRGB(255, 0, 255),    // the hot-pink color key
 		NULL,    // no image info struct
 		NULL,    // not using 256 colors
-		&sprite_hero);    // load to sprite
+		&sprite_hero_1);    // load to sprite
+
+
+	D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
+		L"Hero/SonicSprite6.png",    // the file name
+		60,    // default width
+		60,    // default height
+		D3DX_DEFAULT,    // no mip mapping
+		NULL,    // regular usage
+		D3DFMT_A8R8G8B8,    // 32-bit pixels with alpha
+		D3DPOOL_MANAGED,    // typical memory handling
+		D3DX_DEFAULT,    // no filtering
+		D3DX_DEFAULT,    // no mip filtering
+		D3DCOLOR_XRGB(255, 0, 255),    // the hot-pink color key
+		NULL,    // no image info struct
+		NULL,    // not using 256 colors
+		&sprite_hero_2);    // load to sprite
+
+
+	D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
+		L"Hero/SonicSprite7.png",    // the file name
+		60,    // default width
+		60,    // default height
+		D3DX_DEFAULT,    // no mip mapping
+		NULL,    // regular usage
+		D3DFMT_A8R8G8B8,    // 32-bit pixels with alpha
+		D3DPOOL_MANAGED,    // typical memory handling
+		D3DX_DEFAULT,    // no filtering
+		D3DX_DEFAULT,    // no mip filtering
+		D3DCOLOR_XRGB(255, 0, 255),    // the hot-pink color key
+		NULL,    // no image info struct
+		NULL,    // not using 256 colors
+		&sprite_hero_3);    // load to sprite
+
+	D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
+		L"Hero/SonicSprite8.png",    // the file name
+		60,    // default width
+		60,    // default height
+		D3DX_DEFAULT,    // no mip mapping
+		NULL,    // regular usage
+		D3DFMT_A8R8G8B8,    // 32-bit pixels with alpha
+		D3DPOOL_MANAGED,    // typical memory handling
+		D3DX_DEFAULT,    // no filtering
+		D3DX_DEFAULT,    // no mip filtering
+		D3DCOLOR_XRGB(255, 0, 255),    // the hot-pink color key
+		NULL,    // no image info struct
+		NULL,    // not using 256 colors
+		&sprite_hero_4);    // load to sprite
+
+
 
     //플레이어 총알(플레이어가 쓰는 모든 총알)
 		D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
-			L"CoinBulletsprite.png",    // the file name
+			L"CoinBullet/CoinBulletsprite1.png",    // the file name
 			40,    // default width
 			40,    // default height
 			D3DX_DEFAULT,    // no mip mapping
@@ -369,7 +444,142 @@ void initD3D(HWND hWnd)
 			D3DCOLOR_XRGB(255, 0, 255),    // the hot-pink color key
 			NULL,    // no image info struct
 			NULL,    // not using 256 colors
-			&sprite_bullet);    // load to sprite
+			&sprite_bullet_1);    // load to sprite
+
+		D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
+			L"CoinBullet/CoinBulletsprite2.png",    // the file name
+			40,    // default width
+			40,    // default height
+			D3DX_DEFAULT,    // no mip mapping
+			NULL,    // regular usage
+			D3DFMT_A8R8G8B8,    // 32-bit pixels with alpha
+			D3DPOOL_MANAGED,    // typical memory handling
+			D3DX_DEFAULT,    // no filtering
+			D3DX_DEFAULT,    // no mip filtering
+			D3DCOLOR_XRGB(255, 0, 255),    // the hot-pink color key
+			NULL,    // no image info struct
+			NULL,    // not using 256 colors
+			&sprite_bullet_2);    // load to sprite
+
+		D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
+			L"CoinBullet/CoinBulletsprite3.png",    // the file name
+			40,    // default width
+			40,    // default height
+			D3DX_DEFAULT,    // no mip mapping
+			NULL,    // regular usage
+			D3DFMT_A8R8G8B8,    // 32-bit pixels with alpha
+			D3DPOOL_MANAGED,    // typical memory handling
+			D3DX_DEFAULT,    // no filtering
+			D3DX_DEFAULT,    // no mip filtering
+			D3DCOLOR_XRGB(255, 0, 255),    // the hot-pink color key
+			NULL,    // no image info struct
+			NULL,    // not using 256 colors
+			&sprite_bullet_3);    // load to sprite
+
+		D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
+			L"CoinBullet/CoinBulletsprite4.png",    // the file name
+			40,    // default width
+			40,    // default height
+			D3DX_DEFAULT,    // no mip mapping
+			NULL,    // regular usage
+			D3DFMT_A8R8G8B8,    // 32-bit pixels with alpha
+			D3DPOOL_MANAGED,    // typical memory handling
+			D3DX_DEFAULT,    // no filtering
+			D3DX_DEFAULT,    // no mip filtering
+			D3DCOLOR_XRGB(255, 0, 255),    // the hot-pink color key
+			NULL,    // no image info struct
+			NULL,    // not using 256 colors
+			&sprite_bullet_4);    // load to sprite
+
+		D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
+			L"CoinBullet/CoinBulletsprite5.png",    // the file name
+			40,    // default width
+			40,    // default height
+			D3DX_DEFAULT,    // no mip mapping
+			NULL,    // regular usage
+			D3DFMT_A8R8G8B8,    // 32-bit pixels with alpha
+			D3DPOOL_MANAGED,    // typical memory handling
+			D3DX_DEFAULT,    // no filtering
+			D3DX_DEFAULT,    // no mip filtering
+			D3DCOLOR_XRGB(255, 0, 255),    // the hot-pink color key
+			NULL,    // no image info struct
+			NULL,    // not using 256 colors
+			&sprite_bullet_5);    // load to sprite
+
+		D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
+			L"CoinBullet/CoinBulletsprite6.png",    // the file name
+			40,    // default width
+			40,    // default height
+			D3DX_DEFAULT,    // no mip mapping
+			NULL,    // regular usage
+			D3DFMT_A8R8G8B8,    // 32-bit pixels with alpha
+			D3DPOOL_MANAGED,    // typical memory handling
+			D3DX_DEFAULT,    // no filtering
+			D3DX_DEFAULT,    // no mip filtering
+			D3DCOLOR_XRGB(255, 0, 255),    // the hot-pink color key
+			NULL,    // no image info struct
+			NULL,    // not using 256 colors
+			&sprite_bullet_6);    // load to sprite
+
+		D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
+			L"CoinBullet/CoinBulletsprite7.png",    // the file name
+			40,    // default width
+			40,    // default height
+			D3DX_DEFAULT,    // no mip mapping
+			NULL,    // regular usage
+			D3DFMT_A8R8G8B8,    // 32-bit pixels with alpha
+			D3DPOOL_MANAGED,    // typical memory handling
+			D3DX_DEFAULT,    // no filtering
+			D3DX_DEFAULT,    // no mip filtering
+			D3DCOLOR_XRGB(255, 0, 255),    // the hot-pink color key
+			NULL,    // no image info struct
+			NULL,    // not using 256 colors
+			&sprite_bullet_7);    // load to sprite
+
+		D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
+			L"CoinBullet/CoinBulletsprite8.png",    // the file name
+			40,    // default width
+			40,    // default height
+			D3DX_DEFAULT,    // no mip mapping
+			NULL,    // regular usage
+			D3DFMT_A8R8G8B8,    // 32-bit pixels with alpha
+			D3DPOOL_MANAGED,    // typical memory handling
+			D3DX_DEFAULT,    // no filtering
+			D3DX_DEFAULT,    // no mip filtering
+			D3DCOLOR_XRGB(255, 0, 255),    // the hot-pink color key
+			NULL,    // no image info struct
+			NULL,    // not using 256 colors
+			&sprite_bullet_8);    // load to sprite
+
+		D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
+			L"CoinBullet/CoinBulletsprite9.png",    // the file name
+			40,    // default width
+			40,    // default height
+			D3DX_DEFAULT,    // no mip mapping
+			NULL,    // regular usage
+			D3DFMT_A8R8G8B8,    // 32-bit pixels with alpha
+			D3DPOOL_MANAGED,    // typical memory handling
+			D3DX_DEFAULT,    // no filtering
+			D3DX_DEFAULT,    // no mip filtering
+			D3DCOLOR_XRGB(255, 0, 255),    // the hot-pink color key
+			NULL,    // no image info struct
+			NULL,    // not using 256 colors
+			&sprite_bullet_9);    // load to sprite
+
+		D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
+			L"CoinBullet/CoinBulletsprite10.png",    // the file name
+			40,    // default width
+			40,    // default height
+			D3DX_DEFAULT,    // no mip mapping
+			NULL,    // regular usage
+			D3DFMT_A8R8G8B8,    // 32-bit pixels with alpha
+			D3DPOOL_MANAGED,    // typical memory handling
+			D3DX_DEFAULT,    // no filtering
+			D3DX_DEFAULT,    // no mip filtering
+			D3DCOLOR_XRGB(255, 0, 255),    // the hot-pink color key
+			NULL,    // no image info struct
+			NULL,    // not using 256 colors
+			&sprite_bullet_10);    // load to sprite
 
 	//필살기
 	D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
@@ -390,9 +600,9 @@ void initD3D(HWND hWnd)
 
 	//적
 	D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
-		L"EnemySonic.png",    // the file name
+		L"Enemy/EnemyGundamSprite1.png",    // the file name
 		60,    // default width
-		60,    // default height
+		90,    // default height
 		D3DX_DEFAULT,    // no mip mapping
 		NULL,    // regular usage
 		D3DFMT_A8R8G8B8,    // 32-bit pixels with alpha
@@ -402,7 +612,23 @@ void initD3D(HWND hWnd)
 		D3DCOLOR_XRGB(255, 0, 255),    // the hot-pink color key
 		NULL,    // no image info struct
 		NULL,    // not using 256 colors
-		&sprite_enemy);    // load to sprite
+		&sprite_enemy_1);    // load to sprite
+
+	
+	D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
+		L"Enemy/EnemyGundamSprite2.png",    // the file name
+		60,    // default width
+		90,    // default height
+		D3DX_DEFAULT,    // no mip mapping
+		NULL,    // regular usage
+		D3DFMT_A8R8G8B8,    // 32-bit pixels with alpha
+		D3DPOOL_MANAGED,    // typical memory handling
+		D3DX_DEFAULT,    // no filtering
+		D3DX_DEFAULT,    // no mip filtering
+		D3DCOLOR_XRGB(255, 0, 255),    // the hot-pink color key
+		NULL,    // no image info struct
+		NULL,    // not using 256 colors
+		&sprite_enemy_2);    // load to sprite
 
 
 
@@ -445,6 +671,7 @@ void initD3D(HWND hWnd)
 	HRESULT hr = D3DXCreateFont(d3ddev, 40, 0, FW_NORMAL, 1, false, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, ANTIALIASED_QUALITY,
 		FF_DONTCARE, L"Arial", &font);
 	if (!SUCCEEDED(hr))
+
 	{
 		return;
 	}
@@ -508,7 +735,7 @@ bool NewEnemy::check_collision(float x, float y)
 {
 
 	//충돌 처리 시 
-	if (sphere_collision_check(x_pos, y_pos, 30, x, y, 50) == true)
+	if (sphere_collision_check(x_pos, y_pos, 30, x, y, 100) == true)
 	{
 		bShow = false;
 		return true;
@@ -675,8 +902,8 @@ void do_game_logic(void)
 		if (KEY_DOWN(VK_SPACE) && 0x80000)
 		{
 			mciSendCommand(3, MCI_PLAY, MCI_DGV_PLAY_REPEAT, (DWORD)(LPVOID)&mciPlay);
-			counter++;
-			if (counter % 5 == 0)
+			counter1_1++;
+			if (counter1_1 % 5 == 0)
 			{
 				for (int i = 0; i < 100; i++)
 				{
@@ -739,8 +966,8 @@ void do_game_logic(void)
 		if (KEY_DOWN(VK_SPACE) && 0x80000)
 		{
 			mciSendCommand(3, MCI_PLAY, MCI_DGV_PLAY_REPEAT, (DWORD)(LPVOID)&mciPlay);
-			counter++;
-			if (counter % 5 == 0)
+			counter1_2++;
+			if (counter1_2 % 5 == 0)
 			{
 				for (int i = 0; i < 100; i++)
 				{
@@ -799,8 +1026,8 @@ void do_game_logic(void)
 		if (KEY_DOWN(VK_SPACE) && 0x80000)
 		{
 			mciSendCommand(3, MCI_PLAY, MCI_DGV_PLAY_REPEAT, (DWORD)(LPVOID)&mciPlay);
-			counter++;
-			if (counter % 5 == 0)
+			counter1_3++;
+			if (counter1_3 % 5 == 0)
 			{
 				for (int i = 0; i < 100; i++)
 				{
@@ -1094,8 +1321,35 @@ void render_frame(void)
 		SetRect(&part_1, 0, 0, 60, 60);
 		D3DXVECTOR3 center_1(0.0f, 0.0f, 0.0f);    // center at the upper-left corner
 		D3DXVECTOR3 position_1(hero.x_pos, hero.y_pos, 0.0f);    // position at 50, 50 with no depth
-		d3dspt->Draw(sprite_hero, &part_1, &center_1, &position_1, D3DCOLOR_ARGB(255, 255, 255, 255));
+		Hero_anicounter++;
+		if (Hero_anicounter >= 12)
+		{
+			Hero_anicounter = 0;
+		}
+		switch (Hero_anicounter / 3)
+		{
+		case 0 :
+			d3dspt->Draw(sprite_hero_1, &part_1, &center_1, &position_1, D3DCOLOR_ARGB(255, 255, 255, 255));
+			break;
+		case 1:
+			d3dspt->Draw(sprite_hero_2, &part_1, &center_1, &position_1, D3DCOLOR_ARGB(255, 255, 255, 255));
+			break;
+		case 2:
+			d3dspt->Draw(sprite_hero_3, &part_1, &center_1, &position_1, D3DCOLOR_ARGB(255, 255, 255, 255));
+			break;
+		case 3:
+			d3dspt->Draw(sprite_hero_4, &part_1, &center_1, &position_1, D3DCOLOR_ARGB(255, 255, 255, 255));
+			break;
+		}
 
+
+		/////////////////////////////////////////////////////////////////////////////////////////////////////
+		//첫번째 총알
+		CoinBullet_anicounter_1++;
+		if (CoinBullet_anicounter_1 >= 30)
+		{
+			CoinBullet_anicounter_1 = 0;
+		}
 
 		////첫번째총알
 		for (int i = 0; i < BullLimit; i++)
@@ -1106,12 +1360,50 @@ void render_frame(void)
 				SetRect(&part1_1, 0, 0, 40, 40);
 				D3DXVECTOR3 center1_1(0.0f, 0.0f, 0.0f);    // center at the upper-left corner
 				D3DXVECTOR3 position1_1(bull[i].x_pos, bull[i].y_pos + 5.0f, 0.0f);    // position at 50, 50 with no depth
-				d3dspt->Draw(sprite_bullet, &part1_1, &center1_1, &position1_1, D3DCOLOR_ARGB(255, 255, 255, 255));
+
+				switch (CoinBullet_anicounter_1 / 3)
+				{
+				case 0:
+					d3dspt->Draw(sprite_bullet_1, &part1_1, &center1_1, &position1_1, D3DCOLOR_ARGB(255, 255, 255, 255));
+					break;
+				case 1:
+					d3dspt->Draw(sprite_bullet_2, &part1_1, &center1_1, &position1_1, D3DCOLOR_ARGB(255, 255, 255, 255));
+					break;
+				case 2:
+					d3dspt->Draw(sprite_bullet_3, &part1_1, &center1_1, &position1_1, D3DCOLOR_ARGB(255, 255, 255, 255));
+					break;
+				case 3:
+					d3dspt->Draw(sprite_bullet_4, &part1_1, &center1_1, &position1_1, D3DCOLOR_ARGB(255, 255, 255, 255));
+					break;
+				case 4:
+					d3dspt->Draw(sprite_bullet_5, &part1_1, &center1_1, &position1_1, D3DCOLOR_ARGB(255, 255, 255, 255));
+					break;
+				case 5:
+					d3dspt->Draw(sprite_bullet_6, &part1_1, &center1_1, &position1_1, D3DCOLOR_ARGB(255, 255, 255, 255));
+					break;
+				case 6:
+					d3dspt->Draw(sprite_bullet_7, &part1_1, &center1_1, &position1_1, D3DCOLOR_ARGB(255, 255, 255, 255));
+					break;
+				case 7:
+					d3dspt->Draw(sprite_bullet_8, &part1_1, &center1_1, &position1_1, D3DCOLOR_ARGB(255, 255, 255, 255));
+					break;
+				case 8:
+					d3dspt->Draw(sprite_bullet_9, &part1_1, &center1_1, &position1_1, D3DCOLOR_ARGB(255, 255, 255, 255));
+					break;
+				case 9:
+					d3dspt->Draw(sprite_bullet_10, &part1_1, &center1_1, &position1_1, D3DCOLOR_ARGB(255, 255, 255, 255));
+					break;
+				}
 			}
 		}
 
 
-		//두번째
+		//두번째 총알
+		CoinBullet_anicounter_2++;
+		if (CoinBullet_anicounter_2 >= 30)
+		{
+			CoinBullet_anicounter_2 = 0;
+		}
 		for (int i = 0; i < BullLimit; i++)
 		{
 			if (bull2[i].bShow == true)
@@ -1120,11 +1412,50 @@ void render_frame(void)
 				SetRect(&part1_2, 0, 0, 40, 40);
 				D3DXVECTOR3 center1_2(0.0f, 0.0f, 0.0f);    // center at the upper-left corner
 				D3DXVECTOR3 position1_2(bull2[i].x_pos, bull2[i].y_pos + 5.0f, 0.0f);    // position at 50, 50 with no depth
-				d3dspt->Draw(sprite_bullet, &part1_2, &center1_2, &position1_2, D3DCOLOR_ARGB(255, 255, 255, 255));
+
+				switch (CoinBullet_anicounter_2 / 3)
+				{
+				case 0:
+					d3dspt->Draw(sprite_bullet_1, &part1_2, &center1_2, &position1_2, D3DCOLOR_ARGB(255, 255, 255, 255));
+					break;
+				case 1:
+					d3dspt->Draw(sprite_bullet_2, &part1_2, &center1_2, &position1_2, D3DCOLOR_ARGB(255, 255, 255, 255));
+					break;
+				case 2:
+					d3dspt->Draw(sprite_bullet_3, &part1_2, &center1_2, &position1_2, D3DCOLOR_ARGB(255, 255, 255, 255));
+					break;
+				case 3:
+					d3dspt->Draw(sprite_bullet_4, &part1_2, &center1_2, &position1_2, D3DCOLOR_ARGB(255, 255, 255, 255));
+					break;
+				case 4:
+					d3dspt->Draw(sprite_bullet_5, &part1_2, &center1_2, &position1_2, D3DCOLOR_ARGB(255, 255, 255, 255));
+					break;
+				case 5:
+					d3dspt->Draw(sprite_bullet_6, &part1_2, &center1_2, &position1_2, D3DCOLOR_ARGB(255, 255, 255, 255));
+					break;
+				case 6:
+					d3dspt->Draw(sprite_bullet_7, &part1_2, &center1_2, &position1_2, D3DCOLOR_ARGB(255, 255, 255, 255));
+					break;
+				case 7:
+					d3dspt->Draw(sprite_bullet_8, &part1_2, &center1_2, &position1_2, D3DCOLOR_ARGB(255, 255, 255, 255));
+					break;
+				case 8:
+					d3dspt->Draw(sprite_bullet_9, &part1_2, &center1_2, &position1_2, D3DCOLOR_ARGB(255, 255, 255, 255));
+					break;
+				case 9:
+					d3dspt->Draw(sprite_bullet_10, &part1_2, &center1_2, &position1_2, D3DCOLOR_ARGB(255, 255, 255, 255));
+					break;
+				}
 			}
 		}
 
-		//세번째
+
+		//세번째 총알
+		CoinBullet_anicounter_3++;
+		if (CoinBullet_anicounter_3 >= 30)
+		{
+			CoinBullet_anicounter_3 = 0;
+		}
 		for (int i = 0; i < BullLimit; i++)
 		{
 			if (bull3[i].bShow == true)
@@ -1133,7 +1464,40 @@ void render_frame(void)
 				SetRect(&part1_3, 0, 0, 40, 40);
 				D3DXVECTOR3 center1_3(0.0f, 0.0f, 0.0f);    // center at the upper-left corner
 				D3DXVECTOR3 position1_3(bull3[i].x_pos, bull3[i].y_pos + 5.0f, 0.0f);    // position at 50, 50 with no depth
-				d3dspt->Draw(sprite_bullet, &part1_3, &center1_3, &position1_3, D3DCOLOR_ARGB(255, 255, 255, 255));
+		
+				switch (CoinBullet_anicounter_3 / 3)
+				{
+				case 0:
+					d3dspt->Draw(sprite_bullet_1, &part1_3, &center1_3, &position1_3, D3DCOLOR_ARGB(255, 255, 255, 255));
+					break;
+				case 1:
+					d3dspt->Draw(sprite_bullet_2, &part1_3, &center1_3, &position1_3, D3DCOLOR_ARGB(255, 255, 255, 255));
+					break;
+				case 2:
+					d3dspt->Draw(sprite_bullet_3, &part1_3, &center1_3, &position1_3, D3DCOLOR_ARGB(255, 255, 255, 255));
+					break;
+				case 3:
+					d3dspt->Draw(sprite_bullet_4, &part1_3, &center1_3, &position1_3, D3DCOLOR_ARGB(255, 255, 255, 255));
+					break;
+				case 4:
+					d3dspt->Draw(sprite_bullet_5, &part1_3, &center1_3, &position1_3, D3DCOLOR_ARGB(255, 255, 255, 255));
+					break;
+				case 5:
+					d3dspt->Draw(sprite_bullet_6, &part1_3, &center1_3, &position1_3, D3DCOLOR_ARGB(255, 255, 255, 255));
+					break;
+				case 6:
+					d3dspt->Draw(sprite_bullet_7, &part1_3, &center1_3, &position1_3, D3DCOLOR_ARGB(255, 255, 255, 255));
+					break;
+				case 7:
+					d3dspt->Draw(sprite_bullet_8, &part1_3, &center1_3, &position1_3, D3DCOLOR_ARGB(255, 255, 255, 255));
+					break;
+				case 8:
+					d3dspt->Draw(sprite_bullet_9, &part1_3, &center1_3, &position1_3, D3DCOLOR_ARGB(255, 255, 255, 255));
+					break;
+				case 9:
+					d3dspt->Draw(sprite_bullet_10, &part1_3, &center1_3, &position1_3, D3DCOLOR_ARGB(255, 255, 255, 255));
+					break;
+				}
 			}
 		}
 
@@ -1151,15 +1515,29 @@ void render_frame(void)
 		*/
 
 
+		
+		EnemyGundam_anicounter++;
+		if (EnemyGundam_anicounter >= 6)
+		{
+			EnemyGundam_anicounter = 0;
+		}
 		////에네미 
 		RECT part2;
-		SetRect(&part2, 0, 0, 60, 60);
+		SetRect(&part2, 0, 0, 60, 90);
 		D3DXVECTOR3 center2(0.0f, 0.0f, 0.0f);    // center at the upper-left corner
 
 		for (int i = 0; i < ENEMY_NUM; i++)
 		{
 			D3DXVECTOR3 position2(enemy[i].x_pos, enemy[i].y_pos, 0.0f);    // position at 50, 50 with no depth
-			d3dspt->Draw(sprite_enemy, &part2, &center2, &position2, D3DCOLOR_ARGB(255, 255, 255, 255));
+			switch (EnemyGundam_anicounter / 3)
+			{
+			case 0:
+				d3dspt->Draw(sprite_enemy_1, &part2, &center2, &position2, D3DCOLOR_ARGB(255, 255, 255, 255));
+				break;
+			case 1:
+				d3dspt->Draw(sprite_enemy_2, &part2, &center2, &position2, D3DCOLOR_ARGB(255, 255, 255, 255));
+				break;
+			}
 		}
 		//적총알
 
@@ -1273,12 +1651,30 @@ void cleanD3D(void)
 	sprite_BackGround2->Release();
 
 	//플레이어 해제
-	sprite_hero->Release();
-	sprite_bullet->Release();
+	sprite_hero_1->Release();
+	sprite_hero_2->Release();
+	sprite_hero_3->Release();
+	sprite_hero_4->Release();
+
+	//총알
+	sprite_bullet_1->Release();
+	sprite_bullet_2->Release();
+	sprite_bullet_3->Release();
+	sprite_bullet_4->Release();
+	sprite_bullet_5->Release();
+	sprite_bullet_6->Release();
+	sprite_bullet_7->Release();
+	sprite_bullet_8->Release();
+	sprite_bullet_9->Release();
+	sprite_bullet_10->Release();
+
 	sprite_superbullet->Release();
 
 	//적 해제
-	sprite_enemy->Release();
+	sprite_enemy_1->Release();
+	sprite_enemy_2->Release();
+
+
 	sprite_enemybullet->Release();
 
 	//타이틀 / 게임오버 해제

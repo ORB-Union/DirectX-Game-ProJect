@@ -1,6 +1,8 @@
 #pragma once
 class entity {
 protected :
+
+
 public:
 
 	float x_pos; // ÀÌµ¿ÁÂÇ¥

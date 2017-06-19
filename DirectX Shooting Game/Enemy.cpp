@@ -84,8 +84,6 @@ void NewEnemy::move()
 	x_pos -= 4;
 }
 
-
-
 /*
 void NewEnemy:: Uping()
 {
@@ -144,3 +142,43 @@ stop = false;
 }
 }
 */
+
+
+
+BigestMissile::BigestMissile()
+{
+	HP = 20;
+}
+
+BigestMissile::~BigestMissile()
+{
+
+}
+
+void BigestMissile::init(float x, float y)
+{
+	x_pos = x;
+	y_pos = y;
+}
+
+bool BigestMissile::show()
+{
+	return bShow;
+
+}
+
+void BigestMissile::active()
+{
+	bShow = true;
+}
+
+void BigestMissile::hide()
+{
+	bShow = false;
+}
+
+
+void BigestMissile::move()
+{
+	x_pos -= 4;
+}
