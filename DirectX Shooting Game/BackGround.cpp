@@ -8,10 +8,8 @@ void BackGround::init(float x, float y)
 
 void BackGround::Move()
 {
-	
 	x_pos -= 8;
 	if (x_pos <= -1240)
-	
 	{
 		x_pos = 1240;
 	}
