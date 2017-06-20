@@ -60,7 +60,10 @@ int CoinBullet_anicounter_2; // 코인총알 애니메이션
 int CoinBullet_anicounter_3; // 코인총알 애니메이션
 
 
-int EnemyGundam_anicounter; // 코인총알 애니메이션
+int EnemyGundam_anicounter; // 일반적 애니메이션
+
+
+int NewEnemyGundam_anicounter; // 특수적 애니메이션
 
 // sprite declarations
 LPDIRECT3DTEXTURE9 sprite;    // the pointer to the sprite
@@ -93,7 +96,11 @@ LPDIRECT3DTEXTURE9 sprite_enemy_2;    // the pointer to the sprite
 
 LPDIRECT3DTEXTURE9 sprite_enemybullet;
 
-LPDIRECT3DTEXTURE9 sprite_Newenemy;    // the pointer to the sprite
+LPDIRECT3DTEXTURE9 sprite_Newenemy_1;    // the pointer to the sprite
+LPDIRECT3DTEXTURE9 sprite_Newenemy_2;    // the pointer to the sprite
+LPDIRECT3DTEXTURE9 sprite_Newenemy_3;    // the pointer to the sprite
+LPDIRECT3DTEXTURE9 sprite_Newenemy_4;    // the pointer to the sprite
+
 
 
 ////////////////////////////////////////////////////////////
@@ -649,11 +656,11 @@ void initD3D(HWND hWnd)
 		&sprite_enemybullet);    // load to sprite
 
 
-	//거대 소닉
+
 	D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
-		L"NewEnemy.png",    // the file name
+		L"Enemy/NewEnemySprite1.png",    // the file name
 		100,    // default width
-		100,    // default height
+		95,    // default height
 		D3DX_DEFAULT,    // no mip mapping
 		NULL,    // regular usage
 		D3DFMT_A8R8G8B8,    // 32-bit pixels with alpha
@@ -663,7 +670,52 @@ void initD3D(HWND hWnd)
 		D3DCOLOR_XRGB(255, 0, 255),    // the hot-pink color key
 		NULL,    // no image info struct
 		NULL,    // not using 256 colors
-		&sprite_Newenemy);    // load to sprite
+		&sprite_Newenemy_1);    // load to sprite
+
+	D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
+		L"Enemy/NewEnemySprite2.png",    // the file name
+		100,    // default width
+		95,    // default height
+		D3DX_DEFAULT,    // no mip mapping
+		NULL,    // regular usage
+		D3DFMT_A8R8G8B8,    // 32-bit pixels with alpha
+		D3DPOOL_MANAGED,    // typical memory handling
+		D3DX_DEFAULT,    // no filtering
+		D3DX_DEFAULT,    // no mip filtering
+		D3DCOLOR_XRGB(255, 0, 255),    // the hot-pink color key
+		NULL,    // no image info struct
+		NULL,    // not using 256 colors
+		&sprite_Newenemy_2);    // load to sprite
+
+	D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
+		L"Enemy/NewEnemySprite3.png",    // the file name
+		100,    // default width
+		95,    // default height
+		D3DX_DEFAULT,    // no mip mapping
+		NULL,    // regular usage
+		D3DFMT_A8R8G8B8,    // 32-bit pixels with alpha
+		D3DPOOL_MANAGED,    // typical memory handling
+		D3DX_DEFAULT,    // no filtering
+		D3DX_DEFAULT,    // no mip filtering
+		D3DCOLOR_XRGB(255, 0, 255),    // the hot-pink color key
+		NULL,    // no image info struct
+		NULL,    // not using 256 colors
+		&sprite_Newenemy_3);    // load to sprite
+
+	D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
+		L"Enemy/NewEnemySprite4.png",    // the file name
+		100,    // default width
+		95,    // default height
+		D3DX_DEFAULT,    // no mip mapping
+		NULL,    // regular usage
+		D3DFMT_A8R8G8B8,    // 32-bit pixels with alpha
+		D3DPOOL_MANAGED,    // typical memory handling
+		D3DX_DEFAULT,    // no filtering
+		D3DX_DEFAULT,    // no mip filtering
+		D3DCOLOR_XRGB(255, 0, 255),    // the hot-pink color key
+		NULL,    // no image info struct
+		NULL,    // not using 256 colors
+		&sprite_Newenemy_4);    // load to sprite
 
 
 	/*
@@ -1554,14 +1606,35 @@ void render_frame(void)
 		}
 
 
+
+		NewEnemyGundam_anicounter++;
+		if (NewEnemyGundam_anicounter >= 12)
+		{
+			NewEnemyGundam_anicounter = 0;
+		}
 		//새로운 적
 		RECT part5;
-		SetRect(&part5, 0, 0, 100, 100);
+		SetRect(&part5, 0, 0, 100, 95);
 		D3DXVECTOR3 center5(0.0f, 0.0f, 0.0f);    // center at the upper-left corner
 		for (int i = 0; i < NewENEMY_NUM; i++)
 		{
 			D3DXVECTOR3 position5(newenemy[i].x_pos, newenemy[i].y_pos, 0.0f);    // position at 50, 50 with no depth	
-			d3dspt->Draw(sprite_Newenemy, &part5, &center5, &position5, D3DCOLOR_ARGB(255, 255, 255, 255));
+			switch (NewEnemyGundam_anicounter / 3)
+			{
+			case 0:
+				d3dspt->Draw(sprite_Newenemy_1, &part5, &center5, &position5, D3DCOLOR_ARGB(255, 255, 255, 255));
+				break;
+			case 1:
+				d3dspt->Draw(sprite_Newenemy_2, &part5, &center5, &position5, D3DCOLOR_ARGB(255, 255, 255, 255));
+				break;
+			case 2:
+				d3dspt->Draw(sprite_Newenemy_3, &part5, &center5, &position5, D3DCOLOR_ARGB(255, 255, 255, 255));
+				break;
+			case 3:
+				d3dspt->Draw(sprite_Newenemy_4, &part5, &center5, &position5, D3DCOLOR_ARGB(255, 255, 255, 255));
+				break;
+			}
+			
 		}
 
 		if (font)
@@ -1674,6 +1747,11 @@ void cleanD3D(void)
 	sprite_enemy_1->Release();
 	sprite_enemy_2->Release();
 
+	//특수 적
+	sprite_Newenemy_1->Release();
+	sprite_Newenemy_2->Release();
+	sprite_Newenemy_3->Release();
+	sprite_Newenemy_4->Release();
 
 	sprite_enemybullet->Release();
 
