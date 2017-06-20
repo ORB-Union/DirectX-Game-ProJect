@@ -1,7 +1,3 @@
-#include <windows.h>
-#include <windowsx.h>
-#include <d3d9.h>
-#include <d3dx9.h>
 #include"Common.h"
 #include"Enemy.h"
 
@@ -48,7 +44,7 @@ void Enemy::hide()
 
 NewEnemy::NewEnemy()
 {
-	HP = 20;
+	HP = 15;
 }
 
 NewEnemy::~NewEnemy()
@@ -81,7 +77,7 @@ void NewEnemy::hide()
 
 void NewEnemy::move()
 {
-	x_pos -= 4;
+	x_pos -= 5;
 }
 
 /*
@@ -144,41 +140,42 @@ stop = false;
 */
 
 
-
-BigestMissile::BigestMissile()
-{
-	HP = 20;
-}
-
-BigestMissile::~BigestMissile()
+/////////////////////////////////////////////////
+//거대 버섯미사일
+Mushroom::Mushroom()
 {
 
 }
 
-void BigestMissile::init(float x, float y)
+Mushroom::~Mushroom()
+{
+
+}
+
+void Mushroom::init(float x, float y)
 {
 	x_pos = x;
 	y_pos = y;
 }
 
-bool BigestMissile::show()
+bool Mushroom::show()
 {
 	return bShow;
 
 }
 
-void BigestMissile::active()
+void Mushroom::active()
 {
 	bShow = true;
 }
 
-void BigestMissile::hide()
+void Mushroom::hide()
 {
 	bShow = false;
 }
 
 
-void BigestMissile::move()
+void Mushroom::move()
 {
-	x_pos -= 4;
+	x_pos -= 3;
 }

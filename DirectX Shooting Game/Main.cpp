@@ -27,7 +27,6 @@ using namespace std;
 #define BullLimit 100
 
 
-
 // include the Direct3D Library file
 #pragma comment (lib, "d3d9.lib")
 #pragma comment (lib, "d3dx9.lib")
@@ -103,6 +102,9 @@ LPDIRECT3DTEXTURE9 sprite_Newenemy_4;    // the pointer to the sprite
 
 
 
+LPDIRECT3DTEXTURE9 sprite_MushroomEnemy; // 버섯
+
+
 ////////////////////////////////////////////////////////////
 //백그라운드
 //타이틀
@@ -150,6 +152,7 @@ Bullet3 bull3[BullLimit];
 Enemy enemy[ENEMY_NUM];
 EnemyBullet Ebullet[ENEMY_NUM];
 NewEnemy newenemy[ENEMY_NUM];
+Mushroom mushroom;
 BackGround back[2];
 
 //Bullet bullet;
@@ -718,6 +721,25 @@ void initD3D(HWND hWnd)
 		&sprite_Newenemy_4);    // load to sprite
 
 
+	//버섯
+	D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
+		L"Enemy/EnemyMushroom.png",    // the file name
+		300,    // default width
+		300,    // default height
+		D3DX_DEFAULT,    // no mip mapping
+		NULL,    // regular usage
+		D3DFMT_A8R8G8B8,    // 32-bit pixels with alpha
+		D3DPOOL_MANAGED,    // typical memory handling
+		D3DX_DEFAULT,    // no filtering
+		D3DX_DEFAULT,    // no mip filtering
+		D3DCOLOR_XRGB(255, 0, 255),    // the hot-pink color key
+		NULL,    // no image info struct
+		NULL,    // not using 256 colors
+		&sprite_MushroomEnemy);    // load to sprite
+
+
+
+
 	/*
 	font = NULL;
 	HRESULT hr = D3DXCreateFont(d3ddev, 40, 0, FW_NORMAL, 1, false, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, ANTIALIASED_QUALITY,
@@ -787,7 +809,7 @@ bool NewEnemy::check_collision(float x, float y)
 {
 
 	//충돌 처리 시 
-	if (sphere_collision_check(x_pos, y_pos, 30, x, y, 100) == true)
+	if (sphere_collision_check(x_pos, y_pos, 30, x, y, 30) == true)
 	{
 		bShow = false;
 		return true;
@@ -804,7 +826,7 @@ bool Bullet::check_collision(float x, float y)
 {
 
 	//충돌 처리 시 
-	if (sphere_collision_check(x_pos, y_pos, 30, x, y, 30) == true)
+	if (sphere_collision_check(x_pos-60, y_pos+20, 40, x, y, 40) == true)
 	{
 		bShow = false;
 		return true;
@@ -821,7 +843,7 @@ bool Bullet2::check_collision(float x, float y)
 {
 
 	//충돌 처리 시 
-	if (sphere_collision_check(x_pos, y_pos, 30, x, y, 30) == true)
+	if (sphere_collision_check(x_pos-60, y_pos+20, 40, x, y, 40) == true)
 	{
 		bShow = false;
 		return true;
@@ -837,7 +859,7 @@ bool Bullet3::check_collision(float x, float y)
 {
 
 	//충돌 처리 시 
-	if (sphere_collision_check(x_pos, y_pos, 30, x, y, 30) == true)
+	if (sphere_collision_check(x_pos-60, y_pos+20, 40, x, y, 40) == true)
 	{
 		bShow = false;
 		return true;
@@ -854,6 +876,18 @@ bool Bullet3::check_collision(float x, float y)
 bool EnemyBullet::check_collision(float x, float y)
 {
 	if (sphere_collision_check(x_pos, y_pos, 30, x, y, 30) == true)
+	{
+		bShow = false;
+		return true;
+	}
+	else
+		return false;
+}
+
+
+bool Mushroom::check_collision(float x, float y)
+{
+	if (sphere_collision_check(x_pos+80, y_pos+110, 80, x, y, 80) == true)
 	{
 		bShow = false;
 		return true;
@@ -915,7 +949,8 @@ void init_game(void)
 
 	}
 
-	//Superbullet.init(hero.x_pos, hero.y_pos);
+	//Superbullet.init(hero.x_pos, hero.y_pos);	
+		mushroom.init((float)(SCREEN_WIDTH + (rand() % 400)), rand() % SCREEN_HEIGHT - 100);
 
 }
 
@@ -962,12 +997,10 @@ void do_game_logic(void)
 					if (bull[i].show() == false)
 					{
 						bull[i].active();
-
 						bull[i].init(hero.x_pos, hero.y_pos);
 						//bull[i].move();
 						break;
 					}
-
 				}
 			}
 		}
@@ -976,7 +1009,7 @@ void do_game_logic(void)
 		{
 			mciSendCommand(3, MCI_SEEK, MCI_SEEK_TO_START, (DWORD)(LPVOID)NULL);
 		}
-	
+
 		//총알처리
 		for (int i = 0; i < BullLimit; i++)
 		{
@@ -1006,10 +1039,14 @@ void do_game_logic(void)
 						{
 							//이후 생성 안되는 버그 해결
 							newenemy[t].init((float)(SCREEN_WIDTH + (rand() % 300)), rand() % SCREEN_HEIGHT - 50);
-							newenemy[t].HP = 20;
+							newenemy[t].HP = 15;
 						}
 					}
+				}
 
+				if (bull[i].check_collision(mushroom.x_pos, mushroom.y_pos+160) == true)
+				{
+					bull[i].hide();
 				}
 			}
 		}
@@ -1034,14 +1071,13 @@ void do_game_logic(void)
 
 				}
 			}
-
 		}
 		//총알처리
 		for (int i = 0; i < BullLimit; i++)
 		{
 			if (bull2[i].show() == true)
 			{
-				if (bull2[i].x_pos > SCREEN_WIDTH || bull2[i].y_pos > (SCREEN_HEIGHT+15))
+				if (bull2[i].x_pos > SCREEN_WIDTH || bull2[i].y_pos > (SCREEN_HEIGHT + 15))
 					bull2[i].hide();
 				else
 					bull2[i].move();
@@ -1065,13 +1101,19 @@ void do_game_logic(void)
 						{
 							//이후 생성 안되는 버그 해결
 							newenemy[t].init((float)(SCREEN_WIDTH + (rand() % 300)), rand() % SCREEN_HEIGHT - 50);
-							newenemy[t].HP = 20;
+							newenemy[i].HP = 15;
 						}
 					}
+				}
 
+				
+				if (bull2[i].check_collision(mushroom.x_pos, mushroom.y_pos+160) == true)
+				{
+					bull2[i].hide();
 				}
 			}
 		}
+
 
 		////////////////////////////////////////////////////////////////////////
 		//총알 처리 세번째
@@ -1124,10 +1166,13 @@ void do_game_logic(void)
 						{
 							//이후 생성 안되는 버그 해결
 							newenemy[t].init((float)(SCREEN_WIDTH + (rand() % 300)), rand() % SCREEN_HEIGHT - 50);
-							newenemy[t].HP = 20;
+							newenemy[i].HP = 15;
 						}
 					}
-
+				}
+				if (bull3[i].check_collision(mushroom.x_pos, mushroom.y_pos+160)== true)
+				{
+					bull3[i].hide();
 				}
 			}
 		}
@@ -1210,7 +1255,7 @@ void do_game_logic(void)
 		/////////////////////////////////////////////
 		for (int i = 0; i < NewENEMY_NUM; i++)
 		{
-			if (newenemy[i].show() == false && Time % 8 == 0)
+			if (newenemy[i].show() == false)
 			{
 				newenemy[i].active();
 				newenemy[i].init((float)(SCREEN_WIDTH + (rand() % 400)), rand() % SCREEN_HEIGHT);
@@ -1222,21 +1267,13 @@ void do_game_logic(void)
 				if (newenemy[i].x_pos < -100)
 				{
 					newenemy[i].hide();
-					newenemy[i].HP = 20;
+					newenemy[i].HP = 15;
 				}
 				//if(newenemy[i].x_pos > -100)
 				else
 				{
 					newenemy[i].move();
-					//newenemy[i].Stopping();					
 				}
-				/*
-				else
-				{
-					newenemy[i].Uping();
-					newenemy[i].downing();
-				}
-				*/
 
 			}
 
@@ -1256,6 +1293,30 @@ void do_game_logic(void)
 				}
 			}
 
+		}
+
+		/////////////////////////////////////////////////////////////
+		if (mushroom.show() == false)
+		{
+			mushroom.active();
+			mushroom.init((float)(SCREEN_WIDTH + (rand() % 400)), rand() % SCREEN_HEIGHT - 100);
+		}
+
+		if (mushroom.show() == true)
+		{
+			if (mushroom.x_pos < -500)
+			{
+				mushroom.hide();
+			}
+			else
+			{
+				mushroom.move();
+			}
+
+			if (mushroom.check_collision(hero.x_pos, hero.y_pos) == true)
+			{
+				mushroom.hide();
+			}
 		}
 	}
 }
@@ -1566,8 +1627,6 @@ void render_frame(void)
 		}
 		*/
 
-
-		
 		EnemyGundam_anicounter++;
 		if (EnemyGundam_anicounter >= 6)
 		{
@@ -1637,12 +1696,19 @@ void render_frame(void)
 			
 		}
 
+		//총알 통과불가 오브젝트
+		RECT part10;
+		SetRect(&part10, 0, 0, 300, 300);
+		D3DXVECTOR3 center10(0.0f, 0.0f, 0.0f);    // center at the upper-left corner
+		D3DXVECTOR3 position10(mushroom.x_pos, mushroom.y_pos, 0.0f);    // position at 50, 50 with no depth	
+		d3dspt->Draw(sprite_MushroomEnemy, &part10, &center10, &position10, D3DCOLOR_ARGB(255, 255, 255, 255));
+
+		/*
 		if (font)
 		{
 			font->DrawTextA(NULL, message.c_str(), -1, &fRectangle, DT_LEFT, D3DCOLOR_ARGB(255, 255, 255, 255));
 		}
-
-
+		*/
 
 		d3dspt->End();    // end sprite drawing
 
@@ -1746,6 +1812,8 @@ void cleanD3D(void)
 	//적 해제
 	sprite_enemy_1->Release();
 	sprite_enemy_2->Release();
+
+	sprite_MushroomEnemy->Release(); // 버섯
 
 	//특수 적
 	sprite_Newenemy_1->Release();

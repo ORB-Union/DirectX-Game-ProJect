@@ -54,12 +54,12 @@ public:
 
 
 
-class BigestMissile :public entity {
+class Mushroom:public entity {
 
 public:
 
-	BigestMissile();
-	~BigestMissile();
+	Mushroom();
+	~Mushroom();
 
 	bool up;
 	bool down;

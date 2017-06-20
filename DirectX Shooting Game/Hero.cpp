@@ -1,11 +1,5 @@
-#include <windows.h>
-#include <windowsx.h>
-#include <d3d9.h>
-#include <d3dx9.h>
 #include"Common.h"
 #include"Hero.h"
-#include<iostream>
-#include"Bullet.h"
 
 
 //방향키 정의
