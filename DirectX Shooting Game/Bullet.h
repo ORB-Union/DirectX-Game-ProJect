@@ -1,10 +1,6 @@
 #pragma once
 #include"Common.h"
-#include <windows.h>
-#include <windowsx.h>
-#include <d3d9.h>
-#include <d3dx9.h>
-#include <iostream>
+#include<cmath>
 
 /////////////////////////////////////////////////////////////////////
 //¿µ¿õ ÃÑ¾Ë
@@ -62,6 +58,8 @@ public:
 class EnemyBullet : public Bullet
 {
 public:
+	EnemyBullet();
+	~EnemyBullet();
 	bool bShow;
 	void move();
 	bool check_collision(float x, float y);
@@ -73,10 +71,13 @@ public:
 
 
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+//È£¹Ö½î´Â Æ¯¼öÀû
 class NewEnemyBullet : public Bullet
 {
 public:
-	int Hp;
+	NewEnemyBullet();
+	~NewEnemyBullet();
 	bool bShow;
 	void move();
 	bool check_collision(float x, float y);
@@ -84,4 +85,5 @@ public:
 	bool show();
 	void active();
 	void hide();
+	void MoveSimpleHomingBullet(float& x, float& y, float mx, float my, float speed); // ÅºÈ¯ÀÇ ÁÂÇ¥, ¸ÞÀÎ Ä³¸¯ÅÍÀÇ ÁÂÇ¥, ÅºÈ¯ÀÇ ¼Óµµ
 };

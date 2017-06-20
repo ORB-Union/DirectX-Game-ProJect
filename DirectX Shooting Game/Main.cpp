@@ -22,7 +22,7 @@ using namespace std;
 #define KEY_DOWN(vk_code) ((GetAsyncKeyState(vk_code) & 0x8000) ? 1 : 0)
 #define KEY_UP(vk_code) ((GetAsyncKeyState(vk_code) & 0x8000) ? 0 : 1)
 #define ENEMY_NUM 10
-#define NewENEMY_NUM 3
+#define NewENEMY_NUM 2
 #define BackNum 2
 #define BullLimit 100
 
@@ -100,6 +100,8 @@ LPDIRECT3DTEXTURE9 sprite_Newenemy_2;    // the pointer to the sprite
 LPDIRECT3DTEXTURE9 sprite_Newenemy_3;    // the pointer to the sprite
 LPDIRECT3DTEXTURE9 sprite_Newenemy_4;    // the pointer to the sprite
 
+LPDIRECT3DTEXTURE9 sprite_Newenemymissile;    // 호밍미사일
+
 
 
 LPDIRECT3DTEXTURE9 sprite_MushroomEnemy; // 버섯
@@ -151,7 +153,8 @@ Bullet3 bull3[BullLimit];
 
 Enemy enemy[ENEMY_NUM];
 EnemyBullet Ebullet[ENEMY_NUM];
-NewEnemy newenemy[ENEMY_NUM];
+NewEnemy newenemy[NewENEMY_NUM];
+NewEnemyBullet newenemybull[NewENEMY_NUM];
 Mushroom mushroom;
 BackGround back[2];
 
@@ -658,8 +661,8 @@ void initD3D(HWND hWnd)
 		NULL,    // not using 256 colors
 		&sprite_enemybullet);    // load to sprite
 
-
-
+	/////////////////////////////////////////////////////////////
+	//새로운적
 	D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
 		L"Enemy/NewEnemySprite1.png",    // the file name
 		100,    // default width
@@ -720,7 +723,25 @@ void initD3D(HWND hWnd)
 		NULL,    // not using 256 colors
 		&sprite_Newenemy_4);    // load to sprite
 
+	/////////////////////////////////////////////////////////////
+	//특수적 호밍총알
+	D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
+		L"Enemy/NewEnemyMissile.png",    // the file name
+		60,    // default width
+		60,    // default height
+		D3DX_DEFAULT,    // no mip mapping
+		NULL,    // regular usage
+		D3DFMT_A8R8G8B8,    // 32-bit pixels with alpha
+		D3DPOOL_MANAGED,    // typical memory handling
+		D3DX_DEFAULT,    // no filtering
+		D3DX_DEFAULT,    // no mip filtering
+		D3DCOLOR_XRGB(255, 0, 255),    // the hot-pink color key
+		NULL,    // no image info struct
+		NULL,    // not using 256 colors
+		&sprite_Newenemymissile);    // load to sprite
 
+
+	/////////////////////////////////////////////////////////////
 	//버섯
 	D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
 		L"Enemy/EnemyMushroom.png",    // the file name
@@ -884,6 +905,17 @@ bool EnemyBullet::check_collision(float x, float y)
 		return false;
 }
 
+bool NewEnemyBullet::check_collision(float x, float y)
+{
+	if (sphere_collision_check(x_pos, y_pos, 30, x, y, 30) == true)
+	{
+		bShow = false;
+		return true;
+	}
+	else
+		return false;
+}
+
 
 bool Mushroom::check_collision(float x, float y)
 {
@@ -946,6 +978,13 @@ void init_game(void)
 	for (int i = 0; i < NewENEMY_NUM; i++)
 	{
 		newenemy[i].init((float)(SCREEN_WIDTH + (rand() % 300)), rand() % SCREEN_HEIGHT - 50);
+
+	}
+
+
+	for (int i = 0; i < NewENEMY_NUM; i++)
+	{
+		newenemybull[i].init(newenemy[i].x_pos, newenemy[i].y_pos);
 
 	}
 
@@ -1044,6 +1083,18 @@ void do_game_logic(void)
 					}
 				}
 
+				//호밍미사일이 플레이어 미사일과 충돌시
+				for (int k = 0; k < NewENEMY_NUM; k++)
+				{
+					if (bull[i].check_collision(newenemybull[k].x_pos, newenemybull[k].y_pos) == true)
+					{
+						newenemybull[k].HP -= 1;
+						if (newenemybull[k].HP <= 0)
+						{
+							newenemybull[k].hide();
+						}
+					}
+				}
 				if (bull[i].check_collision(mushroom.x_pos, mushroom.y_pos+160) == true)
 				{
 					bull[i].hide();
@@ -1106,6 +1157,18 @@ void do_game_logic(void)
 					}
 				}
 
+				//호밍미사일이 플레이어 미사일과 충돌시
+				for (int k = 0; k < NewENEMY_NUM; k++)
+				{
+					if (bull2[i].check_collision(newenemybull[k].x_pos, newenemybull[k].y_pos) == true)
+					{
+						newenemybull[k].HP -= 1;
+						if (newenemybull[k].HP <= 0)
+						{
+							newenemybull[k].hide();
+						}
+					}
+				}
 				
 				if (bull2[i].check_collision(mushroom.x_pos, mushroom.y_pos+160) == true)
 				{
@@ -1167,6 +1230,18 @@ void do_game_logic(void)
 							//이후 생성 안되는 버그 해결
 							newenemy[t].init((float)(SCREEN_WIDTH + (rand() % 300)), rand() % SCREEN_HEIGHT - 50);
 							newenemy[i].HP = 15;
+						}
+					}
+				}
+				//호밍미사일이 플레이어 미사일과 충돌시
+				for (int k = 0; k < NewENEMY_NUM; k++)
+				{
+					if (bull3[i].check_collision(newenemybull[k].x_pos, newenemybull[k].y_pos) == true)
+					{
+						newenemybull[k].HP -= 1;
+						if (newenemybull[k].HP <= 0)
+						{
+							newenemybull[k].hide();
 						}
 					}
 				}
@@ -1253,6 +1328,7 @@ void do_game_logic(void)
 
 
 		/////////////////////////////////////////////
+		//특수 적
 		for (int i = 0; i < NewENEMY_NUM; i++)
 		{
 			if (newenemy[i].show() == false)
@@ -1294,8 +1370,48 @@ void do_game_logic(void)
 			}
 
 		}
+		/////////////////////////////////////////////////////////////
+		//특수적의 호밍미사일 발사
+		for (int i = 0; i < NewENEMY_NUM; i++)
+		{
+			if (newenemy[i].x_pos < (SCREEN_WIDTH - 300) + rand() % 150 && newenemybull[i].show() == false)
+			{
+				newenemybull[i].active();
+				newenemybull[i].init(newenemy[i].x_pos, newenemy[i].y_pos);
+			}
+		}
+
+		for (int j = 0; j < NewENEMY_NUM; j++)
+		{
+			if (newenemybull[j].show() == true)
+			{
+				if (newenemybull[j].x_pos < -100)
+					newenemybull[j].hide();
+				else
+				{
+					newenemybull[j].MoveSimpleHomingBullet(newenemybull[j].x_pos, newenemybull[j].y_pos, hero.x_pos, hero.y_pos, 5);
+				}
+			}
+
+			if (newenemybull[j].check_collision(hero.x_pos, hero.y_pos) == true)
+			{
+				newenemybull[j].hide();
+			}
+
+			//플레이어와의 충돌
+			if (hero.check_collision(newenemybull[j].x_pos, newenemybull[j].y_pos) == true)
+			{
+				hero.HP -= 1;
+				if (hero.HP <= 0)
+				{
+					hero.hide();
+					Game_over = true;
+				}
+			}
+		}
 
 		/////////////////////////////////////////////////////////////
+		//총알 관통불가 오브젝트
 		if (mushroom.show() == false)
 		{
 			mushroom.active();
@@ -1651,8 +1767,6 @@ void render_frame(void)
 			}
 		}
 		//적총알
-
-
 		RECT part4;
 		SetRect(&part4, 0, 0, 30, 30);
 		D3DXVECTOR3 center4(0.0f, 0.0f, 0.0f);    // center at the upper-left corner	
@@ -1692,9 +1806,20 @@ void render_frame(void)
 			case 3:
 				d3dspt->Draw(sprite_Newenemy_4, &part5, &center5, &position5, D3DCOLOR_ARGB(255, 255, 255, 255));
 				break;
-			}
-			
+			}	
 		}
+		///////////////////////////////
+		//특수적 호밍미사일
+
+		RECT part11;
+		SetRect(&part11, 0, 0, 60, 60);
+		D3DXVECTOR3 center11(0.0f, 0.0f, 0.0f);    // center at the upper-left corner	
+		for (int i = 0; i < NewENEMY_NUM; i++)
+		{
+			D3DXVECTOR3 position11(newenemybull[i].x_pos, newenemybull[i].y_pos, 0.0f);    // position at 50, 50 with no depth		
+			d3dspt->Draw(sprite_Newenemymissile, &part11, &center11, &position11, D3DCOLOR_ARGB(255, 255, 255, 255));
+		}
+
 
 		//총알 통과불가 오브젝트
 		RECT part10;
@@ -1822,6 +1947,7 @@ void cleanD3D(void)
 	sprite_Newenemy_4->Release();
 
 	sprite_enemybullet->Release();
+	sprite_Newenemymissile->Release();
 
 	//타이틀 / 게임오버 해제
 	sprite_Title->Release();

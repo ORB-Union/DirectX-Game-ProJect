@@ -151,6 +151,14 @@ void Bullet3::hide()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 //적 총알
+EnemyBullet::EnemyBullet()
+{
+}
+
+EnemyBullet::~EnemyBullet()
+{
+}
+
 void EnemyBullet::move()
 {
 	x_pos -= 15;
@@ -185,6 +193,15 @@ void EnemyBullet::hide()
 
 
 /////////////////////////////////////////////
+NewEnemyBullet::NewEnemyBullet()
+{
+	HP = 3;
+}
+
+NewEnemyBullet::~NewEnemyBullet()
+{
+}
+
 void NewEnemyBullet::move()
 {
 	x_pos -= 15;
@@ -212,4 +229,25 @@ void NewEnemyBullet::active()
 void NewEnemyBullet::hide()
 {
 	bShow = false;
+}
+
+void NewEnemyBullet::MoveSimpleHomingBullet(float& x, float& y, float mx, float my, float speed) // 탄환의 좌표, 메인 캐릭터의 좌표, 탄환의 속도
+{
+	float d = sqrt((mx - x)*(mx - x) + (my - y)*(my - y)); // 목표까지의 거리
+
+	float vx, vy;
+
+	// 목표까지의 거리 d가 0일 때는 속도 벡터를 화면 아래쪽으로 함
+	if (d)
+	{
+		vx = (mx - x) / d*speed;
+		vy = (my - y) / d*speed;
+	}
+	else
+	{
+		vx = 0;
+		vy = speed;
+	}
+	x += vx;
+	y += vy;
 }
