@@ -55,7 +55,7 @@ public:
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 //적들 총알
-class EnemyBullet : public Bullet
+class EnemyBullet : public entity
 {
 public:
 	EnemyBullet();
@@ -73,7 +73,7 @@ public:
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 //호밍쏘는 특수적
-class NewEnemyBullet : public Bullet
+class NewEnemyBullet : public entity
 {
 public:
 	NewEnemyBullet();
@@ -85,5 +85,79 @@ public:
 	bool show();
 	void active();
 	void hide();
-	void MoveSimpleHomingBullet(float& x, float& y, float mx, float my, float speed); // 탄환의 좌표, 메인 캐릭터의 좌표, 탄환의 속도
+	void HomingBullet(float& x, float& y, float mx, float my, float speed); // 탄환의 좌표, 메인 캐릭터의 좌표, 탄환의 속도
+};
+
+
+/////////////////////////////////////////////////////////////////////////////////////
+//보스 총알
+//단순 직선총알
+class BossBullet1 : public entity
+{
+public:
+	BossBullet1();
+	~BossBullet1();
+	bool bShow;
+	void move();
+	bool check_collision(float x, float y);
+	void init(float x, float y);
+	bool show();
+	void active();
+	void hide();
+};
+
+
+
+
+//대각선탄
+class BossBullet2 : public entity
+{
+public:
+	BossBullet2();
+	~BossBullet2();
+	bool bShow;
+	void move();
+	bool check_collision(float x, float y);
+	void init(float x, float y);
+	bool show();
+	void active();
+	void hide();
+
+	void InitAimingBullet(float mx, float my, float ex, float ey, float speed, float& x, float& y, float& vx, float& vy); // 메인 캐릭터의 위치, 적기의 좌표, 탄환의 속도, 탄환의 좌표, 탄환의 속도 벡터
+	void AimingBullet(float& x, float& y, float vx, float vy); // 탄환의 좌표, 탄환의 속도
+};
+
+
+//포물선탄
+class BossBullet3 : public entity
+{
+	BossBullet3();
+	~BossBullet3();
+	bool bShow;
+	void move();
+	bool check_collision(float x, float y);
+	void init(float x, float y);
+	bool show();
+	void active();
+	void hide();
+	//
+	void DroppingBullet_Up(float& x, float& y, float accel, float& vx, float& vy); // 탄환의 좌표, 가속도, 속도 벡터의 좌표
+
+};
+
+
+//포물선탄
+class BossBullet4 : public entity
+{
+	BossBullet4();
+	~BossBullet4();
+	bool bShow;
+	void move();
+	bool check_collision(float x, float y);
+	void init(float x, float y);
+	bool show();
+	void active();
+	void hide();
+	//
+	void DroppingBullet_Down(float& x, float& y, float accel, float& vx, float& vy); // 탄환의 좌표, 가속도, 속도 벡터의 좌표
 };

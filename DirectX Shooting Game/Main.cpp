@@ -21,7 +21,7 @@ using namespace std;
 #define SCREEN_HEIGHT 800
 #define KEY_DOWN(vk_code) ((GetAsyncKeyState(vk_code) & 0x8000) ? 1 : 0)
 #define KEY_UP(vk_code) ((GetAsyncKeyState(vk_code) & 0x8000) ? 0 : 1)
-#define ENEMY_NUM 10
+#define ENEMY_NUM 7
 #define NewENEMY_NUM 2
 #define BackNum 2
 #define BullLimit 100
@@ -64,6 +64,10 @@ int EnemyGundam_anicounter; // 일반적 애니메이션
 
 int NewEnemyGundam_anicounter; // 특수적 애니메이션
 
+
+//포물선탄을 위한 변수
+float Rand_DroppingBullet;
+
 // sprite declarations
 LPDIRECT3DTEXTURE9 sprite;    // the pointer to the sprite
 
@@ -100,12 +104,12 @@ LPDIRECT3DTEXTURE9 sprite_Newenemy_2;    // the pointer to the sprite
 LPDIRECT3DTEXTURE9 sprite_Newenemy_3;    // the pointer to the sprite
 LPDIRECT3DTEXTURE9 sprite_Newenemy_4;    // the pointer to the sprite
 
-LPDIRECT3DTEXTURE9 sprite_Newenemymissile;    // 호밍미사일
-
-
+LPDIRECT3DTEXTURE9 sprite_Newenemymissile;    // 특수적 호밍미사일
 
 LPDIRECT3DTEXTURE9 sprite_MushroomEnemy; // 버섯
 
+
+LPDIRECT3DTEXTURE9 sprite_Boss; // 최종보스
 
 ////////////////////////////////////////////////////////////
 //백그라운드
@@ -156,6 +160,8 @@ EnemyBullet Ebullet[ENEMY_NUM];
 NewEnemy newenemy[NewENEMY_NUM];
 NewEnemyBullet newenemybull[NewENEMY_NUM];
 Mushroom mushroom;
+BossEnemy Boss;
+
 BackGround back[2];
 
 //Bullet bullet;
@@ -759,6 +765,23 @@ void initD3D(HWND hWnd)
 		&sprite_MushroomEnemy);    // load to sprite
 
 
+	////////////////////////////////////////////////////////////////
+	//
+	D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
+		L"Enemy/BossEnemySprite.png",    // the file name
+		400,    // default width
+		300,    // default height
+		D3DX_DEFAULT,    // no mip mapping
+		NULL,    // regular usage
+		D3DFMT_A8R8G8B8,    // 32-bit pixels with alpha
+		D3DPOOL_MANAGED,    // typical memory handling
+		D3DX_DEFAULT,    // no filtering
+		D3DX_DEFAULT,    // no mip filtering
+		D3DCOLOR_XRGB(255, 0, 255),    // the hot-pink color key
+		NULL,    // no image info struct
+		NULL,    // not using 256 colors
+		&sprite_Boss);    // load to sprite
+
 
 
 	/*
@@ -847,7 +870,7 @@ bool Bullet::check_collision(float x, float y)
 {
 
 	//충돌 처리 시 
-	if (sphere_collision_check(x_pos-60, y_pos+20, 40, x, y, 40) == true)
+	if (sphere_collision_check(x_pos-60, y_pos-20, 40, x, y, 40) == true)
 	{
 		bShow = false;
 		return true;
@@ -859,7 +882,7 @@ bool Bullet::check_collision(float x, float y)
 	}
 }
 
-
+//아래쪽
 bool Bullet2::check_collision(float x, float y)
 {
 
@@ -876,11 +899,12 @@ bool Bullet2::check_collision(float x, float y)
 	}
 }
 
+//위쪽
 bool Bullet3::check_collision(float x, float y)
 {
 
 	//충돌 처리 시 
-	if (sphere_collision_check(x_pos-60, y_pos+20, 40, x, y, 40) == true)
+	if (sphere_collision_check(x_pos-60, y_pos-40, 40, x, y, 40) == true)
 	{
 		bShow = false;
 		return true;
@@ -927,6 +951,20 @@ bool Mushroom::check_collision(float x, float y)
 	else
 		return false;
 }
+
+
+
+bool BossEnemy::check_collision(float x, float y)
+{
+	if (sphere_collision_check(x_pos + 80, y_pos + 110, 100, x, y, 100) == true)
+	{
+		bShow = false;
+		return true;
+	}
+	else
+		return false;
+}
+
 
 void init_game(void)
 {
@@ -989,7 +1027,10 @@ void init_game(void)
 	}
 
 	//Superbullet.init(hero.x_pos, hero.y_pos);	
-		mushroom.init((float)(SCREEN_WIDTH + (rand() % 400)), rand() % SCREEN_HEIGHT - 100);
+		
+	mushroom.init((float)(SCREEN_WIDTH + (rand() % 400)), rand() % SCREEN_HEIGHT - 100);
+
+	Boss.init(10000, 350); 
 
 }
 
@@ -997,6 +1038,7 @@ void do_game_logic(void)
 {
 	if (InGame == true)
 	{
+		Rand_DroppingBullet = (float)((float)((float)(rand() % 10) / 10) + 0.1); // 포물선 탄 변수
 		//배경화면 처리
 		for (int i = 0; i < BackNum; i++)
 		{
@@ -1006,21 +1048,37 @@ void do_game_logic(void)
 		if (KEY_DOWN(VK_UP))
 		{
 			hero.move(MOVE_UP);
+			if (hero.y_pos < 0)
+			{
+				hero.y_pos = 0;
+			}
 		}
 
 		if (KEY_DOWN(VK_DOWN))
 		{
 			hero.move(MOVE_DOWN);
+			if (hero.y_pos > SCREEN_HEIGHT - 60)
+			{
+				hero.y_pos = SCREEN_HEIGHT - 60;
+			}
 		}
 
 		if (KEY_DOWN(VK_LEFT))
 		{
 			hero.move(MOVE_LEFT);
+			if (hero.x_pos < 0)
+			{
+				hero.x_pos = 0;
+			}
 		}
 
 		if (KEY_DOWN(VK_RIGHT))
 		{
 			hero.move(MOVE_RIGHT);
+			if (hero.x_pos > SCREEN_WIDTH-60)
+			{
+				hero.x_pos = SCREEN_WIDTH-60;
+			}
 		}
 
 		/////////////////////////////////////////////////////////////////////////////////////
@@ -1078,7 +1136,7 @@ void do_game_logic(void)
 						{
 							//이후 생성 안되는 버그 해결
 							newenemy[t].init((float)(SCREEN_WIDTH + (rand() % 300)), rand() % SCREEN_HEIGHT - 50);
-							newenemy[t].HP = 15;
+							newenemy[t].HP = 10;
 						}
 					}
 				}
@@ -1095,7 +1153,7 @@ void do_game_logic(void)
 						}
 					}
 				}
-				if (bull[i].check_collision(mushroom.x_pos, mushroom.y_pos+160) == true)
+				if (bull[i].check_collision(mushroom.x_pos, mushroom.y_pos+115) == true)
 				{
 					bull[i].hide();
 				}
@@ -1152,7 +1210,7 @@ void do_game_logic(void)
 						{
 							//이후 생성 안되는 버그 해결
 							newenemy[t].init((float)(SCREEN_WIDTH + (rand() % 300)), rand() % SCREEN_HEIGHT - 50);
-							newenemy[i].HP = 15;
+							newenemy[i].HP = 10;
 						}
 					}
 				}
@@ -1229,7 +1287,7 @@ void do_game_logic(void)
 						{
 							//이후 생성 안되는 버그 해결
 							newenemy[t].init((float)(SCREEN_WIDTH + (rand() % 300)), rand() % SCREEN_HEIGHT - 50);
-							newenemy[i].HP = 15;
+							newenemy[i].HP = 10;
 						}
 					}
 				}
@@ -1245,7 +1303,7 @@ void do_game_logic(void)
 						}
 					}
 				}
-				if (bull3[i].check_collision(mushroom.x_pos, mushroom.y_pos+160)== true)
+				if (bull3[i].check_collision(mushroom.x_pos, mushroom.y_pos+45)== true)
 				{
 					bull3[i].hide();
 				}
@@ -1263,7 +1321,7 @@ void do_game_logic(void)
 			}
 			if (enemy[i].show() == true)
 			{
-				if (enemy[i].x_pos < -100)
+				if (enemy[i].x_pos < -100 || enemy[i].y_pos >= SCREEN_HEIGHT || enemy[i].y_pos <= 0)
 				{
 					enemy[i].hide();
 				}
@@ -1340,10 +1398,10 @@ void do_game_logic(void)
 
 			if (newenemy[i].show() == true)
 			{
-				if (newenemy[i].x_pos < -100)
+				if (newenemy[i].x_pos < -100 || newenemy[i].y_pos >= SCREEN_HEIGHT-100 || newenemy[i].y_pos <= 100)
 				{
 					newenemy[i].hide();
-					newenemy[i].HP = 15;
+					newenemy[i].HP = 10;
 				}
 				//if(newenemy[i].x_pos > -100)
 				else
@@ -1389,7 +1447,7 @@ void do_game_logic(void)
 					newenemybull[j].hide();
 				else
 				{
-					newenemybull[j].MoveSimpleHomingBullet(newenemybull[j].x_pos, newenemybull[j].y_pos, hero.x_pos, hero.y_pos, 5);
+					newenemybull[j].HomingBullet(newenemybull[j].x_pos, newenemybull[j].y_pos, hero.x_pos, hero.y_pos, 5);
 				}
 			}
 
@@ -1413,14 +1471,13 @@ void do_game_logic(void)
 		/////////////////////////////////////////////////////////////
 		//총알 관통불가 오브젝트
 		if (mushroom.show() == false)
-		{
-			mushroom.active();
+		{	
+			mushroom.active();		
 			mushroom.init((float)(SCREEN_WIDTH + (rand() % 400)), rand() % SCREEN_HEIGHT - 100);
 		}
-
 		if (mushroom.show() == true)
 		{
-			if (mushroom.x_pos < -500)
+			if (mushroom.x_pos < -500 || mushroom.y_pos >= SCREEN_HEIGHT-300 || mushroom.y_pos <= 300)
 			{
 				mushroom.hide();
 			}
@@ -1432,6 +1489,24 @@ void do_game_logic(void)
 			if (mushroom.check_collision(hero.x_pos, hero.y_pos) == true)
 			{
 				mushroom.hide();
+			}
+		}
+
+		if (Boss.show() == false)
+		{
+			Boss.active();
+			Boss.init(2000, 200);
+		}
+
+		if (Boss.show() == true)
+		{
+			if (Boss.x_pos < -500)
+			{
+				Boss.hide();
+			}
+			else
+			{
+				Boss.move(Boss.x_pos, Boss.y_pos);
 			}
 		}
 	}
@@ -1828,6 +1903,14 @@ void render_frame(void)
 		D3DXVECTOR3 position10(mushroom.x_pos, mushroom.y_pos, 0.0f);    // position at 50, 50 with no depth	
 		d3dspt->Draw(sprite_MushroomEnemy, &part10, &center10, &position10, D3DCOLOR_ARGB(255, 255, 255, 255));
 
+
+
+		RECT part12;
+		SetRect(&part12, 0, 0, 400, 300);
+		D3DXVECTOR3 center12(0.0f, 0.0f, 0.0f);    // center at the upper-left corner
+		D3DXVECTOR3 position12(Boss.x_pos, Boss.y_pos, 0.0f);    // position at 50, 50 with no depth	
+		d3dspt->Draw(sprite_Boss, &part12, &center12, &position12, D3DCOLOR_ARGB(255, 255, 255, 255));
+
 		/*
 		if (font)
 		{
@@ -1949,6 +2032,9 @@ void cleanD3D(void)
 	sprite_enemybullet->Release();
 	sprite_Newenemymissile->Release();
 
+	//보스
+	sprite_Boss->Release();
+
 	//타이틀 / 게임오버 해제
 	sprite_Title->Release();
 	sprite_over->Release();
@@ -1959,7 +2045,3 @@ void cleanD3D(void)
 	mciSendCommand(3, MCI_CLOSE, 0, (DWORD)(LPVOID)NULL);
 	return;
 }
-
-
-
-

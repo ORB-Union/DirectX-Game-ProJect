@@ -2,6 +2,7 @@
 
 #define ENEMY_NUM 5
 
+//일반적
 class Enemy :public entity {
 
 public :
@@ -22,7 +23,7 @@ public :
 
 
 
-
+//특수적(호밍)
 class NewEnemy :public entity {
 
 public:
@@ -53,7 +54,7 @@ public:
 
 
 
-
+//통과불가 오브젝트
 class Mushroom:public entity {
 
 public:
@@ -78,5 +79,30 @@ public:
 	void init(float x, float y);
 	void fire();
 	void move();
+	bool Visible;
+};
+
+
+
+
+//보스
+class BossEnemy :public entity {
+
+public:
+	BossEnemy();
+	~BossEnemy();
+
+	bool move_check = false;
+
+	bool bShow; // 보이는지 체크
+	bool show(); // 보여주기
+	void hide(); // 충돌시 파괴
+	void active(); // 버튼 누를시 총알 발사
+	bool check_collision(float x, float y); // 충돌체크
+
+
+	void init(float x, float y);
+	void fire();
+	void move(float x, float y);
 	bool Visible;
 };

@@ -37,6 +37,7 @@ void Hero::move(int i)
 
 	case MOVE_LEFT:
 		x_pos -= 10;
+
 		break;
 
 

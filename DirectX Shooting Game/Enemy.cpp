@@ -44,7 +44,7 @@ void Enemy::hide()
 
 NewEnemy::NewEnemy()
 {
-	HP = 15;
+	HP = 10;
 }
 
 NewEnemy::~NewEnemy()
@@ -77,7 +77,7 @@ void NewEnemy::hide()
 
 void NewEnemy::move()
 {
-	x_pos -= 5;
+	x_pos -= 7;
 }
 
 /*
@@ -178,4 +178,70 @@ void Mushroom::hide()
 void Mushroom::move()
 {
 	x_pos -= 3;
+}
+
+
+////////////////////////////////////////////////////////////////
+//º¸½º
+BossEnemy::BossEnemy()
+{
+	HP = 150;
+}
+
+
+BossEnemy::~BossEnemy()
+{
+
+}
+
+void BossEnemy::init(float x, float y)
+{
+	x_pos = x;
+	y_pos = y;
+}
+	
+void BossEnemy::move(float x, float y)
+{
+	x_pos -= 5;
+	if (x_pos < 700)
+	{
+		x_pos += 5;
+	}
+
+	if (y < 0)
+	{
+		move_check = true;
+	}
+
+	else if (y > 500)
+	{
+		move_check = false;
+	}
+
+	if (move_check)
+	{
+		y_pos += 5;
+	}
+
+	else
+	{
+		y_pos -= 5;
+	}
+
+}
+bool BossEnemy::show()
+{
+	return bShow;
+
+}
+
+void BossEnemy::active()
+{
+	bShow = true;
+
+}
+
+void BossEnemy::hide()
+{
+	bShow = false;
 }
