@@ -208,24 +208,24 @@ void BossEnemy::move(float x, float y)
 		x_pos += 5;
 	}
 
-	if (y < 0)
+	if (y < 100)
 	{
 		move_check = true;
 	}
 
-	else if (y > 500)
+	else if (y > 400)
 	{
 		move_check = false;
 	}
 
 	if (move_check)
 	{
-		y_pos += 5;
+		y_pos += 8;
 	}
 
 	else
 	{
-		y_pos -= 5;
+		y_pos -= 8;
 	}
 
 }
