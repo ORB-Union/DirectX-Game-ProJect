@@ -141,7 +141,7 @@ public:
 	void active();
 	void hide();
 	//포물선탄
-	void InitAimingBullet(float mx, float my, float ex, float ey, float speed, float& x, float& y, float& vx, float& vy); // 메인 캐릭터의 위치, 적기의 좌표, 탄환의 속도, 탄환의 좌표, 탄환의 속도 벡터
+	void InitAimingBullet2(float mx, float my, float ex, float ey, float speed, float& x, float& y, float& vx, float& vy); // 메인 캐릭터의 위치, 적기의 좌표, 탄환의 속도, 탄환의 좌표, 탄환의 속도 벡터
 	void DroppingBullet_Up(float& x, float& y, float accel, float& vx, float& vy); // 탄환의 좌표, 가속도, 속도 벡터의 좌표
 
 };

@@ -404,7 +404,7 @@ void BossBullet3::hide()
 	bShow = false;
 }
 
-void BossBullet3::InitAimingBullet(float mx, float my, float ex, float ey, float speed, float& x, float& y, float& vx, float& vy) // 메인 캐릭터의 위치, 적기의 좌표, 탄환의 속도, 탄환의 좌표, 탄환의 속도 벡터
+void BossBullet3::InitAimingBullet2(float mx, float my, float ex, float ey, float speed, float& x, float& y, float& vx, float& vy) // 메인 캐릭터의 위치, 적기의 좌표, 탄환의 속도, 탄환의 좌표, 탄환의 속도 벡터
 {
 	x = ex;
 	y = ey;
@@ -447,7 +447,7 @@ BossBullet4::~BossBullet4()
 
 void BossBullet4::move()
 {
-	x_pos -= 15;
+	x_pos -= 20;
 	y_pos -= 3;
 }
 

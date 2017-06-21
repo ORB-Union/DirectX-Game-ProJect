@@ -1470,7 +1470,7 @@ void do_game_logic(void)
 		//적들 충돌 처리  및 생성
 		for (int i = 0; i < ENEMY_NUM; i++)
 		{
-			if (enemy[i].show() == false)
+			if (enemy[i].show() == false && Boss.Boss_Exist == false)
 			{
 				enemy[i].active();
 				enemy[i].init((float)(SCREEN_WIDTH + (rand() % 200)), rand() % SCREEN_HEIGHT - 50);
@@ -1535,7 +1535,7 @@ void do_game_logic(void)
 		//특수 적
 		for (int i = 0; i < NewENEMY_NUM; i++)
 		{
-			if (newenemy[i].show() == false)
+			if (newenemy[i].show() == false && Boss.Boss_Exist == false)
 			{
 				newenemy[i].active();
 				newenemy[i].init((float)(SCREEN_WIDTH + (rand() % 400)), rand() % SCREEN_HEIGHT);
@@ -1617,7 +1617,7 @@ void do_game_logic(void)
 
 		/////////////////////////////////////////////////////////////
 		//총알 관통불가 오브젝트
-		if (mushroom.show() == false)
+		if (mushroom.show() == false && Boss.Boss_Exist == false)
 		{
 			mushroom.active();
 			mushroom.init((float)(SCREEN_WIDTH + (rand() % 400)), rand() % SCREEN_HEIGHT - 100);
@@ -1640,7 +1640,7 @@ void do_game_logic(void)
 		}
 		/////////////////////////////////////////////
 		//보스 등장
-		if (score >= 100 && Boss.Boss_Exist == false)
+		if (score >= 300 && Boss.Boss_Exist == false)
 		{
 			Boss.Boss_Check = true;
 			Boss.Boss_Exist = true;
@@ -1665,10 +1665,13 @@ void do_game_logic(void)
 				Bossbull1[i].init(Boss.x_pos + 50, Boss.y_pos + 150);
 				Bossbull1[i].active();
 			}
+		}
 
+		for(int i = 0; i < BossBullLimit; i++)
+		{
 			if (Bossbull1[i].show() == true)
 			{
-				if (Bossbull1[i].x_pos < -20)
+				if (Bossbull1[i].x_pos < -150)
 				{
 					Bossbull1[i].hide();
 				}
@@ -1735,7 +1738,7 @@ void do_game_logic(void)
 		{
 			if (Boss.x_pos < SCREEN_WIDTH - 50 && Bossbull2[i].show() == false)
 			{
-				Bossbull3[i].InitAimingBullet(hero.x_pos, hero.y_pos, Boss.x_pos, Boss.y_pos, 15, Bossbull3[i].x_pos, Bossbull3[i].y_pos, Bossbull3[i].vx, Bossbull3[i].vy);
+				Bossbull3[i].InitAimingBullet2(hero.x_pos, hero.y_pos, Boss.x_pos, Boss.y_pos, 20,Bossbull3[i].x_pos, Bossbull3[i].y_pos, Bossbull3[i].vx, Bossbull3[i].vy);
 				Rand_DroppingBullet = (float)((float)((float)(rand() % 10) / 10) + 0.5); // 포물선 탄 변수
 				Bossbull3[i].active();
 			}
@@ -1745,7 +1748,7 @@ void do_game_logic(void)
 		{
 			if (Bossbull3[i].show() == true)
 			{
-				if (Bossbull3[i].x_pos < -50)
+				if (Bossbull3[i].x_pos < -20)
 				{
 					Bossbull3[i].hide();
 				}
@@ -1774,9 +1777,18 @@ void do_game_logic(void)
 		//보스 네번째 총알
 		for (int i = 0; i < BossBullLimit; i++)
 		{
+			if (Boss.x_pos < SCREEN_WIDTH - 50 && Bossbull1[i].show() == false)
+			{
+				Bossbull4[i].init(Boss.x_pos + 50, Boss.y_pos + 150);
+				Bossbull4[i].active();
+			}
+		}
+
+		for (int i = 0; i < BossBullLimit; i++)
+		{
 			if (Bossbull4[i].show() == true)
 			{
-				if (Bossbull4[i].x_pos < -50)
+				if (Bossbull4[i].x_pos < -150)
 				{
 					Bossbull4[i].hide();
 				}
@@ -2115,85 +2127,90 @@ void render_frame(void)
 		{
 			EnemyGundam_anicounter = 0;
 		}
-		////에네미 
-		RECT part2;
-		SetRect(&part2, 0, 0, 60, 90);
-		D3DXVECTOR3 center2(0.0f, 0.0f, 0.0f);    // center at the upper-left corner
-
-		for (int i = 0; i < ENEMY_NUM; i++)
+		if (Boss.Boss_Exist == false)
 		{
-			D3DXVECTOR3 position2(enemy[i].x_pos, enemy[i].y_pos, 0.0f);    // position at 50, 50 with no depth
-			switch (EnemyGundam_anicounter / 3)
+			////에네미 
+			RECT part2;
+			SetRect(&part2, 0, 0, 60, 90);
+			D3DXVECTOR3 center2(0.0f, 0.0f, 0.0f);    // center at the upper-left corner
+
+			for (int i = 0; i < ENEMY_NUM; i++)
 			{
-			case 0:
-				d3dspt->Draw(sprite_enemy_1, &part2, &center2, &position2, D3DCOLOR_ARGB(255, 255, 255, 255));
-				break;
-			case 1:
-				d3dspt->Draw(sprite_enemy_2, &part2, &center2, &position2, D3DCOLOR_ARGB(255, 255, 255, 255));
-				break;
+				D3DXVECTOR3 position2(enemy[i].x_pos, enemy[i].y_pos, 0.0f);    // position at 50, 50 with no depth
+				switch (EnemyGundam_anicounter / 3)
+				{
+				case 0:
+					d3dspt->Draw(sprite_enemy_1, &part2, &center2, &position2, D3DCOLOR_ARGB(255, 255, 255, 255));
+					break;
+				case 1:
+					d3dspt->Draw(sprite_enemy_2, &part2, &center2, &position2, D3DCOLOR_ARGB(255, 255, 255, 255));
+					break;
+				}
 			}
-		}
-		//적총알
-		RECT part4;
-		SetRect(&part4, 0, 0, 30, 30);
-		D3DXVECTOR3 center4(0.0f, 0.0f, 0.0f);    // center at the upper-left corner	
 
 
-		for (int i = 0; i < ENEMY_NUM; i++)
-		{
-			D3DXVECTOR3 position4(Ebullet[i].x_pos, Ebullet[i].y_pos, 0.0f);    // position at 50, 50 with no depth		
-			d3dspt->Draw(sprite_enemybullet, &part4, &center4, &position4, D3DCOLOR_ARGB(255, 255, 255, 255));
-		}
+			//적총알
+			RECT part4;
+			SetRect(&part4, 0, 0, 30, 30);
+			D3DXVECTOR3 center4(0.0f, 0.0f, 0.0f);    // center at the upper-left corner	
 
 
-
-		NewEnemyGundam_anicounter++;
-		if (NewEnemyGundam_anicounter >= 12)
-		{
-			NewEnemyGundam_anicounter = 0;
-		}
-		//새로운 적
-		RECT part5;
-		SetRect(&part5, 0, 0, 100, 95);
-		D3DXVECTOR3 center5(0.0f, 0.0f, 0.0f);    // center at the upper-left corner
-		for (int i = 0; i < NewENEMY_NUM; i++)
-		{
-			D3DXVECTOR3 position5(newenemy[i].x_pos, newenemy[i].y_pos, 0.0f);    // position at 50, 50 with no depth	
-			switch (NewEnemyGundam_anicounter / 3)
+			for (int i = 0; i < ENEMY_NUM; i++)
 			{
-			case 0:
-				d3dspt->Draw(sprite_Newenemy_1, &part5, &center5, &position5, D3DCOLOR_ARGB(255, 255, 255, 255));
-				break;
-			case 1:
-				d3dspt->Draw(sprite_Newenemy_2, &part5, &center5, &position5, D3DCOLOR_ARGB(255, 255, 255, 255));
-				break;
-			case 2:
-				d3dspt->Draw(sprite_Newenemy_3, &part5, &center5, &position5, D3DCOLOR_ARGB(255, 255, 255, 255));
-				break;
-			case 3:
-				d3dspt->Draw(sprite_Newenemy_4, &part5, &center5, &position5, D3DCOLOR_ARGB(255, 255, 255, 255));
-				break;
-			}	
+				D3DXVECTOR3 position4(Ebullet[i].x_pos, Ebullet[i].y_pos, 0.0f);    // position at 50, 50 with no depth		
+				d3dspt->Draw(sprite_enemybullet, &part4, &center4, &position4, D3DCOLOR_ARGB(255, 255, 255, 255));
+			}
+
+
+
+
+			NewEnemyGundam_anicounter++;
+			if (NewEnemyGundam_anicounter >= 12)
+			{
+				NewEnemyGundam_anicounter = 0;
+			}
+			//새로운 적
+			RECT part5;
+			SetRect(&part5, 0, 0, 100, 95);
+			D3DXVECTOR3 center5(0.0f, 0.0f, 0.0f);    // center at the upper-left corner
+			for (int i = 0; i < NewENEMY_NUM; i++)
+			{
+				D3DXVECTOR3 position5(newenemy[i].x_pos, newenemy[i].y_pos, 0.0f);    // position at 50, 50 with no depth	
+				switch (NewEnemyGundam_anicounter / 3)
+				{
+				case 0:
+					d3dspt->Draw(sprite_Newenemy_1, &part5, &center5, &position5, D3DCOLOR_ARGB(255, 255, 255, 255));
+					break;
+				case 1:
+					d3dspt->Draw(sprite_Newenemy_2, &part5, &center5, &position5, D3DCOLOR_ARGB(255, 255, 255, 255));
+					break;
+				case 2:
+					d3dspt->Draw(sprite_Newenemy_3, &part5, &center5, &position5, D3DCOLOR_ARGB(255, 255, 255, 255));
+					break;
+				case 3:
+					d3dspt->Draw(sprite_Newenemy_4, &part5, &center5, &position5, D3DCOLOR_ARGB(255, 255, 255, 255));
+					break;
+				}
+			}
+			///////////////////////////////
+			//특수적 호밍미사일
+				RECT part11;
+				SetRect(&part11, 0, 0, 60, 60);
+				D3DXVECTOR3 center11(0.0f, 0.0f, 0.0f);    // center at the upper-left corner	
+				for (int i = 0; i < NewENEMY_NUM; i++)
+				{
+					D3DXVECTOR3 position11(newenemybull[i].x_pos, newenemybull[i].y_pos, 0.0f);    // position at 50, 50 with no depth		
+					d3dspt->Draw(sprite_Newenemymissile, &part11, &center11, &position11, D3DCOLOR_ARGB(255, 255, 255, 255));
+				}
+
+
+			//총알 통과불가 오브젝트
+			RECT part10;
+			SetRect(&part10, 0, 0, 300, 300);
+			D3DXVECTOR3 center10(0.0f, 0.0f, 0.0f);    // center at the upper-left corner
+			D3DXVECTOR3 position10(mushroom.x_pos, mushroom.y_pos, 0.0f);    // position at 50, 50 with no depth	
+			d3dspt->Draw(sprite_MushroomEnemy, &part10, &center10, &position10, D3DCOLOR_ARGB(255, 255, 255, 255));
 		}
-		///////////////////////////////
-		//특수적 호밍미사일
-
-		RECT part11;
-		SetRect(&part11, 0, 0, 60, 60);
-		D3DXVECTOR3 center11(0.0f, 0.0f, 0.0f);    // center at the upper-left corner	
-		for (int i = 0; i < NewENEMY_NUM; i++)
-		{
-			D3DXVECTOR3 position11(newenemybull[i].x_pos, newenemybull[i].y_pos, 0.0f);    // position at 50, 50 with no depth		
-			d3dspt->Draw(sprite_Newenemymissile, &part11, &center11, &position11, D3DCOLOR_ARGB(255, 255, 255, 255));
-		}
-
-
-		//총알 통과불가 오브젝트
-		RECT part10;
-		SetRect(&part10, 0, 0, 300, 300);
-		D3DXVECTOR3 center10(0.0f, 0.0f, 0.0f);    // center at the upper-left corner
-		D3DXVECTOR3 position10(mushroom.x_pos, mushroom.y_pos, 0.0f);    // position at 50, 50 with no depth	
-		d3dspt->Draw(sprite_MushroomEnemy, &part10, &center10, &position10, D3DCOLOR_ARGB(255, 255, 255, 255));
 
 
 
