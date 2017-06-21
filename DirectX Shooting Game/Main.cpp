@@ -141,6 +141,7 @@ bool Game_over; // 게임오버
 void initD3D(HWND hWnd);    // sets up and initializes Direct3D
 void render_frame(void);    // renders a single frame
 void cleanD3D(void);		// closes Direct3D and releases memory
+void Score_Manager(void);
 
 void init_game(void);
 void do_game_logic(void);
@@ -264,6 +265,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
 		do_game_logic();
 		render_frame();
+		
 		// check the 'escape' key
 		if (KEY_DOWN(VK_ESCAPE))
 			PostMessage(hWnd, WM_DESTROY, 0, 0);
@@ -1963,6 +1965,8 @@ void render_frame(void)
 		}
 		*/
 
+		Score_Manager();
+
 		d3dspt->End();    // end sprite drawing
 
 		d3ddev->EndScene();    // ends the 3D scene
@@ -2033,11 +2037,11 @@ void render_frame(void)
 
 
 //스코어
-void Score_Manager()
+void Score_Manager(void)
 {
 	RECT part20;
-	D3DXVECTOR3 center(0.0f, 0.0f, 0.0f);
-	D3DXVECTOR3 position(0, 0, 0.0f);
+	D3DXVECTOR3 center20(0.0f, 0.0f, 0.0f);
+	D3DXVECTOR3 position20(SCREEN_WIDTH-(32*4), 0, 0.0f);
 	SetRect(&part20, 0, 0, 32, 64);
 	int score_temp = score;
 	int temp;
@@ -2046,7 +2050,7 @@ void Score_Manager()
 	{
 	case 0:
 		D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
-			L"Number0.png",    // the file name
+			L"Score/Number0.png",    // the file name
 			D3DX_DEFAULT,    // default width
 			D3DX_DEFAULT,    // default height
 			D3DX_DEFAULT,    // no mip mapping
@@ -2063,7 +2067,7 @@ void Score_Manager()
 
 	case 1:
 		D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
-			L"Number1.png",    // the file name
+			L"Score/Number1.png",    // the file name
 			D3DX_DEFAULT,    // default width
 			D3DX_DEFAULT,    // default height
 			D3DX_DEFAULT,    // no mip mapping
@@ -2079,7 +2083,7 @@ void Score_Manager()
 		break;
 	case 2:
 		D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
-			L"Number2.png",    // the file name
+			L"Score/Number2.png",    // the file name
 			D3DX_DEFAULT,    // default width
 			D3DX_DEFAULT,    // default height
 			D3DX_DEFAULT,    // no mip mapping
@@ -2095,7 +2099,7 @@ void Score_Manager()
 		break;
 	case 3:
 		D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
-			L"Number3.png",    // the file name
+			L"Score/Number3.png",    // the file name
 			D3DX_DEFAULT,    // default width
 			D3DX_DEFAULT,    // default height
 			D3DX_DEFAULT,    // no mip mapping
@@ -2111,7 +2115,7 @@ void Score_Manager()
 		break;
 	case 4:
 		D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
-			L"Number4.png",    // the file name
+			L"Score/Number4.png",    // the file name
 			D3DX_DEFAULT,    // default width
 			D3DX_DEFAULT,    // default height
 			D3DX_DEFAULT,    // no mip mapping
@@ -2127,7 +2131,7 @@ void Score_Manager()
 		break;
 	case 5:
 		D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
-			L"Number5.png",    // the file name
+			L"Score/Number5.png",    // the file name
 			D3DX_DEFAULT,    // default width
 			D3DX_DEFAULT,    // default height
 			D3DX_DEFAULT,    // no mip mapping
@@ -2143,7 +2147,7 @@ void Score_Manager()
 		break;
 	case 6:
 		D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
-			L"Number6.png",    // the file name
+			L"Score/Number6.png",    // the file name
 			D3DX_DEFAULT,    // default width
 			D3DX_DEFAULT,    // default height
 			D3DX_DEFAULT,    // no mip mapping
@@ -2159,7 +2163,7 @@ void Score_Manager()
 		break;
 	case 7:
 		D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
-			L"Number7.png",    // the file name
+			L"Score/Number7.png",    // the file name
 			D3DX_DEFAULT,    // default width
 			D3DX_DEFAULT,    // default height
 			D3DX_DEFAULT,    // no mip mapping
@@ -2175,7 +2179,7 @@ void Score_Manager()
 		break;
 	case 8:
 		D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
-			L"Number8.png",    // the file name
+			L"Score/Number8.png",    // the file name
 			D3DX_DEFAULT,    // default width
 			D3DX_DEFAULT,    // default height
 			D3DX_DEFAULT,    // no mip mapping
@@ -2191,7 +2195,7 @@ void Score_Manager()
 		break;
 	case 9:
 		D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
-			L"Number9.png",    // the file name
+			L"Score/Number9.png",    // the file name
 			D3DX_DEFAULT,    // default width
 			D3DX_DEFAULT,    // default height
 			D3DX_DEFAULT,    // no mip mapping
@@ -2207,8 +2211,8 @@ void Score_Manager()
 		break;
 	}
 
-	d3dspt->Draw(sprite_SThou, &part20, &center, &position, D3DCOLOR_ARGB(255, 255, 255, 255));
-	D3DXVECTOR3 position1(32, 0, 0.0f);
+	d3dspt->Draw(sprite_SThou, &part20, &center20, &position20, D3DCOLOR_ARGB(255, 255, 255, 255));
+	D3DXVECTOR3 position21(SCREEN_WIDTH - (32 * 3), 0, 0.0f);
 	score_temp = score_temp % 1000;
 	temp = score_temp / 100;
 
@@ -2216,7 +2220,7 @@ void Score_Manager()
 	{
 	case 0:
 		D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
-			L"Number0.png",    // the file name
+			L"Score/Number0.png",    // the file name
 			D3DX_DEFAULT,    // default width
 			D3DX_DEFAULT,    // default height
 			D3DX_DEFAULT,    // no mip mapping
@@ -2233,7 +2237,7 @@ void Score_Manager()
 
 	case 1:
 		D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
-			L"Number1.png",    // the file name
+			L"Score/Number1.png",    // the file name
 			D3DX_DEFAULT,    // default width
 			D3DX_DEFAULT,    // default height
 			D3DX_DEFAULT,    // no mip mapping
@@ -2249,7 +2253,7 @@ void Score_Manager()
 		break;
 	case 2:
 		D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
-			L"Number2.png",    // the file name
+			L"Score/Number2.png",    // the file name
 			D3DX_DEFAULT,    // default width
 			D3DX_DEFAULT,    // default height
 			D3DX_DEFAULT,    // no mip mapping
@@ -2265,7 +2269,7 @@ void Score_Manager()
 		break;
 	case 3:
 		D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
-			L"Number3.png",    // the file name
+			L"Score/Number3.png",    // the file name
 			D3DX_DEFAULT,    // default width
 			D3DX_DEFAULT,    // default height
 			D3DX_DEFAULT,    // no mip mapping
@@ -2281,7 +2285,7 @@ void Score_Manager()
 		break;
 	case 4:
 		D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
-			L"Number4.png",    // the file name
+			L"Score/Number4.png",    // the file name
 			D3DX_DEFAULT,    // default width
 			D3DX_DEFAULT,    // default height
 			D3DX_DEFAULT,    // no mip mapping
@@ -2297,7 +2301,7 @@ void Score_Manager()
 		break;
 	case 5:
 		D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
-			L"Number5.png",    // the file name
+			L"Score/Number5.png",    // the file name
 			D3DX_DEFAULT,    // default width
 			D3DX_DEFAULT,    // default height
 			D3DX_DEFAULT,    // no mip mapping
@@ -2313,7 +2317,7 @@ void Score_Manager()
 		break;
 	case 6:
 		D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
-			L"Number6.png",    // the file name
+			L"Score/Number6.png",    // the file name
 			D3DX_DEFAULT,    // default width
 			D3DX_DEFAULT,    // default height
 			D3DX_DEFAULT,    // no mip mapping
@@ -2329,7 +2333,7 @@ void Score_Manager()
 		break;
 	case 7:
 		D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
-			L"Number7.png",    // the file name
+			L"Score/Number7.png",    // the file name
 			D3DX_DEFAULT,    // default width
 			D3DX_DEFAULT,    // default height
 			D3DX_DEFAULT,    // no mip mapping
@@ -2345,7 +2349,7 @@ void Score_Manager()
 		break;
 	case 8:
 		D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
-			L"Number8.png",    // the file name
+			L"Score/Number8.png",    // the file name
 			D3DX_DEFAULT,    // default width
 			D3DX_DEFAULT,    // default height
 			D3DX_DEFAULT,    // no mip mapping
@@ -2361,7 +2365,7 @@ void Score_Manager()
 		break;
 	case 9:
 		D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
-			L"Number9.png",    // the file name
+			L"Score/Number9.png",    // the file name
 			D3DX_DEFAULT,    // default width
 			D3DX_DEFAULT,    // default height
 			D3DX_DEFAULT,    // no mip mapping
@@ -2376,9 +2380,9 @@ void Score_Manager()
 			&sprite_SHund);    // load to sprite
 		break;
 	}
-	d3dspt->Draw(sprite_SHund, &part20, &center, &position1, D3DCOLOR_ARGB(255, 255, 255, 255));
+	d3dspt->Draw(sprite_SHund, &part20, &center20, &position21, D3DCOLOR_ARGB(255, 255, 255, 255));
 
-	D3DXVECTOR3 position2(64, 0, 0.0f);
+	D3DXVECTOR3 position22(SCREEN_WIDTH - (32 * 2), 0, 0.0f);
 
 	score_temp = score_temp % 100;
 	temp = score_temp / 10;
@@ -2386,7 +2390,7 @@ void Score_Manager()
 	{
 	case 0:
 		D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
-			L"Number0.png",    // the file name
+			L"Score/Number0.png",    // the file name
 			D3DX_DEFAULT,    // default width
 			D3DX_DEFAULT,    // default height
 			D3DX_DEFAULT,    // no mip mapping
@@ -2403,7 +2407,7 @@ void Score_Manager()
 
 	case 1:
 		D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
-			L"Number1.png",    // the file name
+			L"Score/Number1.png",    // the file name
 			D3DX_DEFAULT,    // default width
 			D3DX_DEFAULT,    // default height
 			D3DX_DEFAULT,    // no mip mapping
@@ -2419,7 +2423,7 @@ void Score_Manager()
 		break;
 	case 2:
 		D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
-			L"Number2.png",    // the file name
+			L"Score/Number2.png",    // the file name
 			D3DX_DEFAULT,    // default width
 			D3DX_DEFAULT,    // default height
 			D3DX_DEFAULT,    // no mip mapping
@@ -2435,7 +2439,7 @@ void Score_Manager()
 		break;
 	case 3:
 		D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
-			L"Number3.png",    // the file name
+			L"Score/Number3.png",    // the file name
 			D3DX_DEFAULT,    // default width
 			D3DX_DEFAULT,    // default height
 			D3DX_DEFAULT,    // no mip mapping
@@ -2451,7 +2455,7 @@ void Score_Manager()
 		break;
 	case 4:
 		D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
-			L"Number4.png",    // the file name
+			L"Score/Number4.png",    // the file name
 			D3DX_DEFAULT,    // default width
 			D3DX_DEFAULT,    // default height
 			D3DX_DEFAULT,    // no mip mapping
@@ -2467,7 +2471,7 @@ void Score_Manager()
 		break;
 	case 5:
 		D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
-			L"Number5.png",    // the file name
+			L"Score/Number5.png",    // the file name
 			D3DX_DEFAULT,    // default width
 			D3DX_DEFAULT,    // default height
 			D3DX_DEFAULT,    // no mip mapping
@@ -2483,7 +2487,7 @@ void Score_Manager()
 		break;
 	case 6:
 		D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
-			L"Number6.png",    // the file name
+			L"Score/Number6.png",    // the file name
 			D3DX_DEFAULT,    // default width
 			D3DX_DEFAULT,    // default height
 			D3DX_DEFAULT,    // no mip mapping
@@ -2499,7 +2503,7 @@ void Score_Manager()
 		break;
 	case 7:
 		D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
-			L"Number7.png",    // the file name
+			L"Score/Number7.png",    // the file name
 			D3DX_DEFAULT,    // default width
 			D3DX_DEFAULT,    // default height
 			D3DX_DEFAULT,    // no mip mapping
@@ -2515,7 +2519,7 @@ void Score_Manager()
 		break;
 	case 8:
 		D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
-			L"Number8.png",    // the file name
+			L"Score/Number8.png",    // the file name
 			D3DX_DEFAULT,    // default width
 			D3DX_DEFAULT,    // default height
 			D3DX_DEFAULT,    // no mip mapping
@@ -2531,7 +2535,7 @@ void Score_Manager()
 		break;
 	case 9:
 		D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
-			L"Number9.png",    // the file name
+			L"Score/Number9.png",    // the file name
 			D3DX_DEFAULT,    // default width
 			D3DX_DEFAULT,    // default height
 			D3DX_DEFAULT,    // no mip mapping
@@ -2547,16 +2551,16 @@ void Score_Manager()
 		break;
 	}
 
-	d3dspt->Draw(sprite_STen, &part20, &center, &position2, D3DCOLOR_ARGB(255, 255, 255, 255));
+	d3dspt->Draw(sprite_STen, &part20, &center20, &position22, D3DCOLOR_ARGB(255, 255, 255, 255));
 
-	D3DXVECTOR3 position3(96, 0, 0.0f);
+	D3DXVECTOR3 position23(SCREEN_WIDTH - (32*1) , 0, 0.0f);
 
 	score_temp = score_temp % 10;
 	switch (score_temp)
 	{
 	case 0:
 		D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
-			L"Number0.png",    // the file name
+			L"Score/Number0.png",    // the file name
 			D3DX_DEFAULT,    // default width
 			D3DX_DEFAULT,    // default height
 			D3DX_DEFAULT,    // no mip mapping
@@ -2573,7 +2577,7 @@ void Score_Manager()
 
 	case 1:
 		D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
-			L"Number1.png",    // the file name
+			L"Score/Number1.png",    // the file name
 			D3DX_DEFAULT,    // default width
 			D3DX_DEFAULT,    // default height
 			D3DX_DEFAULT,    // no mip mapping
@@ -2589,7 +2593,7 @@ void Score_Manager()
 		break;
 	case 2:
 		D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
-			L"Number2.png",    // the file name
+			L"Score/Number2.png",    // the file name
 			D3DX_DEFAULT,    // default width
 			D3DX_DEFAULT,    // default height
 			D3DX_DEFAULT,    // no mip mapping
@@ -2605,7 +2609,7 @@ void Score_Manager()
 		break;
 	case 3:
 		D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
-			L"Number3.png",    // the file name
+			L"Score/Number3.png",    // the file name
 			D3DX_DEFAULT,    // default width
 			D3DX_DEFAULT,    // default height
 			D3DX_DEFAULT,    // no mip mapping
@@ -2621,7 +2625,7 @@ void Score_Manager()
 		break;
 	case 4:
 		D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
-			L"Number4.png",    // the file name
+			L"Score/Number4.png",    // the file name
 			D3DX_DEFAULT,    // default width
 			D3DX_DEFAULT,    // default height
 			D3DX_DEFAULT,    // no mip mapping
@@ -2637,7 +2641,7 @@ void Score_Manager()
 		break;
 	case 5:
 		D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
-			L"Number5.png",    // the file name
+			L"Score/Number5.png",    // the file name
 			D3DX_DEFAULT,    // default width
 			D3DX_DEFAULT,    // default height
 			D3DX_DEFAULT,    // no mip mapping
@@ -2653,7 +2657,7 @@ void Score_Manager()
 		break;
 	case 6:
 		D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
-			L"Number6.png",    // the file name
+			L"Score/Number6.png",    // the file name
 			D3DX_DEFAULT,    // default width
 			D3DX_DEFAULT,    // default height
 			D3DX_DEFAULT,    // no mip mapping
@@ -2669,7 +2673,7 @@ void Score_Manager()
 		break;
 	case 7:
 		D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
-			L"Number7.png",    // the file name
+			L"Score/Number7.png",    // the file name
 			D3DX_DEFAULT,    // default width
 			D3DX_DEFAULT,    // default height
 			D3DX_DEFAULT,    // no mip mapping
@@ -2685,7 +2689,7 @@ void Score_Manager()
 		break;
 	case 8:
 		D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
-			L"Number8.png",    // the file name
+			L"Score/Number8.png",    // the file name
 			D3DX_DEFAULT,    // default width
 			D3DX_DEFAULT,    // default height
 			D3DX_DEFAULT,    // no mip mapping
@@ -2701,7 +2705,7 @@ void Score_Manager()
 		break;
 	case 9:
 		D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
-			L"Number9.png",    // the file name
+			L"Score/Number9.png",    // the file name
 			D3DX_DEFAULT,    // default width
 			D3DX_DEFAULT,    // default height
 			D3DX_DEFAULT,    // no mip mapping
@@ -2716,7 +2720,7 @@ void Score_Manager()
 			&sprite_SOne);    // load to sprite
 		break;
 	}
-	d3dspt->Draw(sprite_SOne, &part20, &center, &position3, D3DCOLOR_ARGB(255, 255, 255, 255));
+	d3dspt->Draw(sprite_SOne, &part20, &center20, &position23, D3DCOLOR_ARGB(255, 255, 255, 255));
 }
 
 
