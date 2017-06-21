@@ -1,21 +1,21 @@
 ﻿  Main.cpp
 c:\users\6kmar\documents\github\directx-game-project\directx shooting game\main.cpp(24): warning C4005: 'ENEMY_NUM': 매크로 재정의
   c:\users\6kmar\documents\github\directx-game-project\directx shooting game\enemy.h(3): note: 'ENEMY_NUM'의 이전 정의를 참조하십시오.
-c:\users\6kmar\documents\github\directx-game-project\directx shooting game\main.cpp(211): warning C4100: 'lpCmdLine': 참조되지 않은 정식 매개 변수입니다.
-c:\users\6kmar\documents\github\directx-game-project\directx shooting game\main.cpp(210): warning C4100: 'hPrevInstance': 참조되지 않은 정식 매개 변수입니다.
-c:\users\6kmar\documents\github\directx-game-project\directx shooting game\main.cpp(284): warning C4459: 'message' 선언은 전역 선언을 숨깁니다.
-  c:\users\6kmar\documents\github\directx-game-project\directx shooting game\main.cpp(46): note: 'message' 선언을 참조하십시오.
-c:\users\6kmar\documents\github\directx-game-project\directx shooting game\main.cpp(1030): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\6kmar\documents\github\directx-game-project\directx shooting game\main.cpp(1046): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\6kmar\documents\github\directx-game-project\directx shooting game\main.cpp(1059): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\6kmar\documents\github\directx-game-project\directx shooting game\main.cpp(1153): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\6kmar\documents\github\directx-game-project\directx shooting game\main.cpp(1166): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\6kmar\documents\github\directx-game-project\directx shooting game\main.cpp(1236): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\6kmar\documents\github\directx-game-project\directx shooting game\main.cpp(1249): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\6kmar\documents\github\directx-game-project\directx shooting game\main.cpp(1322): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\6kmar\documents\github\directx-game-project\directx shooting game\main.cpp(1335): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\6kmar\documents\github\directx-game-project\directx shooting game\main.cpp(1375): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\6kmar\documents\github\directx-game-project\directx shooting game\main.cpp(1439): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\6kmar\documents\github\directx-game-project\directx shooting game\main.cpp(1520): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\6kmar\documents\github\directx-game-project\directx shooting game\main.cpp(225): warning C4100: 'lpCmdLine': 참조되지 않은 정식 매개 변수입니다.
+c:\users\6kmar\documents\github\directx-game-project\directx shooting game\main.cpp(224): warning C4100: 'hPrevInstance': 참조되지 않은 정식 매개 변수입니다.
+c:\users\6kmar\documents\github\directx-game-project\directx shooting game\main.cpp(299): warning C4459: 'message' 선언은 전역 선언을 숨깁니다.
+  c:\users\6kmar\documents\github\directx-game-project\directx shooting game\main.cpp(48): note: 'message' 선언을 참조하십시오.
+c:\users\6kmar\documents\github\directx-game-project\directx shooting game\main.cpp(1107): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\6kmar\documents\github\directx-game-project\directx shooting game\main.cpp(1123): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\6kmar\documents\github\directx-game-project\directx shooting game\main.cpp(1136): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\6kmar\documents\github\directx-game-project\directx shooting game\main.cpp(1251): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\6kmar\documents\github\directx-game-project\directx shooting game\main.cpp(1265): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\6kmar\documents\github\directx-game-project\directx shooting game\main.cpp(1336): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\6kmar\documents\github\directx-game-project\directx shooting game\main.cpp(1350): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\6kmar\documents\github\directx-game-project\directx shooting game\main.cpp(1424): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\6kmar\documents\github\directx-game-project\directx shooting game\main.cpp(1438): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\6kmar\documents\github\directx-game-project\directx shooting game\main.cpp(1478): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\6kmar\documents\github\directx-game-project\directx shooting game\main.cpp(1543): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\6kmar\documents\github\directx-game-project\directx shooting game\main.cpp(1625): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
   Matrices0999_2010.vcxproj -> C:\Users\6kmar\Documents\GitHub\DirectX-Game-ProJect\DirectX Shooting Game\Debug\Matrices0999.exe
   Matrices0999_2010.vcxproj -> C:\Users\6kmar\Documents\GitHub\DirectX-Game-ProJect\DirectX Shooting Game\Debug\Matrices0999.pdb (Full PDB)

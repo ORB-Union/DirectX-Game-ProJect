@@ -16,7 +16,6 @@ public:
 	void active(); // 버튼 누를시 총알 발사
 	bool check_collision(float x, float y);//충돌체크
 	bool Hero_Hit;
-
 	void init(float x, float y);
 
 

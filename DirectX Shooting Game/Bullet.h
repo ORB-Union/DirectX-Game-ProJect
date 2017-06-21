@@ -106,13 +106,11 @@ public:
 	void hide();
 };
 
-
-
-
 //대각선탄
 class BossBullet2 : public entity
 {
 public:
+	float vx, vy;
 	BossBullet2();
 	~BossBullet2();
 	bool bShow;
@@ -131,6 +129,8 @@ public:
 //포물선탄
 class BossBullet3 : public entity
 {
+public:
+	float vx, vy;
 	BossBullet3();
 	~BossBullet3();
 	bool bShow;
@@ -140,7 +140,8 @@ class BossBullet3 : public entity
 	bool show();
 	void active();
 	void hide();
-	//
+	//포물선탄
+	void InitAimingBullet(float mx, float my, float ex, float ey, float speed, float& x, float& y, float& vx, float& vy); // 메인 캐릭터의 위치, 적기의 좌표, 탄환의 속도, 탄환의 좌표, 탄환의 속도 벡터
 	void DroppingBullet_Up(float& x, float& y, float accel, float& vx, float& vy); // 탄환의 좌표, 가속도, 속도 벡터의 좌표
 
 };
@@ -149,6 +150,7 @@ class BossBullet3 : public entity
 //포물선탄
 class BossBullet4 : public entity
 {
+public:
 	BossBullet4();
 	~BossBullet4();
 	bool bShow;
@@ -158,6 +160,5 @@ class BossBullet4 : public entity
 	bool show();
 	void active();
 	void hide();
-	//
-	void DroppingBullet_Down(float& x, float& y, float accel, float& vx, float& vy); // 탄환의 좌표, 가속도, 속도 벡터의 좌표
+	//포물선탄
 };

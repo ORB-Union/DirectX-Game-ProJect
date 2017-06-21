@@ -25,6 +25,8 @@ using namespace std;
 #define NewENEMY_NUM 2
 #define BackNum 2
 #define BullLimit 100
+#define BossBullLimit 1
+#define ENEMY_BullLimit 1
 
 
 // include the Direct3D Library file
@@ -132,6 +134,7 @@ LPDIRECT3DTEXTURE9 sprite_SThou;
 LPDIRECT3DTEXTURE9 sprite_SOne;
 LPDIRECT3DTEXTURE9 sprite_SHund;
 LPDIRECT3DTEXTURE9 sprite_STen;
+LPDIRECT3DTEXTURE9 sprite_ScoreBox;
 
 bool Title; // 타이틀
 bool InGame; // 인게임
@@ -142,6 +145,7 @@ void initD3D(HWND hWnd);    // sets up and initializes Direct3D
 void render_frame(void);    // renders a single frame
 void cleanD3D(void);		// closes Direct3D and releases memory
 void Score_Manager(void);
+void BossAttack(void);
 
 void init_game(void);
 void do_game_logic(void);
@@ -166,11 +170,21 @@ Bullet2 bull2[BullLimit];
 Bullet3 bull3[BullLimit];
 
 Enemy enemy[ENEMY_NUM];
+
 EnemyBullet Ebullet[ENEMY_NUM];
+
 NewEnemy newenemy[NewENEMY_NUM];
+
 NewEnemyBullet newenemybull[NewENEMY_NUM];
-Mushroom mushroom;
-BossEnemy Boss;
+
+Mushroom mushroom; // 통과불가 오브젝트
+
+BossEnemy Boss; // 보스
+
+BossBullet1 Bossbull1[BossBullLimit];
+BossBullet2 Bossbull2[BossBullLimit];
+BossBullet3 Bossbull3[BossBullLimit];
+BossBullet4 Bossbull4[BossBullLimit];
 
 BackGround back[2];
 
@@ -272,7 +286,6 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
 		while ((GetTickCount() - starting_point) < 25);
 	}
-
 	// clean up DirectX and COM
 	cleanD3D();
 
@@ -797,8 +810,8 @@ void initD3D(HWND hWnd)
 	  //보스 미사일
 	D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
 		L"Enemy/BossEnemyMissile.png",    // the file name
-		400,    // default width
-		300,    // default height
+		40,    // default width
+		40,    // default height
 		D3DX_DEFAULT,    // no mip mapping
 		NULL,    // regular usage
 		D3DFMT_A8R8G8B8,    // 32-bit pixels with alpha
@@ -809,6 +822,24 @@ void initD3D(HWND hWnd)
 		NULL,    // no image info struct
 		NULL,    // not using 256 colors
 		&sprite_BossMissile);    // load to sprite
+
+	///////////////////////////////////////////////////////////////
+
+	//스코어박스
+	D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
+		L"Score/ScoreBox.png",    // the file name
+		128,  // default width
+		64,    // default height
+		D3DX_DEFAULT,    // no mip mapping
+		NULL,    // regular usage
+		D3DFMT_A8R8G8B8,    // 32-bit pixels with alpha
+		D3DPOOL_MANAGED,    // typical memory handling
+		D3DX_DEFAULT,    // no filtering
+		D3DX_DEFAULT,    // no mip filtering
+		D3DCOLOR_XRGB(255, 0, 255),    // the hot-pink color key
+		NULL,    // no image info struct
+		NULL,    // not using 256 colors
+		&sprite_ScoreBox);    // load to sprite
 
 
 
@@ -993,6 +1024,50 @@ bool BossEnemy::check_collision(float x, float y)
 		return false;
 }
 
+bool BossBullet1::check_collision(float x, float y)
+{
+	if (sphere_collision_check(x_pos, y_pos, 40, x, y, 40) == true)
+	{
+		bShow = false;
+		return true;
+	}
+	else
+		return false;
+}
+
+bool BossBullet2::check_collision(float x, float y)
+{
+	if (sphere_collision_check(x_pos, y_pos, 40, x, y, 40) == true)
+	{
+		bShow = false;
+		return true;
+	}
+	else
+		return false;
+}
+
+bool BossBullet3::check_collision(float x, float y)
+{
+	if (sphere_collision_check(x_pos, y_pos, 40, x, y, 40) == true)
+	{
+		bShow = false;
+		return true;
+	}
+	else
+		return false;
+}
+
+bool BossBullet4::check_collision(float x, float y)
+{
+	if (sphere_collision_check(x_pos, y_pos, 40, x, y, 40) == true)
+	{
+		bShow = false;
+		return true;
+	}
+	else
+		return false;
+}
+
 
 void init_game(void)
 {
@@ -1058,7 +1133,27 @@ void init_game(void)
 		
 	mushroom.init((float)(SCREEN_WIDTH + (rand() % 400)), rand() % SCREEN_HEIGHT - 100);
 
-	Boss.init(10000, 350); 
+	Boss.init(2000, 350);
+
+	for (int i = 0; i < BossBullLimit; i++)
+	{
+		Bossbull1[i].init(Boss.x_pos, Boss.y_pos);
+	}
+
+	for (int i = 0; i < BossBullLimit; i++)
+	{
+		Bossbull2[i].init(Boss.x_pos, Boss.y_pos);
+	}
+
+	for (int i = 0; i < BossBullLimit; i++)
+	{
+		Bossbull3[i].init(Boss.x_pos, Boss.y_pos);
+	}
+
+	for (int i = 0; i < BossBullLimit; i++)
+	{
+		Bossbull4[i].init(Boss.x_pos, Boss.y_pos);
+	}
 
 }
 
@@ -1103,9 +1198,9 @@ void do_game_logic(void)
 		if (KEY_DOWN(VK_RIGHT))
 		{
 			hero.move(MOVE_RIGHT);
-			if (hero.x_pos > SCREEN_WIDTH-60)
+			if (hero.x_pos > SCREEN_WIDTH - 60)
 			{
-				hero.x_pos = SCREEN_WIDTH-60;
+				hero.x_pos = SCREEN_WIDTH - 60;
 			}
 		}
 
@@ -1150,6 +1245,7 @@ void do_game_logic(void)
 				{
 					if (bull[i].check_collision(enemy[j].x_pos, enemy[j].y_pos) == true)
 					{
+						score += 3;
 						enemy[j].init((float)(SCREEN_WIDTH + (rand() % 300)), rand() % SCREEN_HEIGHT - 50);
 					}
 				}
@@ -1162,6 +1258,7 @@ void do_game_logic(void)
 						newenemy[t].HP -= 1;
 						if (newenemy[t].HP <= 0)
 						{
+							score += 5;
 							//이후 생성 안되는 버그 해결
 							newenemy[t].init((float)(SCREEN_WIDTH + (rand() % 300)), rand() % SCREEN_HEIGHT - 50);
 							newenemy[t].HP = 10;
@@ -1181,7 +1278,7 @@ void do_game_logic(void)
 						}
 					}
 				}
-				if (bull[i].check_collision(mushroom.x_pos, mushroom.y_pos+115) == true)
+				if (bull[i].check_collision(mushroom.x_pos, mushroom.y_pos + 115) == true)
 				{
 					bull[i].hide();
 				}
@@ -1233,6 +1330,7 @@ void do_game_logic(void)
 				{
 					if (bull2[i].check_collision(enemy[j].x_pos, enemy[j].y_pos) == true)
 					{
+						score += 3;
 						enemy[j].init((float)(SCREEN_WIDTH + (rand() % 300)), rand() % SCREEN_HEIGHT - 50);
 					}
 				}
@@ -1245,6 +1343,7 @@ void do_game_logic(void)
 						newenemy[t].HP -= 1;
 						if (newenemy[t].HP <= 0)
 						{
+							score += 5;
 							//이후 생성 안되는 버그 해결
 							newenemy[t].init((float)(SCREEN_WIDTH + (rand() % 300)), rand() % SCREEN_HEIGHT - 50);
 							newenemy[i].HP = 10;
@@ -1264,13 +1363,13 @@ void do_game_logic(void)
 						}
 					}
 				}
-				
-				if (bull2[i].check_collision(mushroom.x_pos, mushroom.y_pos+160) == true)
+
+				if (bull2[i].check_collision(mushroom.x_pos, mushroom.y_pos + 160) == true)
 				{
 					bull2[i].hide();
 				}
 
-				if (bull2[i].check_collision(Boss.x_pos, Boss.y_pos+160) == true)
+				if (bull2[i].check_collision(Boss.x_pos, Boss.y_pos + 160) == true)
 				{
 					Boss.HP -= 1;
 					if (Boss.HP <= 0)
@@ -1319,6 +1418,7 @@ void do_game_logic(void)
 				{
 					if (bull3[i].check_collision(enemy[j].x_pos, enemy[j].y_pos) == true)
 					{
+						score += 3;
 						enemy[j].init((float)(SCREEN_WIDTH + (rand() % 300)), rand() % SCREEN_HEIGHT - 50);
 					}
 				}
@@ -1331,6 +1431,7 @@ void do_game_logic(void)
 						newenemy[t].HP -= 1;
 						if (newenemy[t].HP <= 0)
 						{
+							score += 5;
 							//이후 생성 안되는 버그 해결
 							newenemy[t].init((float)(SCREEN_WIDTH + (rand() % 300)), rand() % SCREEN_HEIGHT - 50);
 							newenemy[i].HP = 10;
@@ -1349,7 +1450,7 @@ void do_game_logic(void)
 						}
 					}
 				}
-				if (bull3[i].check_collision(mushroom.x_pos, mushroom.y_pos+45)== true)
+				if (bull3[i].check_collision(mushroom.x_pos, mushroom.y_pos + 45) == true)
 				{
 					bull3[i].hide();
 				}
@@ -1369,10 +1470,10 @@ void do_game_logic(void)
 		//적들 충돌 처리  및 생성
 		for (int i = 0; i < ENEMY_NUM; i++)
 		{
-			if (enemy[i].show() == false && hero.x_pos > 1000)
+			if (enemy[i].show() == false)
 			{
-					enemy[i].active();
-					enemy[i].init((float)(SCREEN_WIDTH + (rand() % 200)), rand() % SCREEN_HEIGHT - 50);
+				enemy[i].active();
+				enemy[i].init((float)(SCREEN_WIDTH + (rand() % 200)), rand() % SCREEN_HEIGHT - 50);
 
 			}
 			if (enemy[i].show() == true)
@@ -1417,6 +1518,7 @@ void do_game_logic(void)
 			{
 				if (Ebullet[t].x_pos < -100)
 					Ebullet[t].hide();
+
 				else
 					Ebullet[t].move();
 			}
@@ -1433,7 +1535,7 @@ void do_game_logic(void)
 		//특수 적
 		for (int i = 0; i < NewENEMY_NUM; i++)
 		{
-			if (newenemy[i].show() == false && hero.x_pos > 1000)
+			if (newenemy[i].show() == false)
 			{
 				newenemy[i].active();
 				newenemy[i].init((float)(SCREEN_WIDTH + (rand() % 400)), rand() % SCREEN_HEIGHT);
@@ -1442,7 +1544,7 @@ void do_game_logic(void)
 
 			if (newenemy[i].show() == true)
 			{
-				if (newenemy[i].x_pos < -100 || newenemy[i].y_pos >= SCREEN_HEIGHT-100 || newenemy[i].y_pos <= 100)
+				if (newenemy[i].x_pos < -100 || newenemy[i].y_pos >= SCREEN_HEIGHT - 100 || newenemy[i].y_pos <= 100)
 				{
 					newenemy[i].hide();
 					newenemy[i].HP = 10;
@@ -1478,8 +1580,9 @@ void do_game_logic(void)
 		{
 			if (newenemy[i].x_pos < (SCREEN_WIDTH - 300) + rand() % 150 && newenemybull[i].show() == false)
 			{
-				newenemybull[i].active();
 				newenemybull[i].init(newenemy[i].x_pos, newenemy[i].y_pos);
+				newenemybull[i].active();
+
 			}
 		}
 
@@ -1514,14 +1617,14 @@ void do_game_logic(void)
 
 		/////////////////////////////////////////////////////////////
 		//총알 관통불가 오브젝트
-		if (mushroom.show() == false && hero.x_pos > 1000)
-		{	
-			mushroom.active();		
+		if (mushroom.show() == false)
+		{
+			mushroom.active();
 			mushroom.init((float)(SCREEN_WIDTH + (rand() % 400)), rand() % SCREEN_HEIGHT - 100);
 		}
 		if (mushroom.show() == true)
 		{
-			if (mushroom.x_pos < -500 || mushroom.y_pos >= SCREEN_HEIGHT-300 || mushroom.y_pos <= 300)
+			if (mushroom.x_pos < -500 || mushroom.y_pos >= SCREEN_HEIGHT - 300 || mushroom.y_pos <= 300)
 			{
 				mushroom.hide();
 			}
@@ -1537,25 +1640,167 @@ void do_game_logic(void)
 		}
 		/////////////////////////////////////////////
 		//보스 등장
-
-		if (Boss.show() == false)
+		if (score >= 100 && Boss.Boss_Exist == false)
 		{
-			Boss.active();
-			Boss.init(2000, 200);
+			Boss.Boss_Check = true;
+			Boss.Boss_Exist = true;
 		}
 
-		if (Boss.show() == true)
+		if (Boss.Boss_Check)
 		{
-			if (Boss.x_pos < -500)
+			Boss.init(hero.x_pos + 1000, 350);
+			Boss.Boss_Check = false;
+		}
+
+		if (Boss.Boss_Exist)
+		{
+			Boss.move(Boss.x_pos, Boss.y_pos);
+		}
+
+		//보스 첫번쨰 총알
+		for (int i = 0; i < BossBullLimit; i++)
+		{
+			if (Boss.x_pos < SCREEN_WIDTH - 50 && Bossbull1[i].show() == false)
 			{
-				Boss.hide();
+				Bossbull1[i].init(Boss.x_pos + 50, Boss.y_pos + 150);
+				Bossbull1[i].active();
 			}
-			else
+
+			if (Bossbull1[i].show() == true)
 			{
-				Boss.move(Boss.x_pos, Boss.y_pos);
+				if (Bossbull1[i].x_pos < -20)
+				{
+					Bossbull1[i].hide();
+				}
+				else
+				{
+					Bossbull1[i].move();
+				}
+			}
+
+			if (Bossbull1[i].check_collision(hero.x_pos, hero.y_pos) == true)
+			{
+				Bossbull1[i].hide();
+			}
+
+			if (hero.check_collision(Bossbull1[i].x_pos, Bossbull1[i].y_pos) == true)
+			{
+				if (hero.HP <= 0)
+				{
+					hero.hide();
+					Game_over = true;
+				}
+			}
+		}
+		//보스 두번째 총알
+		for (int i = 0; i < BossBullLimit; i++)
+		{
+			if (Boss.x_pos < SCREEN_WIDTH - 50 && Bossbull2[i].show() == false)
+			{
+				Bossbull2[i].InitAimingBullet(hero.x_pos, hero.y_pos, Boss.x_pos, Boss.y_pos, 15, Bossbull2[i].x_pos, Bossbull2[i].y_pos, Bossbull2[i].vx, Bossbull2[i].vy);
+				Bossbull2[i].active();
+			}
+		}
+		for(int i = 0; i < BossBullLimit; i++)
+		{
+			if (Bossbull2[i].show() == true)
+			{
+				if (Bossbull2[i].x_pos < -20)
+				{
+					Bossbull2[i].hide();
+				}
+				else
+				{
+					Bossbull2[i].AimingBullet(Bossbull2[i].x_pos, Bossbull2[i].y_pos, Bossbull2[i].vx, Bossbull2[i].vy); // 대각선 직진탄
+				}
+			}
+
+			if (Bossbull2[i].check_collision(hero.x_pos, hero.y_pos) == true)
+			{
+				Bossbull2[i].hide();
+			}
+
+			if (hero.check_collision(Bossbull2[i].x_pos, Bossbull2[i].y_pos) == true)
+			{
+				if (hero.HP <= 0)
+				{
+					hero.hide();
+					Game_over = true;
+				}
 			}
 		}
 
+		//보스 세번째 총알
+		for (int i = 0; i < BossBullLimit; i++)
+		{
+			if (Boss.x_pos < SCREEN_WIDTH - 50 && Bossbull2[i].show() == false)
+			{
+				Bossbull3[i].InitAimingBullet(hero.x_pos, hero.y_pos, Boss.x_pos, Boss.y_pos, 15, Bossbull3[i].x_pos, Bossbull3[i].y_pos, Bossbull3[i].vx, Bossbull3[i].vy);
+				Rand_DroppingBullet = (float)((float)((float)(rand() % 10) / 10) + 0.5); // 포물선 탄 변수
+				Bossbull3[i].active();
+			}
+		}
+
+		for (int i = 0; i < BossBullLimit; i++)
+		{
+			if (Bossbull3[i].show() == true)
+			{
+				if (Bossbull3[i].x_pos < -50)
+				{
+					Bossbull3[i].hide();
+				}
+				else
+				{
+					Bossbull3[i].DroppingBullet_Up(Bossbull3[i].x_pos, Bossbull3[i].y_pos, Rand_DroppingBullet, Bossbull3[i].vx, Bossbull3[i].vy);
+				}
+			}
+
+			if (Bossbull3[i].check_collision(hero.x_pos, hero.y_pos) == true)
+			{
+				Bossbull3[i].hide();
+			}
+
+			if (hero.check_collision(Bossbull3[i].x_pos, Bossbull3[i].y_pos) == true)
+			{
+				hero.HP -= 1;
+				if (hero.HP <= 0)
+				{
+					hero.hide();
+					Game_over = true;
+				}
+			}
+		}
+
+		//보스 네번째 총알
+		for (int i = 0; i < BossBullLimit; i++)
+		{
+			if (Bossbull4[i].show() == true)
+			{
+				if (Bossbull4[i].x_pos < -50)
+				{
+					Bossbull4[i].hide();
+				}
+				else
+				{
+					Bossbull4[i].move();
+				}
+			}
+
+			if (Bossbull4[i].check_collision(hero.x_pos, hero.y_pos) == true)
+			{
+				Bossbull4[i].hide();
+			}
+
+			if (hero.check_collision(Bossbull4[i].x_pos, Bossbull4[i].y_pos) == true)
+			{
+				hero.HP -= 1;
+				if (hero.HP <= 0)
+				{
+					hero.hide();
+					Game_over = true;
+				}
+			}
+		}
 	}
 }
 
@@ -1958,6 +2203,44 @@ void render_frame(void)
 		D3DXVECTOR3 position12(Boss.x_pos, Boss.y_pos, 0.0f);    // position at 50, 50 with no depth	
 		d3dspt->Draw(sprite_Boss, &part12, &center12, &position12, D3DCOLOR_ARGB(255, 255, 255, 255));
 
+		//보스 총알
+		RECT part13_1;
+		SetRect(&part13_1, 0, 0, 40, 40);
+		D3DXVECTOR3 center13_1(0.0f, 0.0f, 0.0f);    // center at the upper-left corner
+		for (int i = 0; i < BossBullLimit; i++)
+		{
+			D3DXVECTOR3 position13_1(Bossbull1[i] .x_pos, Bossbull1[i].y_pos, 0.0f);    // position at 50, 50 with no depth	
+			d3dspt->Draw(sprite_BossMissile, &part13_1, &center13_1, &position13_1, D3DCOLOR_ARGB(255, 255, 255, 255));
+		}
+
+		RECT part13_2;
+		SetRect(&part13_2, 0, 0, 40, 40);
+		D3DXVECTOR3 center13_2(0.0f, 0.0f, 0.0f);    // center at the upper-left corner
+		for (int i = 0; i < BossBullLimit; i++)
+		{
+			D3DXVECTOR3 position13_2(Bossbull2[i].x_pos, Bossbull2[i].y_pos, 0.0f);    // position at 50, 50 with no depth	
+			d3dspt->Draw(sprite_BossMissile, &part13_2, &center13_2, &position13_2, D3DCOLOR_ARGB(255, 255, 255, 255));
+		}
+
+		RECT part13_3;
+		SetRect(&part13_3, 0, 0, 40, 40);
+		D3DXVECTOR3 center13_3(0.0f, 0.0f, 0.0f);    // center at the upper-left corner
+		for (int i = 0; i < BossBullLimit; i++)
+		{
+			D3DXVECTOR3 position13_3(Bossbull3[i].x_pos, Bossbull3[i].y_pos, 0.0f);    // position at 50, 50 with no depth	
+			d3dspt->Draw(sprite_BossMissile, &part13_3, &center13_3, &position13_3, D3DCOLOR_ARGB(255, 255, 255, 255));
+		}
+
+		RECT part13_4;
+		SetRect(&part13_4, 0, 0, 40, 40);
+		D3DXVECTOR3 center13_4(0.0f, 0.0f, 0.0f);    // center at the upper-left corner
+		for (int i = 0; i < BossBullLimit; i++)
+		{
+			D3DXVECTOR3 position13_4(Bossbull4[i].x_pos, Bossbull4[i].y_pos, 0.0f);    // position at 50, 50 with no depth	
+			d3dspt->Draw(sprite_BossMissile, &part13_4, &center13_4, &position13_4, D3DCOLOR_ARGB(255, 255, 255, 255));
+		}
+
+
 		/*
 		if (font)
 		{
@@ -1965,7 +2248,15 @@ void render_frame(void)
 		}
 		*/
 
+		RECT part25;
+		SetRect(&part25, 0, 0, 128, 64);
+		D3DXVECTOR3 center25(0.0f, 0.0f, 0.0f);    // center at the upper-left corner
+		D3DXVECTOR3 position25(SCREEN_WIDTH - (32 * 4), 0.0f, 0.0f);    // position at 50, 50 with no depth	
+		d3dspt->Draw(sprite_ScoreBox, &part25, &center25, &position25, D3DCOLOR_ARGB(255, 255, 255, 255));
 		Score_Manager();
+		
+		//
+		//sprite_ScoreBox
 
 		d3dspt->End();    // end sprite drawing
 
@@ -2723,9 +3014,6 @@ void Score_Manager(void)
 	d3dspt->Draw(sprite_SOne, &part20, &center20, &position23, D3DCOLOR_ARGB(255, 255, 255, 255));
 }
 
-
-
-
 // this is the function that cleans up Direct3D and COM
 void cleanD3D(void)
 {
@@ -2784,6 +3072,7 @@ void cleanD3D(void)
 	sprite_SOne->Release();
 	sprite_SHund->Release();
 	sprite_STen->Release();
+	sprite_ScoreBox->Release();
 
 	//음악 닫기
 	mciSendCommand(1, MCI_CLOSE, 0, (DWORD)(LPVOID)NULL);

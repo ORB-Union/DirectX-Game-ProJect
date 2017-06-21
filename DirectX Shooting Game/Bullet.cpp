@@ -267,7 +267,7 @@ BossBullet1::~BossBullet1()
 
 void BossBullet1::move()
 {
-	x_pos -= 15;
+	x_pos -= 20;
 }
 
 void BossBullet1::init(float x, float y)
@@ -404,6 +404,25 @@ void BossBullet3::hide()
 	bShow = false;
 }
 
+void BossBullet3::InitAimingBullet(float mx, float my, float ex, float ey, float speed, float& x, float& y, float& vx, float& vy) // 메인 캐릭터의 위치, 적기의 좌표, 탄환의 속도, 탄환의 좌표, 탄환의 속도 벡터
+{
+	x = ex;
+	y = ey;
+
+	float d = sqrt((mx - ex)*(mx - ex) + (my - ey)*(my - ey));
+
+	if (d)
+	{
+		vx = (mx - ex) / d*speed;
+		vy = (my - ey) / d*speed;
+	}
+	else
+	{
+		vx = 0;
+		vy = speed;
+	}
+}
+
 // 포물선탄 위쪽
 void BossBullet3:: DroppingBullet_Up(float& x, float& y, float accel, float& vx, float& vy) // 탄환의 좌표, 가속도, 속도 벡터의 좌표
 {
@@ -429,7 +448,9 @@ BossBullet4::~BossBullet4()
 void BossBullet4::move()
 {
 	x_pos -= 15;
+	y_pos -= 3;
 }
+
 
 void BossBullet4::init(float x, float y)
 {
@@ -454,20 +475,3 @@ void BossBullet4::hide()
 {
 	bShow = false;
 }
-
-//포물선탄 아래쪽
-void BossBullet4::DroppingBullet_Down(float& x, float& y, float accel, float& vx, float& vy) // 탄환의 좌표, 가속도, 속도 벡터의 좌표
-{
-	vx -= 0.12;
-	vy += accel;
-	x += vx;
-	y += vy;
-}
-
-/*
-사용법
-InitAimingBullet(hero.x_pos, hero.y_pos, f_boss.x_pos + 32, f_boss.y_pos + 32, 4, f_boss_bullet_bomb1.x_pos, f_boss_bullet_bomb1.y_pos, f_boss_bullet_bomb1.vx, f_boss_bullet_bomb1.vy); // 대각선 직진탄
-AimingBullet(f_boss_bullet_bomb1.x_pos, f_boss_bullet_bomb1.y_pos, f_boss_bullet_bomb1.vx, f_boss_bullet_bomb1.vy);
-DroppingBullet_Up(f_boss_bullet_bomb2.x_pos, f_boss_bullet_bomb2.y_pos, Rand_DroppingBullet, f_boss_bullet_bomb2.vx, f_boss_bullet_bomb2.vy); 
-DroppingBullet_Down(f_boss_bullet_bomb3.x_pos, f_boss_bullet_bomb3.y_pos, Rand_DroppingBullet, f_boss_bullet_bomb3.vx, f_boss_bullet_bomb3.vy);
-*/

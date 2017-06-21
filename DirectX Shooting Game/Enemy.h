@@ -105,4 +105,6 @@ public:
 	void fire();
 	void move(float x, float y);
 	bool Visible;
+	bool Boss_Check = false;
+	bool Boss_Exist = false;
 };
