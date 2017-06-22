@@ -54,8 +54,12 @@ int Time;
 int counter1_1;
 int counter1_2;
 int counter1_3;
+int Hero_Hit_counter;// 히어로 애니메이션
 
 int Hero_anicounter;// 히어로 애니메이션
+
+int Hero_Hit_anicounter;// 히어로 애니메이션
+
 int CoinBullet_anicounter_1; // 코인총알 애니메이션
 int CoinBullet_anicounter_2; // 코인총알 애니메이션
 int CoinBullet_anicounter_3; // 코인총알 애니메이션
@@ -80,6 +84,10 @@ LPDIRECT3DTEXTURE9 sprite_hero_1;    // the pointer to the sprite
 LPDIRECT3DTEXTURE9 sprite_hero_2;    // the pointer to the sprite
 LPDIRECT3DTEXTURE9 sprite_hero_3;    // the pointer to the sprite
 LPDIRECT3DTEXTURE9 sprite_hero_4;    // the pointer to the sprite
+
+
+LPDIRECT3DTEXTURE9 sprite_Hit_hero_1;    // 플레이어 히트 스프라이트
+LPDIRECT3DTEXTURE9 sprite_Hit_hero_2;    // 플레이어 히트 스프라이트
 
 
 //플레이어 애니메이션
@@ -471,6 +479,37 @@ void initD3D(HWND hWnd)
 		NULL,    // not using 256 colors
 		&sprite_hero_4);    // load to sprite
 
+	//플레이어 히트 스프라이트
+	D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
+		L"Hero/SonicHitSprite2.png",    // the file name
+		60,    // default width
+		60,    // default height
+		D3DX_DEFAULT,    // no mip mapping
+		NULL,    // regular usage
+		D3DFMT_A8R8G8B8,    // 32-bit pixels with alpha
+		D3DPOOL_MANAGED,    // typical memory handling
+		D3DX_DEFAULT,    // no filtering
+		D3DX_DEFAULT,    // no mip filtering
+		D3DCOLOR_XRGB(255, 0, 255),    // the hot-pink color key
+		NULL,    // no image info struct
+		NULL,    // not using 256 colors
+		&sprite_Hit_hero_1);    // load to sprite
+
+	D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
+		L"Hero/SonicHitSprite2.png",    // the file name
+		60,    // default width
+		60,    // default height
+		D3DX_DEFAULT,    // no mip mapping
+		NULL,    // regular usage
+		D3DFMT_A8R8G8B8,    // 32-bit pixels with alpha
+		D3DPOOL_MANAGED,    // typical memory handling
+		D3DX_DEFAULT,    // no filtering
+		D3DX_DEFAULT,    // no mip filtering
+		D3DCOLOR_XRGB(255, 0, 255),    // the hot-pink color key
+		NULL,    // no image info struct
+		NULL,    // not using 256 colors
+		&sprite_Hit_hero_2);    // load to sprite
+
 
 
     //플레이어 총알(플레이어가 쓰는 모든 총알)
@@ -859,6 +898,7 @@ void initD3D(HWND hWnd)
 	return;
 }
 
+
 //충돌
 bool sphere_collision_check(float x0, float y0, float size0, float x1, float y1, float size1)
 {
@@ -879,6 +919,7 @@ bool Hero::check_collision(float x, float y)
 	//충돌 처리 시 
 	if (sphere_collision_check(x_pos, y_pos, 60, x, y, 60) == true)
 	{
+		Hero_hit = true;
 		bShow = false;
 		return true;
 
@@ -990,7 +1031,7 @@ bool EnemyBullet::check_collision(float x, float y)
 
 bool NewEnemyBullet::check_collision(float x, float y)
 {
-	if (sphere_collision_check(x_pos, y_pos, 30, x, y, 30) == true)
+	if (sphere_collision_check(x_pos, y_pos, 10, x, y, 10) == true)
 	{
 		bShow = false;
 		return true;
@@ -1026,7 +1067,7 @@ bool BossEnemy::check_collision(float x, float y)
 
 bool BossBullet1::check_collision(float x, float y)
 {
-	if (sphere_collision_check(x_pos, y_pos, 40, x, y, 40) == true)
+	if (sphere_collision_check(x_pos, y_pos, 20, x, y, 20) == true)
 	{
 		bShow = false;
 		return true;
@@ -1037,7 +1078,7 @@ bool BossBullet1::check_collision(float x, float y)
 
 bool BossBullet2::check_collision(float x, float y)
 {
-	if (sphere_collision_check(x_pos, y_pos, 40, x, y, 40) == true)
+	if (sphere_collision_check(x_pos, y_pos, 20, x, y, 20) == true)
 	{
 		bShow = false;
 		return true;
@@ -1048,7 +1089,7 @@ bool BossBullet2::check_collision(float x, float y)
 
 bool BossBullet3::check_collision(float x, float y)
 {
-	if (sphere_collision_check(x_pos, y_pos, 40, x, y, 40) == true)
+	if (sphere_collision_check(x_pos, y_pos, 20, x, y, 20) == true)
 	{
 		bShow = false;
 		return true;
@@ -1488,6 +1529,7 @@ void do_game_logic(void)
 
 			if (enemy[i].check_collision(hero.x_pos, hero.y_pos) == true)
 			{
+				hero.Hero_hit = true;
 				enemy[i].hide();
 			}
 
@@ -1525,6 +1567,8 @@ void do_game_logic(void)
 
 			if (Ebullet[t].check_collision(hero.x_pos, hero.y_pos) == true)
 			{
+				score -= 1;
+				hero.Hero_hit = true;
 				Ebullet[t].hide();
 			}
 		}
@@ -1559,6 +1603,7 @@ void do_game_logic(void)
 
 			if (newenemy[i].check_collision(hero.x_pos, hero.y_pos) == true || newenemy[i].HP <= 0)
 			{
+				hero.Hero_hit = true;
 				newenemy[i].hide();
 			}
 
@@ -1600,6 +1645,7 @@ void do_game_logic(void)
 
 			if (newenemybull[j].check_collision(hero.x_pos, hero.y_pos) == true)
 			{
+				hero.Hero_hit = true;
 				newenemybull[j].hide();
 			}
 
@@ -1635,6 +1681,7 @@ void do_game_logic(void)
 
 			if (mushroom.check_collision(hero.x_pos, hero.y_pos) == true)
 			{
+				hero.Hero_hit = true;
 				mushroom.hide();
 			}
 		}
@@ -1683,6 +1730,7 @@ void do_game_logic(void)
 
 			if (Bossbull1[i].check_collision(hero.x_pos, hero.y_pos) == true)
 			{
+				hero.Hero_hit = true;
 				Bossbull1[i].hide();
 			}
 
@@ -1720,6 +1768,7 @@ void do_game_logic(void)
 
 			if (Bossbull2[i].check_collision(hero.x_pos, hero.y_pos) == true)
 			{
+				hero.Hero_hit = true;
 				Bossbull2[i].hide();
 			}
 
@@ -1760,6 +1809,7 @@ void do_game_logic(void)
 
 			if (Bossbull3[i].check_collision(hero.x_pos, hero.y_pos) == true)
 			{
+				hero.Hero_hit = true;
 				Bossbull3[i].hide();
 			}
 
@@ -1800,6 +1850,7 @@ void do_game_logic(void)
 
 			if (Bossbull4[i].check_collision(hero.x_pos, hero.y_pos) == true)
 			{
+				hero.Hero_hit = true;
 				Bossbull4[i].hide();
 			}
 
@@ -1925,31 +1976,69 @@ void render_frame(void)
 
 
 		//주인공 애니메이션
-		RECT part_1;
-		SetRect(&part_1, 0, 0, 60, 60);
-		D3DXVECTOR3 center_1(0.0f, 0.0f, 0.0f);    // center at the upper-left corner
-		D3DXVECTOR3 position_1(hero.x_pos, hero.y_pos, 0.0f);    // position at 50, 50 with no depth
-		Hero_anicounter++;
-		if (Hero_anicounter >= 12)
+		if (hero.Hero_hit == false)
 		{
-			Hero_anicounter = 0;
+			RECT part_1;
+			SetRect(&part_1, 0, 0, 60, 60);
+			D3DXVECTOR3 center_1(0.0f, 0.0f, 0.0f);    // center at the upper-left corner
+			D3DXVECTOR3 position_1(hero.x_pos, hero.y_pos, 0.0f);    // position at 50, 50 with no depth
+			Hero_anicounter++;
+			if (Hero_anicounter >= 12)
+			{
+				Hero_anicounter = 0;
+			}
+			switch (Hero_anicounter / 3)
+			{
+			case 0:
+				d3dspt->Draw(sprite_hero_1, &part_1, &center_1, &position_1, D3DCOLOR_ARGB(255, 255, 255, 255));
+				break;
+			case 1:
+				d3dspt->Draw(sprite_hero_2, &part_1, &center_1, &position_1, D3DCOLOR_ARGB(255, 255, 255, 255));
+				break;
+			case 2:
+				d3dspt->Draw(sprite_hero_3, &part_1, &center_1, &position_1, D3DCOLOR_ARGB(255, 255, 255, 255));
+				break;
+			case 3:
+				d3dspt->Draw(sprite_hero_4, &part_1, &center_1, &position_1, D3DCOLOR_ARGB(255, 255, 255, 255));
+				break;
+			}
 		}
-		switch (Hero_anicounter / 3)
+		//주인공에게 물체가 히트시
+		if (hero.Hero_hit == true)
 		{
-		case 0 :
-			d3dspt->Draw(sprite_hero_1, &part_1, &center_1, &position_1, D3DCOLOR_ARGB(255, 255, 255, 255));
-			break;
-		case 1:
-			d3dspt->Draw(sprite_hero_2, &part_1, &center_1, &position_1, D3DCOLOR_ARGB(255, 255, 255, 255));
-			break;
-		case 2:
-			d3dspt->Draw(sprite_hero_3, &part_1, &center_1, &position_1, D3DCOLOR_ARGB(255, 255, 255, 255));
-			break;
-		case 3:
-			d3dspt->Draw(sprite_hero_4, &part_1, &center_1, &position_1, D3DCOLOR_ARGB(255, 255, 255, 255));
-			break;
+			RECT partHit_1;
+			SetRect(&partHit_1, 0, 0, 60, 60);
+			D3DXVECTOR3 centerHit_1(0.0f, 0.0f, 0.0f);    // center at the upper-left corner
+			D3DXVECTOR3 positionHit_1(hero.x_pos, hero.y_pos, 0.0f);    // position at 50, 50 with no depth
+			Hero_Hit_anicounter++;
+			if (Hero_Hit_anicounter >= 10)
+			{
+				Hero_Hit_anicounter = 0;
+			}
+			switch (Hero_Hit_anicounter / 5)
+			{
+			case 0:
+				d3dspt->Draw(sprite_Hit_hero_1, &partHit_1, &centerHit_1, &positionHit_1, D3DCOLOR_ARGB(255, 255, 255, 255));
+				break;
+			case 1:
+				d3dspt->Draw(sprite_Hit_hero_2, &partHit_1, &centerHit_1, &positionHit_1, D3DCOLOR_ARGB(255, 255, 255, 255));
+				break;
+
+			}
 		}
 
+		
+		
+		if (hero.Hero_hit == true)
+		{
+			Hero_Hit_counter++;
+		}
+
+		if (Hero_Hit_counter % 20 == 0)
+		{
+			Hero_Hit_counter = 0;
+			hero.Hero_hit = false;
+		}
 
 		/////////////////////////////////////////////////////////////////////////////////////////////////////
 		//첫번째 총알
@@ -2201,7 +2290,7 @@ void render_frame(void)
 				{
 					D3DXVECTOR3 position11(newenemybull[i].x_pos, newenemybull[i].y_pos, 0.0f);    // position at 50, 50 with no depth		
 					d3dspt->Draw(sprite_Newenemymissile, &part11, &center11, &position11, D3DCOLOR_ARGB(255, 255, 255, 255));
-				}
+				} 
 
 
 			//총알 통과불가 오브젝트
@@ -2212,6 +2301,17 @@ void render_frame(void)
 			d3dspt->Draw(sprite_MushroomEnemy, &part10, &center10, &position10, D3DCOLOR_ARGB(255, 255, 255, 255));
 		}
 
+
+		if (hero.Hero_hit == true)
+		{
+			Hero_Hit_counter++;
+		}
+
+		if (Hero_Hit_counter % 20 == 0)
+		{
+			Hero_Hit_counter = 0;
+			hero.Hero_hit = false;
+		}
 
 
 		RECT part12;
@@ -3046,6 +3146,10 @@ void cleanD3D(void)
 	sprite_hero_2->Release();
 	sprite_hero_3->Release();
 	sprite_hero_4->Release();
+
+	//히트 애니메이션
+	sprite_Hit_hero_1->Release();
+	sprite_Hit_hero_2->Release();
 
 	//총알
 	sprite_bullet_1->Release();

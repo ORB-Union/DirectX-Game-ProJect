@@ -68,10 +68,6 @@ void Hero::hide()
 }
 
 
-
-
-
-
 /*
 void Hero::fire()
 {
