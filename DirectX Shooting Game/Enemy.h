@@ -14,6 +14,7 @@ public :
 	void active(); // 버튼 누를시 총알 발사
 	bool check_collision(float x, float y); // 충돌체크
 
+	bool Enemy_Hit = false; //피격시 파괴되는 애니메이션 도구
 
 	void init(float x, float y);
 	void fire();
@@ -49,6 +50,8 @@ public:
 	void fire();
 	void move();
 	bool Visible;
+
+	bool NewEnemy_Hit = false; //피격시 파괴되는 애니메이션 도구
 };
 
 
@@ -76,6 +79,7 @@ public:
 	void active(); // 버튼 누를시 총알 발사
 	bool check_collision(float x, float y); // 충돌체크
 
+
 	void init(float x, float y);
 	void fire();
 	void move();
@@ -100,11 +104,12 @@ public:
 	void active(); // 버튼 누를시 총알 발사
 	bool check_collision(float x, float y); // 충돌체크
 
-
 	void init(float x, float y);
 	void fire();
 	void move(float x, float y);
 	bool Visible;
 	bool Boss_Check = false;
 	bool Boss_Exist = false;
+
+	bool BossEnemy_Hit = false; //피격시 파괴되는 애니메이션 도구
 };

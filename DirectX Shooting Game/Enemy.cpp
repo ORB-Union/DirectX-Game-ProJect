@@ -185,7 +185,7 @@ void Mushroom::move()
 //º¸½º
 BossEnemy::BossEnemy()
 {
-	HP = 300;
+	HP = 10;
 }
 
 

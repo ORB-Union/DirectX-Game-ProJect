@@ -66,15 +66,17 @@ int CoinBullet_anicounter_3; // 코인총알 애니메이션
 
 
 int EnemyGundam_anicounter; // 일반적 애니메이션
+int EnemyGundam_Hit_anicounter; // 일반적 히트 애니메이션
 
 
 int NewEnemyGundam_anicounter; // 특수적 애니메이션
+int NewEnemyGundam_Hit_anicounter; // 특수적 히트 애니메이션
 
 
 //포물선탄을 위한 변수
 float Rand_DroppingBullet;
 
-int score;
+float score;
 
 // sprite declarations
 LPDIRECT3DTEXTURE9 sprite;    // the pointer to the sprite
@@ -125,6 +127,23 @@ LPDIRECT3DTEXTURE9 sprite_Boss; // 최종보스
 LPDIRECT3DTEXTURE9 sprite_BossMissile; // 최종보스
 
 ////////////////////////////////////////////////////////////
+//적들 피격시 파괴되는 애니메이션
+LPDIRECT3DTEXTURE9 sprite_enemy_Hit_1;    // the pointer to the sprite
+LPDIRECT3DTEXTURE9 sprite_enemy_Hit_2;    // the pointer to the sprite
+LPDIRECT3DTEXTURE9 sprite_enemy_Hit_3;    // the pointer to the sprite
+LPDIRECT3DTEXTURE9 sprite_enemy_Hit_4;    // the pointer to the sprite
+LPDIRECT3DTEXTURE9 sprite_enemy_Hit_5;    // the pointer to the sprite
+LPDIRECT3DTEXTURE9 sprite_enemy_Hit_6;    // the pointer to the sprite
+LPDIRECT3DTEXTURE9 sprite_enemy_Hit_7;    // the pointer to the sprite
+LPDIRECT3DTEXTURE9 sprite_enemy_Hit_8;    // the pointer to the sprite
+LPDIRECT3DTEXTURE9 sprite_enemy_Hit_9;    // the pointer to the sprite
+LPDIRECT3DTEXTURE9 sprite_enemy_Hit_10;    // the pointer to the sprite
+LPDIRECT3DTEXTURE9 sprite_enemy_Hit_11;    // the pointer to the sprite
+LPDIRECT3DTEXTURE9 sprite_enemy_Hit_12;    // the pointer to the sprite
+
+
+
+//////////////////////////////////////////////////////////
 //백그라운드
 //타이틀
 LPDIRECT3DTEXTURE9 sprite_Title;    // 타이틀
@@ -863,7 +882,188 @@ void initD3D(HWND hWnd)
 		&sprite_BossMissile);    // load to sprite
 
 	///////////////////////////////////////////////////////////////
+	//적들 피격시 파괴 애니메이션
+	D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
+		L"Enemy/ExplosionSprite1.png",    // the file name
+		40,    // default width
+		40,    // default height
+		D3DX_DEFAULT,    // no mip mapping
+		NULL,    // regular usage
+		D3DFMT_A8R8G8B8,    // 32-bit pixels with alpha
+		D3DPOOL_MANAGED,    // typical memory handling
+		D3DX_DEFAULT,    // no filtering
+		D3DX_DEFAULT,    // no mip filtering
+		D3DCOLOR_XRGB(255, 0, 255),    // the hot-pink color key
+		NULL,    // no image info struct
+		NULL,    // not using 256 colors
+		&sprite_enemy_Hit_1);    // load to sprite
 
+	D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
+		L"Enemy/ExplosionSprite2.png",    // the file name
+		40,    // default width
+		40,    // default height
+		D3DX_DEFAULT,    // no mip mapping
+		NULL,    // regular usage
+		D3DFMT_A8R8G8B8,    // 32-bit pixels with alpha
+		D3DPOOL_MANAGED,    // typical memory handling
+		D3DX_DEFAULT,    // no filtering
+		D3DX_DEFAULT,    // no mip filtering
+		D3DCOLOR_XRGB(255, 0, 255),    // the hot-pink color key
+		NULL,    // no image info struct
+		NULL,    // not using 256 colors
+		&sprite_enemy_Hit_2);    // load to sprite
+
+	D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
+		L"Enemy/ExplosionSprite3.png",    // the file name
+		40,    // default width
+		40,    // default height
+		D3DX_DEFAULT,    // no mip mapping
+		NULL,    // regular usage
+		D3DFMT_A8R8G8B8,    // 32-bit pixels with alpha
+		D3DPOOL_MANAGED,    // typical memory handling
+		D3DX_DEFAULT,    // no filtering
+		D3DX_DEFAULT,    // no mip filtering
+		D3DCOLOR_XRGB(255, 0, 255),    // the hot-pink color key
+		NULL,    // no image info struct
+		NULL,    // not using 256 colors
+		&sprite_enemy_Hit_3);    // load to sprite
+
+	D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
+		L"Enemy/ExplosionSprite4.png",    // the file name
+		40,    // default width
+		40,    // default height
+		D3DX_DEFAULT,    // no mip mapping
+		NULL,    // regular usage
+		D3DFMT_A8R8G8B8,    // 32-bit pixels with alpha
+		D3DPOOL_MANAGED,    // typical memory handling
+		D3DX_DEFAULT,    // no filtering
+		D3DX_DEFAULT,    // no mip filtering
+		D3DCOLOR_XRGB(255, 0, 255),    // the hot-pink color key
+		NULL,    // no image info struct
+		NULL,    // not using 256 colors
+		&sprite_enemy_Hit_4);    // load to sprite
+
+	D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
+		L"Enemy/ExplosionSprite5.png",    // the file name
+		40,    // default width
+		40,    // default height
+		D3DX_DEFAULT,    // no mip mapping
+		NULL,    // regular usage
+		D3DFMT_A8R8G8B8,    // 32-bit pixels with alpha
+		D3DPOOL_MANAGED,    // typical memory handling
+		D3DX_DEFAULT,    // no filtering
+		D3DX_DEFAULT,    // no mip filtering
+		D3DCOLOR_XRGB(255, 0, 255),    // the hot-pink color key
+		NULL,    // no image info struct
+		NULL,    // not using 256 colors
+		&sprite_enemy_Hit_5);    // load to sprite
+
+	D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
+		L"Enemy/ExplosionSprite6.png",    // the file name
+		40,    // default width
+		40,    // default height
+		D3DX_DEFAULT,    // no mip mapping
+		NULL,    // regular usage
+		D3DFMT_A8R8G8B8,    // 32-bit pixels with alpha
+		D3DPOOL_MANAGED,    // typical memory handling
+		D3DX_DEFAULT,    // no filtering
+		D3DX_DEFAULT,    // no mip filtering
+		D3DCOLOR_XRGB(255, 0, 255),    // the hot-pink color key
+		NULL,    // no image info struct
+		NULL,    // not using 256 colors
+		&sprite_enemy_Hit_6);    // load to sprite
+
+	D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
+		L"Enemy/ExplosionSprite7.png",    // the file name
+		40,    // default width
+		40,    // default height
+		D3DX_DEFAULT,    // no mip mapping
+		NULL,    // regular usage
+		D3DFMT_A8R8G8B8,    // 32-bit pixels with alpha
+		D3DPOOL_MANAGED,    // typical memory handling
+		D3DX_DEFAULT,    // no filtering
+		D3DX_DEFAULT,    // no mip filtering
+		D3DCOLOR_XRGB(255, 0, 255),    // the hot-pink color key
+		NULL,    // no image info struct
+		NULL,    // not using 256 colors
+		&sprite_enemy_Hit_7);    // load to sprite
+
+	D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
+		L"Enemy/ExplosionSprite8.png",    // the file name
+		40,    // default width
+		40,    // default height
+		D3DX_DEFAULT,    // no mip mapping
+		NULL,    // regular usage
+		D3DFMT_A8R8G8B8,    // 32-bit pixels with alpha
+		D3DPOOL_MANAGED,    // typical memory handling
+		D3DX_DEFAULT,    // no filtering
+		D3DX_DEFAULT,    // no mip filtering
+		D3DCOLOR_XRGB(255, 0, 255),    // the hot-pink color key
+		NULL,    // no image info struct
+		NULL,    // not using 256 colors
+		&sprite_enemy_Hit_8);    // load to sprite
+
+	D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
+		L"Enemy/ExplosionSprite9.png",    // the file name
+		40,    // default width
+		40,    // default height
+		D3DX_DEFAULT,    // no mip mapping
+		NULL,    // regular usage
+		D3DFMT_A8R8G8B8,    // 32-bit pixels with alpha
+		D3DPOOL_MANAGED,    // typical memory handling
+		D3DX_DEFAULT,    // no filtering
+		D3DX_DEFAULT,    // no mip filtering
+		D3DCOLOR_XRGB(255, 0, 255),    // the hot-pink color key
+		NULL,    // no image info struct
+		NULL,    // not using 256 colors
+		&sprite_enemy_Hit_9);    // load to sprite
+
+	D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
+		L"Enemy/ExplosionSprite10.png",    // the file name
+		40,    // default width
+		40,    // default height
+		D3DX_DEFAULT,    // no mip mapping
+		NULL,    // regular usage
+		D3DFMT_A8R8G8B8,    // 32-bit pixels with alpha
+		D3DPOOL_MANAGED,    // typical memory handling
+		D3DX_DEFAULT,    // no filtering
+		D3DX_DEFAULT,    // no mip filtering
+		D3DCOLOR_XRGB(255, 0, 255),    // the hot-pink color key
+		NULL,    // no image info struct
+		NULL,    // not using 256 colors
+		&sprite_enemy_Hit_10);    // load to sprite
+
+	D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
+		L"Enemy/ExplosionSprite11.png",    // the file name
+		40,    // default width
+		40,    // default height
+		D3DX_DEFAULT,    // no mip mapping
+		NULL,    // regular usage
+		D3DFMT_A8R8G8B8,    // 32-bit pixels with alpha
+		D3DPOOL_MANAGED,    // typical memory handling
+		D3DX_DEFAULT,    // no filtering
+		D3DX_DEFAULT,    // no mip filtering
+		D3DCOLOR_XRGB(255, 0, 255),    // the hot-pink color key
+		NULL,    // no image info struct
+		NULL,    // not using 256 colors
+		&sprite_enemy_Hit_11);    // load to sprite
+
+	D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
+		L"Enemy/ExplosionSprite12.png",    // the file name
+		40,    // default width
+		40,    // default height
+		D3DX_DEFAULT,    // no mip mapping
+		NULL,    // regular usage
+		D3DFMT_A8R8G8B8,    // 32-bit pixels with alpha
+		D3DPOOL_MANAGED,    // typical memory handling
+		D3DX_DEFAULT,    // no filtering
+		D3DX_DEFAULT,    // no mip filtering
+		D3DCOLOR_XRGB(255, 0, 255),    // the hot-pink color key
+		NULL,    // no image info struct
+		NULL,    // not using 256 colors
+		&sprite_enemy_Hit_12);    // load to sprite
+
+	////////////////////////////////////////////////////////////////////
 	//스코어박스
 	D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
 		L"Score/ScoreBox.png",    // the file name
@@ -879,8 +1079,6 @@ void initD3D(HWND hWnd)
 		NULL,    // no image info struct
 		NULL,    // not using 256 colors
 		&sprite_ScoreBox);    // load to sprite
-
-
 
 	/*
 	font = NULL;
@@ -1286,8 +1484,15 @@ void do_game_logic(void)
 				{
 					if (bull[i].check_collision(enemy[j].x_pos, enemy[j].y_pos) == true)
 					{
-						score += 3;
-						enemy[j].init((float)(SCREEN_WIDTH + (rand() % 300)), rand() % SCREEN_HEIGHT - 50);
+						if (Boss.Boss_Exist == false)
+						{
+							score += 3;
+						}
+						enemy[j].Enemy_Hit = true;
+						if (enemy[j].Enemy_Hit == false)
+						{
+							enemy[j].init((float)(SCREEN_WIDTH + (rand() % 300)), rand() % SCREEN_HEIGHT - 50);
+						}
 					}
 				}
 
@@ -1299,7 +1504,11 @@ void do_game_logic(void)
 						newenemy[t].HP -= 1;
 						if (newenemy[t].HP <= 0)
 						{
-							score += 5;
+							if (Boss.Boss_Exist == false)
+							{
+								score += 5;
+							}
+							newenemy[t].NewEnemy_Hit = true;
 							//이후 생성 안되는 버그 해결
 							newenemy[t].init((float)(SCREEN_WIDTH + (rand() % 300)), rand() % SCREEN_HEIGHT - 50);
 							newenemy[t].HP = 10;
@@ -1329,6 +1538,7 @@ void do_game_logic(void)
 					Boss.HP -= 1;
 					if (Boss.HP <= 0)
 					{
+						Boss.BossEnemy_Hit = true;
 						Boss.hide();
 					}
 				}
@@ -1371,8 +1581,16 @@ void do_game_logic(void)
 				{
 					if (bull2[i].check_collision(enemy[j].x_pos, enemy[j].y_pos) == true)
 					{
-						score += 3;
-						enemy[j].init((float)(SCREEN_WIDTH + (rand() % 300)), rand() % SCREEN_HEIGHT - 50);
+						if (Boss.Boss_Exist == false)
+						{
+							score += 3;
+						}
+						enemy[j].Enemy_Hit = true;
+
+						if (enemy[j].Enemy_Hit == false)
+						{
+							enemy[j].init((float)(SCREEN_WIDTH + (rand() % 300)), rand() % SCREEN_HEIGHT - 50);
+						}
 					}
 				}
 
@@ -1384,7 +1602,11 @@ void do_game_logic(void)
 						newenemy[t].HP -= 1;
 						if (newenemy[t].HP <= 0)
 						{
-							score += 5;
+							if (Boss.Boss_Exist == false)
+							{
+								score += 5;
+							}
+							newenemy[t].NewEnemy_Hit = true;
 							//이후 생성 안되는 버그 해결
 							newenemy[t].init((float)(SCREEN_WIDTH + (rand() % 300)), rand() % SCREEN_HEIGHT - 50);
 							newenemy[i].HP = 10;
@@ -1459,8 +1681,15 @@ void do_game_logic(void)
 				{
 					if (bull3[i].check_collision(enemy[j].x_pos, enemy[j].y_pos) == true)
 					{
-						score += 3;
-						enemy[j].init((float)(SCREEN_WIDTH + (rand() % 300)), rand() % SCREEN_HEIGHT - 50);
+						if (Boss.Boss_Exist == false)
+						{
+							score += 3;
+						}
+						enemy[j].Enemy_Hit = true;
+						if (enemy[j].Enemy_Hit == false)
+						{
+							enemy[j].init((float)(SCREEN_WIDTH + (rand() % 300)), rand() % SCREEN_HEIGHT - 50);
+						}
 					}
 				}
 
@@ -1472,7 +1701,11 @@ void do_game_logic(void)
 						newenemy[t].HP -= 1;
 						if (newenemy[t].HP <= 0)
 						{
-							score += 5;
+							if (Boss.Boss_Exist == false)
+							{
+								score += 5;
+							}
+							newenemy[t].NewEnemy_Hit = true;
 							//이후 생성 안되는 버그 해결
 							newenemy[t].init((float)(SCREEN_WIDTH + (rand() % 300)), rand() % SCREEN_HEIGHT - 50);
 							newenemy[i].HP = 10;
@@ -1523,6 +1756,11 @@ void do_game_logic(void)
 				{
 					enemy[i].hide();
 				}
+				if (enemy[i].Enemy_Hit == true)
+				{
+					enemy[i].move();
+					enemy[i].x_pos += 10; // 폭파시 전진이 아니라 정시상태에서 터지게 하기위해서
+				}
 				else
 					enemy[i].move();
 			}
@@ -1530,6 +1768,7 @@ void do_game_logic(void)
 			if (enemy[i].check_collision(hero.x_pos, hero.y_pos) == true)
 			{
 				hero.Hero_hit = true;
+				score -= 1;
 				enemy[i].hide();
 			}
 
@@ -1567,7 +1806,7 @@ void do_game_logic(void)
 
 			if (Ebullet[t].check_collision(hero.x_pos, hero.y_pos) == true)
 			{
-				score -= 1;
+				score -= 3;
 				hero.Hero_hit = true;
 				Ebullet[t].hide();
 			}
@@ -1604,6 +1843,7 @@ void do_game_logic(void)
 			if (newenemy[i].check_collision(hero.x_pos, hero.y_pos) == true || newenemy[i].HP <= 0)
 			{
 				hero.Hero_hit = true;
+				score -= 1;
 				newenemy[i].hide();
 			}
 
@@ -1646,6 +1886,7 @@ void do_game_logic(void)
 			if (newenemybull[j].check_collision(hero.x_pos, hero.y_pos) == true)
 			{
 				hero.Hero_hit = true;
+				score -= 0.5f;
 				newenemybull[j].hide();
 			}
 
@@ -1682,6 +1923,7 @@ void do_game_logic(void)
 			if (mushroom.check_collision(hero.x_pos, hero.y_pos) == true)
 			{
 				hero.Hero_hit = true;
+				score -= 5;
 				mushroom.hide();
 			}
 		}
@@ -1702,165 +1944,172 @@ void do_game_logic(void)
 		if (Boss.Boss_Exist)
 		{
 			Boss.move(Boss.x_pos, Boss.y_pos);
-		}
-
-		//보스 첫번쨰 총알
-		for (int i = 0; i < BossBullLimit; i++)
-		{
-			if (Boss.x_pos < SCREEN_WIDTH - 50 && Bossbull1[i].show() == false)
+			if (Boss.x_pos < 1100)
 			{
-				Bossbull1[i].init(Boss.x_pos + 50, Boss.y_pos + 150);
-				Bossbull1[i].active();
-			}
-		}
-
-		for(int i = 0; i < BossBullLimit; i++)
-		{
-			if (Bossbull1[i].show() == true)
-			{
-				if (Bossbull1[i].x_pos < -150)
+				//보스 첫번쨰 총알
+				for (int i = 0; i < BossBullLimit; i++)
 				{
-					Bossbull1[i].hide();
+					if (Boss.x_pos < SCREEN_WIDTH - 50 && Bossbull1[i].show() == false)
+					{
+						Bossbull1[i].init(Boss.x_pos + 50, Boss.y_pos + 150);
+						Bossbull1[i].active();
+					}
 				}
-				else
+
+				for (int i = 0; i < BossBullLimit; i++)
 				{
-					Bossbull1[i].move();
+					if (Bossbull1[i].show() == true)
+					{
+						if (Bossbull1[i].x_pos < -150)
+						{
+							Bossbull1[i].hide();
+						}
+						else
+						{
+							Bossbull1[i].move();
+						}
+					}
+
+					if (Bossbull1[i].check_collision(hero.x_pos, hero.y_pos) == true)
+					{
+						hero.Hero_hit = true;
+						score -= 0.5f;
+						Bossbull1[i].hide();
+					}
+
+					if (hero.check_collision(Bossbull1[i].x_pos, Bossbull1[i].y_pos) == true)
+					{
+						if (hero.HP <= 0)
+						{
+							hero.hide();
+							Game_over = true;
+						}
+					}
 				}
-			}
-
-			if (Bossbull1[i].check_collision(hero.x_pos, hero.y_pos) == true)
-			{
-				hero.Hero_hit = true;
-				Bossbull1[i].hide();
-			}
-
-			if (hero.check_collision(Bossbull1[i].x_pos, Bossbull1[i].y_pos) == true)
-			{
-				if (hero.HP <= 0)
+				//보스 두번째 총알
+				for (int i = 0; i < BossBullLimit; i++)
 				{
-					hero.hide();
-					Game_over = true;
+					if (Boss.x_pos < SCREEN_WIDTH - 50 && Bossbull2[i].show() == false)
+					{
+						Bossbull2[i].InitAimingBullet(hero.x_pos, hero.y_pos, Boss.x_pos, Boss.y_pos, 15, Bossbull2[i].x_pos, Bossbull2[i].y_pos, Bossbull2[i].vx, Bossbull2[i].vy);
+						Bossbull2[i].active();
+					}
 				}
-			}
-		}
-		//보스 두번째 총알
-		for (int i = 0; i < BossBullLimit; i++)
-		{
-			if (Boss.x_pos < SCREEN_WIDTH - 50 && Bossbull2[i].show() == false)
-			{
-				Bossbull2[i].InitAimingBullet(hero.x_pos, hero.y_pos, Boss.x_pos, Boss.y_pos, 15, Bossbull2[i].x_pos, Bossbull2[i].y_pos, Bossbull2[i].vx, Bossbull2[i].vy);
-				Bossbull2[i].active();
-			}
-		}
-		for(int i = 0; i < BossBullLimit; i++)
-		{
-			if (Bossbull2[i].show() == true)
-			{
-				if (Bossbull2[i].x_pos < -20)
+				for (int i = 0; i < BossBullLimit; i++)
 				{
-					Bossbull2[i].hide();
+					if (Bossbull2[i].show() == true)
+					{
+						if (Bossbull2[i].x_pos < -20)
+						{
+							Bossbull2[i].hide();
+						}
+						else
+						{
+
+							Bossbull2[i].AimingBullet(Bossbull2[i].x_pos, Bossbull2[i].y_pos, Bossbull2[i].vx, Bossbull2[i].vy); // 대각선 직진탄
+						}
+					}
+
+					if (Bossbull2[i].check_collision(hero.x_pos, hero.y_pos) == true)
+					{
+						score -= 1;
+						hero.Hero_hit = true;
+						Bossbull2[i].hide();
+					}
+
+					if (hero.check_collision(Bossbull2[i].x_pos, Bossbull2[i].y_pos) == true)
+					{
+						if (hero.HP <= 0)
+						{
+							hero.hide();
+							Game_over = true;
+						}
+					}
 				}
-				else
+
+				//보스 세번째 총알
+				for (int i = 0; i < BossBullLimit; i++)
 				{
-					Bossbull2[i].AimingBullet(Bossbull2[i].x_pos, Bossbull2[i].y_pos, Bossbull2[i].vx, Bossbull2[i].vy); // 대각선 직진탄
+					if (Boss.x_pos < SCREEN_WIDTH - 50 && Bossbull2[i].show() == false)
+					{
+						Bossbull3[i].InitAimingBullet2(hero.x_pos, hero.y_pos, Boss.x_pos, Boss.y_pos, 20, Bossbull3[i].x_pos, Bossbull3[i].y_pos, Bossbull3[i].vx, Bossbull3[i].vy);
+						Rand_DroppingBullet = (float)((float)((float)(rand() % 10) / 10) + 0.5); // 포물선 탄 변수
+						Bossbull3[i].active();
+					}
 				}
-			}
 
-			if (Bossbull2[i].check_collision(hero.x_pos, hero.y_pos) == true)
-			{
-				hero.Hero_hit = true;
-				Bossbull2[i].hide();
-			}
-
-			if (hero.check_collision(Bossbull2[i].x_pos, Bossbull2[i].y_pos) == true)
-			{
-				if (hero.HP <= 0)
+				for (int i = 0; i < BossBullLimit; i++)
 				{
-					hero.hide();
-					Game_over = true;
+					if (Bossbull3[i].show() == true)
+					{
+						if (Bossbull3[i].x_pos < -20)
+						{
+							Bossbull3[i].hide();
+						}
+						else
+						{
+							Bossbull3[i].DroppingBullet_Up(Bossbull3[i].x_pos, Bossbull3[i].y_pos, Rand_DroppingBullet, Bossbull3[i].vx, Bossbull3[i].vy);
+						}
+					}
+
+					if (Bossbull3[i].check_collision(hero.x_pos, hero.y_pos) == true)
+					{
+						score -= 1;
+						hero.Hero_hit = true;
+						Bossbull3[i].hide();
+					}
+
+					if (hero.check_collision(Bossbull3[i].x_pos, Bossbull3[i].y_pos) == true)
+					{
+						hero.HP -= 1;
+						if (hero.HP <= 0)
+						{
+							hero.hide();
+							Game_over = true;
+						}
+					}
 				}
-			}
-		}
 
-		//보스 세번째 총알
-		for (int i = 0; i < BossBullLimit; i++)
-		{
-			if (Boss.x_pos < SCREEN_WIDTH - 50 && Bossbull2[i].show() == false)
-			{
-				Bossbull3[i].InitAimingBullet2(hero.x_pos, hero.y_pos, Boss.x_pos, Boss.y_pos, 20,Bossbull3[i].x_pos, Bossbull3[i].y_pos, Bossbull3[i].vx, Bossbull3[i].vy);
-				Rand_DroppingBullet = (float)((float)((float)(rand() % 10) / 10) + 0.5); // 포물선 탄 변수
-				Bossbull3[i].active();
-			}
-		}
-
-		for (int i = 0; i < BossBullLimit; i++)
-		{
-			if (Bossbull3[i].show() == true)
-			{
-				if (Bossbull3[i].x_pos < -20)
+				//보스 네번째 총알
+				for (int i = 0; i < BossBullLimit; i++)
 				{
-					Bossbull3[i].hide();
+					if (Boss.x_pos < SCREEN_WIDTH - 50 && Bossbull1[i].show() == false)
+					{
+						Bossbull4[i].init(Boss.x_pos + 50, Boss.y_pos + 150);
+						Bossbull4[i].active();
+					}
 				}
-				else
+
+				for (int i = 0; i < BossBullLimit; i++)
 				{
-					Bossbull3[i].DroppingBullet_Up(Bossbull3[i].x_pos, Bossbull3[i].y_pos, Rand_DroppingBullet, Bossbull3[i].vx, Bossbull3[i].vy);
-				}
-			}
+					if (Bossbull4[i].show() == true)
+					{
+						if (Bossbull4[i].x_pos < -150)
+						{
+							Bossbull4[i].hide();
+						}
+						else
+						{
+							Bossbull4[i].move();
+						}
+					}
 
-			if (Bossbull3[i].check_collision(hero.x_pos, hero.y_pos) == true)
-			{
-				hero.Hero_hit = true;
-				Bossbull3[i].hide();
-			}
+					if (Bossbull4[i].check_collision(hero.x_pos, hero.y_pos) == true)
+					{
+						score -= 1;
+						hero.Hero_hit = true;
+						Bossbull4[i].hide();
+					}
 
-			if (hero.check_collision(Bossbull3[i].x_pos, Bossbull3[i].y_pos) == true)
-			{
-				hero.HP -= 1;
-				if (hero.HP <= 0)
-				{
-					hero.hide();
-					Game_over = true;
-				}
-			}
-		}
-
-		//보스 네번째 총알
-		for (int i = 0; i < BossBullLimit; i++)
-		{
-			if (Boss.x_pos < SCREEN_WIDTH - 50 && Bossbull1[i].show() == false)
-			{
-				Bossbull4[i].init(Boss.x_pos + 50, Boss.y_pos + 150);
-				Bossbull4[i].active();
-			}
-		}
-
-		for (int i = 0; i < BossBullLimit; i++)
-		{
-			if (Bossbull4[i].show() == true)
-			{
-				if (Bossbull4[i].x_pos < -150)
-				{
-					Bossbull4[i].hide();
-				}
-				else
-				{
-					Bossbull4[i].move();
-				}
-			}
-
-			if (Bossbull4[i].check_collision(hero.x_pos, hero.y_pos) == true)
-			{
-				hero.Hero_hit = true;
-				Bossbull4[i].hide();
-			}
-
-			if (hero.check_collision(Bossbull4[i].x_pos, Bossbull4[i].y_pos) == true)
-			{
-				hero.HP -= 1;
-				if (hero.HP <= 0)
-				{
-					hero.hide();
-					Game_over = true;
+					if (hero.check_collision(Bossbull4[i].x_pos, Bossbull4[i].y_pos) == true)
+					{
+						hero.HP -= 1;
+						if (hero.HP <= 0)
+						{
+							hero.hide();
+							Game_over = true;
+						}
+					}
 				}
 			}
 		}
@@ -2222,18 +2471,71 @@ void render_frame(void)
 			RECT part2;
 			SetRect(&part2, 0, 0, 60, 90);
 			D3DXVECTOR3 center2(0.0f, 0.0f, 0.0f);    // center at the upper-left corner
-
 			for (int i = 0; i < ENEMY_NUM; i++)
 			{
 				D3DXVECTOR3 position2(enemy[i].x_pos, enemy[i].y_pos, 0.0f);    // position at 50, 50 with no depth
-				switch (EnemyGundam_anicounter / 3)
+				if (enemy[i].show() == true && enemy[i].Enemy_Hit == false)
 				{
-				case 0:
-					d3dspt->Draw(sprite_enemy_1, &part2, &center2, &position2, D3DCOLOR_ARGB(255, 255, 255, 255));
-					break;
-				case 1:
-					d3dspt->Draw(sprite_enemy_2, &part2, &center2, &position2, D3DCOLOR_ARGB(255, 255, 255, 255));
-					break;
+					switch (EnemyGundam_anicounter / 3)
+					{
+					case 0:
+						d3dspt->Draw(sprite_enemy_1, &part2, &center2, &position2, D3DCOLOR_ARGB(255, 255, 255, 255));
+						break;
+					case 1:
+						d3dspt->Draw(sprite_enemy_2, &part2, &center2, &position2, D3DCOLOR_ARGB(255, 255, 255, 255));
+						break;
+					}
+				}
+				if (enemy[i].Enemy_Hit == true)
+				{
+					EnemyGundam_Hit_anicounter++;
+					if (EnemyGundam_Hit_anicounter >= 39)
+					{
+						enemy[i].Enemy_Hit = false;
+						EnemyGundam_Hit_anicounter = 0;
+					}
+					switch (EnemyGundam_Hit_anicounter / 3)
+					{
+					case 0:
+						d3dspt->Draw(sprite_enemy_Hit_1, &part2, &center2, &position2, D3DCOLOR_ARGB(255, 255, 255, 255));
+						break;
+					case 1:
+						d3dspt->Draw(sprite_enemy_Hit_2, &part2, &center2, &position2, D3DCOLOR_ARGB(255, 255, 255, 255));
+						break;
+					case 2:
+						d3dspt->Draw(sprite_enemy_Hit_3, &part2, &center2, &position2, D3DCOLOR_ARGB(255, 255, 255, 255));
+						break;
+					case 3:
+						d3dspt->Draw(sprite_enemy_Hit_4, &part2, &center2, &position2, D3DCOLOR_ARGB(255, 255, 255, 255));
+						break;
+					case 4:
+						d3dspt->Draw(sprite_enemy_Hit_5, &part2, &center2, &position2, D3DCOLOR_ARGB(255, 255, 255, 255));
+						break;
+					case 5:
+						d3dspt->Draw(sprite_enemy_Hit_6, &part2, &center2, &position2, D3DCOLOR_ARGB(255, 255, 255, 255));
+						break;
+					case 6:
+						d3dspt->Draw(sprite_enemy_Hit_7, &part2, &center2, &position2, D3DCOLOR_ARGB(255, 255, 255, 255));
+						break;
+					case 7:
+						d3dspt->Draw(sprite_enemy_Hit_8, &part2, &center2, &position2, D3DCOLOR_ARGB(255, 255, 255, 255));
+						break;
+					case 8:
+						d3dspt->Draw(sprite_enemy_Hit_9, &part2, &center2, &position2, D3DCOLOR_ARGB(255, 255, 255, 255));
+						break;
+					case 9:
+						d3dspt->Draw(sprite_enemy_Hit_10, &part2, &center2, &position2, D3DCOLOR_ARGB(255, 255, 255, 255));
+						break;
+					case 10:
+						d3dspt->Draw(sprite_enemy_Hit_11, &part2, &center2, &position2, D3DCOLOR_ARGB(255, 255, 255, 255));
+						break;
+					case 11:
+						d3dspt->Draw(sprite_enemy_Hit_12, &part2, &center2, &position2, D3DCOLOR_ARGB(255, 255, 255, 255));
+						break;
+					case 12 :
+						enemy[i].hide();
+						break;
+					}
 				}
 			}
 
@@ -2279,6 +2581,58 @@ void render_frame(void)
 				case 3:
 					d3dspt->Draw(sprite_Newenemy_4, &part5, &center5, &position5, D3DCOLOR_ARGB(255, 255, 255, 255));
 					break;
+				}
+
+				if (newenemy[i].NewEnemy_Hit == true)
+				{
+					NewEnemyGundam_Hit_anicounter++;
+					if (EnemyGundam_Hit_anicounter >= 39)
+					{
+						newenemy[i].NewEnemy_Hit = false;
+						NewEnemyGundam_Hit_anicounter = 0;
+					}
+					switch (NewEnemyGundam_Hit_anicounter / 3)
+					{
+					case 0:
+						d3dspt->Draw(sprite_enemy_Hit_1, &part5, &center5, &position5, D3DCOLOR_ARGB(255, 255, 255, 255));
+						break;
+					case 1:
+						d3dspt->Draw(sprite_enemy_Hit_2, &part5, &center5, &position5, D3DCOLOR_ARGB(255, 255, 255, 255));
+						break;
+					case 2:
+						d3dspt->Draw(sprite_enemy_Hit_3, &part5, &center5, &position5, D3DCOLOR_ARGB(255, 255, 255, 255));
+						break;
+					case 3:
+						d3dspt->Draw(sprite_enemy_Hit_4, &part5, &center5, &position5, D3DCOLOR_ARGB(255, 255, 255, 255));
+						break;
+					case 4:
+						d3dspt->Draw(sprite_enemy_Hit_5, &part5, &center5, &position5, D3DCOLOR_ARGB(255, 255, 255, 255));
+						break;
+					case 5:
+						d3dspt->Draw(sprite_enemy_Hit_6, &part5, &center5, &position5, D3DCOLOR_ARGB(255, 255, 255, 255));
+						break;
+					case 6:
+						d3dspt->Draw(sprite_enemy_Hit_7, &part5, &center5, &position5, D3DCOLOR_ARGB(255, 255, 255, 255));
+						break;
+					case 7:
+						d3dspt->Draw(sprite_enemy_Hit_8, &part5, &center5, &position5, D3DCOLOR_ARGB(255, 255, 255, 255));
+						break;
+					case 8:
+						d3dspt->Draw(sprite_enemy_Hit_9, &part5, &center5, &position5, D3DCOLOR_ARGB(255, 255, 255, 255));
+						break;
+					case 9:
+						d3dspt->Draw(sprite_enemy_Hit_10, &part5, &center5, &position5, D3DCOLOR_ARGB(255, 255, 255, 255));
+						break;
+					case 10:
+						d3dspt->Draw(sprite_enemy_Hit_11, &part5, &center5, &position5, D3DCOLOR_ARGB(255, 255, 255, 255));
+						break;
+					case 11:
+						d3dspt->Draw(sprite_enemy_Hit_12, &part5, &center5, &position5, D3DCOLOR_ARGB(255, 255, 255, 255));
+						break;
+					case 12:
+						newenemy[i].hide();
+						break;
+					}
 				}
 			}
 			///////////////////////////////
@@ -3184,6 +3538,20 @@ void cleanD3D(void)
 	sprite_Boss->Release();
 	sprite_BossMissile->Release();
 
+	//적들 피격시 애니메이션 해제 
+	sprite_enemy_Hit_1->Release();
+	sprite_enemy_Hit_2->Release();
+	sprite_enemy_Hit_3->Release();
+	sprite_enemy_Hit_4->Release();
+	sprite_enemy_Hit_5->Release();
+	sprite_enemy_Hit_6->Release();
+	sprite_enemy_Hit_7->Release();
+	sprite_enemy_Hit_8->Release();
+	sprite_enemy_Hit_9->Release();
+	sprite_enemy_Hit_10->Release();
+	sprite_enemy_Hit_11->Release();
+	sprite_enemy_Hit_12->Release();
+
 	//타이틀 / 게임오버 해제
 	sprite_Title->Release();
 	sprite_over->Release();
@@ -3194,6 +3562,9 @@ void cleanD3D(void)
 	sprite_SHund->Release();
 	sprite_STen->Release();
 	sprite_ScoreBox->Release();
+
+
+
 
 	//음악 닫기
 	mciSendCommand(1, MCI_CLOSE, 0, (DWORD)(LPVOID)NULL);

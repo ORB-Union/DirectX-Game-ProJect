@@ -18,8 +18,4 @@ public:
 	void init(float x, float y);
 
 	bool Hero_hit = false;//히트애니메이션용
-	bool HitShow();
-	void Hit_hide();
-	void Hot_active();
-
 };
