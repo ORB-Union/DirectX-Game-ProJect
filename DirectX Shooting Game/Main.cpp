@@ -2125,6 +2125,7 @@ void render_frame(void)
 	{
 		Title = false;
 		InGame = true;
+		Game_over = false;
 	}
 
 	if (Title == true)
@@ -2179,7 +2180,11 @@ void render_frame(void)
 
 	if (InGame == true)
 	{
-
+		if (score < 0)
+		{
+			InGame = false;
+			Game_over = true;
+		}
 		//À½¾Ç´Ý°í Àç»ý
 		mciSendCommand(2, MCI_SEEK, MCI_SEEK_TO_START, (DWORD)(LPVOID)NULL);
 		mciSendCommand(1, MCI_PLAY, MCI_DGV_PLAY_REPEAT, (DWORD)(LPVOID)&mciPlay);
@@ -2742,14 +2747,14 @@ void render_frame(void)
 	///////////////////////////////////////////////////////////
 	//°ÔÀÓ¿À¹ö
 
-	if (hero.HP <= 0)
-	{
-		InGame = false;
-		Game_over = true;
-	}
-
 	if (Game_over == true)
 	{
+		if (KEY_DOWN(VK_RETURN))
+		{
+			Title = true;
+			Game_over = false;
+		}
+
 		mciSendCommand(1, MCI_SEEK, MCI_SEEK_TO_START, (DWORD)(LPVOID)NULL);
 		mciSendCommand(2, MCI_SEEK, MCI_SEEK_TO_START, (DWORD)(LPVOID)NULL);
 		// clear the window to a deep blue
