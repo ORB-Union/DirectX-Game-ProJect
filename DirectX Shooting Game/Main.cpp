@@ -1774,12 +1774,6 @@ void do_game_logic(void)
 
 			if (hero.check_collision(enemy[i].x_pos, enemy[i].y_pos) == true)
 			{
-				hero.HP -= 1;
-				if (hero.HP <= 0)
-				{
-					hero.hide();
-					Game_over = true;
-				}
 			}
 		}
 
@@ -1850,12 +1844,6 @@ void do_game_logic(void)
 			//플레이어와의 충돌
 			if (hero.check_collision(newenemy[i].x_pos, newenemy[i].y_pos) == true)
 			{
-				hero.HP -= 1;
-				if (hero.HP <= 0)
-				{
-					hero.hide();
-					Game_over = true;
-				}
 			}
 
 		}
@@ -1893,12 +1881,6 @@ void do_game_logic(void)
 			//플레이어와의 충돌
 			if (hero.check_collision(newenemybull[j].x_pos, newenemybull[j].y_pos) == true)
 			{
-				hero.HP -= 1;
-				if (hero.HP <= 0)
-				{
-					hero.hide();
-					Game_over = true;
-				}
 			}
 		}
 
@@ -1979,11 +1961,7 @@ void do_game_logic(void)
 
 					if (hero.check_collision(Bossbull1[i].x_pos, Bossbull1[i].y_pos) == true)
 					{
-						if (hero.HP <= 0)
-						{
-							hero.hide();
-							Game_over = true;
-						}
+
 					}
 				}
 				//보스 두번째 총알
@@ -2019,11 +1997,7 @@ void do_game_logic(void)
 
 					if (hero.check_collision(Bossbull2[i].x_pos, Bossbull2[i].y_pos) == true)
 					{
-						if (hero.HP <= 0)
-						{
-							hero.hide();
-							Game_over = true;
-						}
+			
 					}
 				}
 
@@ -2061,12 +2035,7 @@ void do_game_logic(void)
 
 					if (hero.check_collision(Bossbull3[i].x_pos, Bossbull3[i].y_pos) == true)
 					{
-						hero.HP -= 1;
-						if (hero.HP <= 0)
-						{
-							hero.hide();
-							Game_over = true;
-						}
+
 					}
 				}
 
@@ -2103,12 +2072,7 @@ void do_game_logic(void)
 
 					if (hero.check_collision(Bossbull4[i].x_pos, Bossbull4[i].y_pos) == true)
 					{
-						hero.HP -= 1;
-						if (hero.HP <= 0)
-						{
-							hero.hide();
-							Game_over = true;
-						}
+
 					}
 				}
 			}

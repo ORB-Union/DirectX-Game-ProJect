@@ -1,22 +1,21 @@
-﻿  Main.cpp
-c:\users\6kmar\documents\github\directx-game-project\directx shooting game\main.cpp(24): warning C4005: 'ENEMY_NUM': 매크로 재정의
-  c:\users\6kmar\documents\github\directx-game-project\directx shooting game\enemy.h(3): note: 'ENEMY_NUM'의 이전 정의를 참조하십시오.
-c:\users\6kmar\documents\github\directx-game-project\directx shooting game\main.cpp(252): warning C4100: 'lpCmdLine': 참조되지 않은 정식 매개 변수입니다.
-c:\users\6kmar\documents\github\directx-game-project\directx shooting game\main.cpp(251): warning C4100: 'hPrevInstance': 참조되지 않은 정식 매개 변수입니다.
-c:\users\6kmar\documents\github\directx-game-project\directx shooting game\main.cpp(324): warning C4459: 'message' 선언은 전역 선언을 숨깁니다.
-  c:\users\6kmar\documents\github\directx-game-project\directx shooting game\main.cpp(48): note: 'message' 선언을 참조하십시오.
-c:\users\6kmar\documents\github\directx-game-project\directx shooting game\main.cpp(1344): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\6kmar\documents\github\directx-game-project\directx shooting game\main.cpp(1360): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\6kmar\documents\github\directx-game-project\directx shooting game\main.cpp(1373): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\6kmar\documents\github\directx-game-project\directx shooting game\main.cpp(1494): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\6kmar\documents\github\directx-game-project\directx shooting game\main.cpp(1513): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\6kmar\documents\github\directx-game-project\directx shooting game\main.cpp(1592): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\6kmar\documents\github\directx-game-project\directx shooting game\main.cpp(1611): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\6kmar\documents\github\directx-game-project\directx shooting game\main.cpp(1691): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\6kmar\documents\github\directx-game-project\directx shooting game\main.cpp(1710): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\6kmar\documents\github\directx-game-project\directx shooting game\main.cpp(1750): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\6kmar\documents\github\directx-game-project\directx shooting game\main.cpp(1824): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\6kmar\documents\github\directx-game-project\directx shooting game\main.cpp(1910): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\6kmar\documents\github\directx-game-project\directx shooting game\main.cpp(2814): warning C4244: '초기화 중': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+﻿  Bullet.cpp
+c:\users\6kmar\documents\github\directx-game-project\directx shooting game\bullet.cpp(339): warning C4458: 'vx' 선언은 클래스 멤버를 숨깁니다.
+  c:\users\6kmar\documents\github\directx-game-project\directx shooting game\bullet.h(113): note: 'BossBullet2::vx' 선언을 참조하십시오.
+c:\users\6kmar\documents\github\directx-game-project\directx shooting game\bullet.cpp(339): warning C4458: 'vy' 선언은 클래스 멤버를 숨깁니다.
+  c:\users\6kmar\documents\github\directx-game-project\directx shooting game\bullet.h(113): note: 'BossBullet2::vy' 선언을 참조하십시오.
+c:\users\6kmar\documents\github\directx-game-project\directx shooting game\bullet.cpp(359): warning C4458: 'vx' 선언은 클래스 멤버를 숨깁니다.
+  c:\users\6kmar\documents\github\directx-game-project\directx shooting game\bullet.h(113): note: 'BossBullet2::vx' 선언을 참조하십시오.
+c:\users\6kmar\documents\github\directx-game-project\directx shooting game\bullet.cpp(359): warning C4458: 'vy' 선언은 클래스 멤버를 숨깁니다.
+  c:\users\6kmar\documents\github\directx-game-project\directx shooting game\bullet.h(113): note: 'BossBullet2::vy' 선언을 참조하십시오.
+c:\users\6kmar\documents\github\directx-game-project\directx shooting game\bullet.cpp(407): warning C4458: 'vx' 선언은 클래스 멤버를 숨깁니다.
+  c:\users\6kmar\documents\github\directx-game-project\directx shooting game\bullet.h(133): note: 'BossBullet3::vx' 선언을 참조하십시오.
+c:\users\6kmar\documents\github\directx-game-project\directx shooting game\bullet.cpp(407): warning C4458: 'vy' 선언은 클래스 멤버를 숨깁니다.
+  c:\users\6kmar\documents\github\directx-game-project\directx shooting game\bullet.h(133): note: 'BossBullet3::vy' 선언을 참조하십시오.
+c:\users\6kmar\documents\github\directx-game-project\directx shooting game\bullet.cpp(427): warning C4458: 'vx' 선언은 클래스 멤버를 숨깁니다.
+  c:\users\6kmar\documents\github\directx-game-project\directx shooting game\bullet.h(133): note: 'BossBullet3::vx' 선언을 참조하십시오.
+c:\users\6kmar\documents\github\directx-game-project\directx shooting game\bullet.cpp(427): warning C4458: 'vy' 선언은 클래스 멤버를 숨깁니다.
+  c:\users\6kmar\documents\github\directx-game-project\directx shooting game\bullet.h(133): note: 'BossBullet3::vy' 선언을 참조하십시오.
+  Hero.cpp
+  코드를 생성하고 있습니다...
   Matrices0999_2010.vcxproj -> C:\Users\6kmar\Documents\GitHub\DirectX-Game-ProJect\DirectX Shooting Game\Debug\Matrices0999.exe
   Matrices0999_2010.vcxproj -> C:\Users\6kmar\Documents\GitHub\DirectX-Game-ProJect\DirectX Shooting Game\Debug\Matrices0999.pdb (Full PDB)
