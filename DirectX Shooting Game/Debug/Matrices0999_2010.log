@@ -1,21 +1,5 @@
-﻿  Bullet.cpp
-c:\users\6kmar\documents\github\directx-game-project\directx shooting game\bullet.cpp(339): warning C4458: 'vx' 선언은 클래스 멤버를 숨깁니다.
-  c:\users\6kmar\documents\github\directx-game-project\directx shooting game\bullet.h(113): note: 'BossBullet2::vx' 선언을 참조하십시오.
-c:\users\6kmar\documents\github\directx-game-project\directx shooting game\bullet.cpp(339): warning C4458: 'vy' 선언은 클래스 멤버를 숨깁니다.
-  c:\users\6kmar\documents\github\directx-game-project\directx shooting game\bullet.h(113): note: 'BossBullet2::vy' 선언을 참조하십시오.
-c:\users\6kmar\documents\github\directx-game-project\directx shooting game\bullet.cpp(359): warning C4458: 'vx' 선언은 클래스 멤버를 숨깁니다.
-  c:\users\6kmar\documents\github\directx-game-project\directx shooting game\bullet.h(113): note: 'BossBullet2::vx' 선언을 참조하십시오.
-c:\users\6kmar\documents\github\directx-game-project\directx shooting game\bullet.cpp(359): warning C4458: 'vy' 선언은 클래스 멤버를 숨깁니다.
-  c:\users\6kmar\documents\github\directx-game-project\directx shooting game\bullet.h(113): note: 'BossBullet2::vy' 선언을 참조하십시오.
-c:\users\6kmar\documents\github\directx-game-project\directx shooting game\bullet.cpp(407): warning C4458: 'vx' 선언은 클래스 멤버를 숨깁니다.
-  c:\users\6kmar\documents\github\directx-game-project\directx shooting game\bullet.h(133): note: 'BossBullet3::vx' 선언을 참조하십시오.
-c:\users\6kmar\documents\github\directx-game-project\directx shooting game\bullet.cpp(407): warning C4458: 'vy' 선언은 클래스 멤버를 숨깁니다.
-  c:\users\6kmar\documents\github\directx-game-project\directx shooting game\bullet.h(133): note: 'BossBullet3::vy' 선언을 참조하십시오.
-c:\users\6kmar\documents\github\directx-game-project\directx shooting game\bullet.cpp(427): warning C4458: 'vx' 선언은 클래스 멤버를 숨깁니다.
-  c:\users\6kmar\documents\github\directx-game-project\directx shooting game\bullet.h(133): note: 'BossBullet3::vx' 선언을 참조하십시오.
-c:\users\6kmar\documents\github\directx-game-project\directx shooting game\bullet.cpp(427): warning C4458: 'vy' 선언은 클래스 멤버를 숨깁니다.
-  c:\users\6kmar\documents\github\directx-game-project\directx shooting game\bullet.h(133): note: 'BossBullet3::vy' 선언을 참조하십시오.
-  Hero.cpp
-  코드를 생성하고 있습니다...
+﻿BackGround.obj : warning LNK4075: '/EDITANDCONTINUE'이(가) '/SAFESEH' 사양으로 인해 무시됩니다.
+Common.obj : warning LNK4204: 'C:\Users\6kmar\Documents\GitHub\DirectX-Game-ProJect\DirectX Shooting Game\Debug\vc140.pdb'에 참조 모듈에 대한 디버깅 정보가 없습니다. 디버깅 정보가 없는 것처럼 개체를 링크합니다.
+BackGround.obj : warning LNK4204: 'C:\Users\6kmar\Documents\GitHub\DirectX-Game-ProJect\DirectX Shooting Game\Debug\vc140.pdb'에 참조 모듈에 대한 디버깅 정보가 없습니다. 디버깅 정보가 없는 것처럼 개체를 링크합니다.
   Matrices0999_2010.vcxproj -> C:\Users\6kmar\Documents\GitHub\DirectX-Game-ProJect\DirectX Shooting Game\Debug\Matrices0999.exe
   Matrices0999_2010.vcxproj -> C:\Users\6kmar\Documents\GitHub\DirectX-Game-ProJect\DirectX Shooting Game\Debug\Matrices0999.pdb (Full PDB)

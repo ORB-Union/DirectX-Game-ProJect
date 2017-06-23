@@ -1115,7 +1115,7 @@ bool Hero::check_collision(float x, float y)
 {
 
 	//충돌 처리 시 
-	if (sphere_collision_check(x_pos, y_pos, 60, x, y, 60) == true)
+	if (sphere_collision_check(x_pos, y_pos, 30, x, y, 30) == true)
 	{
 		Hero_hit = true;
 		bShow = false;
@@ -1298,7 +1298,7 @@ bool BossBullet3::check_collision(float x, float y)
 
 bool BossBullet4::check_collision(float x, float y)
 {
-	if (sphere_collision_check(x_pos, y_pos, 40, x, y, 40) == true)
+	if (sphere_collision_check(x_pos, y_pos, 20, x, y, 20) == true)
 	{
 		bShow = false;
 		return true;
@@ -2028,7 +2028,6 @@ void do_game_logic(void)
 
 					if (Bossbull3[i].check_collision(hero.x_pos, hero.y_pos) == true)
 					{
-						score -= 1;
 						hero.Hero_hit = true;
 						Bossbull3[i].hide();
 					}
